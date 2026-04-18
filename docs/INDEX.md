@@ -1,122 +1,92 @@
-# [PROJECT_NAME] — Навигатор документации
+# FixIt — Навигатор документации
 
-> **Статус проекта:** [TODO: Planning / In Development / Live / Paused]
-> **Стек:** [TODO: Flutter / React Native / Next.js / FlutterFlow]
-> **Бэкенд:** [TODO: Supabase / Firebase / Custom]
-> **Дата старта:** YYYY-MM-DD
-> **Последнее обновление:** YYYY-MM-DD
+> **Статус проекта:** UX Design complete (Stage 4 done) → ready for Stage 5 Design
+> **Стек:** Expo SDK 55 / React Native / TypeScript strict
+> **Бэкенд:** Supabase + Adapty + Claude API + Price aggregation APIs
+> **Дата старта:** 2026-04-17
+> **Последнее обновление:** 2026-04-18
 
 ---
 
 ## Структура документации
 
-### 00 — Мета
-Служебные файлы проекта: глоссарий, контакты, правила ведения документации.
+### 01 — Исследование (Research) ✅
 
-| Файл | Описание |
-|------|----------|
-| [GLOSSARY.md](00-meta/GLOSSARY.md) | Глоссарий терминов проекта |
-| [CONVENTIONS.md](00-meta/CONVENTIONS.md) | Соглашения: как вести документы, нейминг, версионирование |
+| Файл | Описание | Статус |
+|------|----------|--------|
+| [MARKET-RESEARCH.md](01-research/MARKET-RESEARCH.md) | TAM/SAM/SOM, растущие сегменты, тренды | ✅ |
+| [COMPETITOR-ANALYSIS.md](01-research/COMPETITOR-ANALYSIS.md) | Thumbtack, Angi, Handy + indirect competitors | ✅ |
+| [USER-PERSONAS.md](01-research/USER-PERSONAS.md) | Emma (primary) + Mike / Sarah / Tyler / Ronald | ✅ |
+| [DOMAIN-RESEARCH.md](01-research/DOMAIN-RESEARCH.md) | Home repair domain: pricing, labor, regulatory | ✅ |
+| [RESEARCH-BRIEF.md](01-research/RESEARCH-BRIEF.md) | Synthesis — мой take на всё | ✅ |
 
-### 01 — Исследование (Research)
-Большие исследовательские документы по нише, рынку, конкурентам, пользователям.
+### 02 — Продукт (Product) ✅
 
-| Файл | Описание |
-|------|----------|
-| [MARKET-RESEARCH.md](01-research/MARKET-RESEARCH.md) | Исследование рынка и ниши (50-150 стр) |
-| [COMPETITOR-ANALYSIS.md](01-research/COMPETITOR-ANALYSIS.md) | Разбор конкурентов |
-| [USER-PERSONAS.md](01-research/USER-PERSONAS.md) | Портреты пользователей, сегменты аудитории |
-| [DOMAIN-DEEP-DIVE.md](01-research/DOMAIN-DEEP-DIVE.md) | Глубокое погружение в предметную область |
+| Файл | Описание | Статус |
+|------|----------|--------|
+| [PRODUCT-VISION.md](02-product/PRODUCT-VISION.md) | WEPA north star, 7 принципов, flywheel | ✅ |
+| [PROBLEM-SOLUTION-FIT.md](02-product/PROBLEM-SOLUTION-FIT.md) | 5 falsifiable hypotheses | ✅ |
+| [FEATURES.md](02-product/FEATURES.md) | 10 MVP features с RICE prioritization | ✅ |
+| [TARGET-AUDIENCE.md](02-product/TARGET-AUDIENCE.md) | Emma deep dive + secondary personas | ✅ |
+| [MONETIZATION.md](02-product/MONETIZATION.md) | 4 revenue streams (sub + affiliate + pay-per + premium) | ✅ |
 
-### 02 — Продукт (Product)
-Что приложение делает, как себя ведёт, какие фичи, какие экраны.
+### 03 — Практики (Practices) ✅
 
-| Файл | Описание |
-|------|----------|
-| [VISION.md](02-product/VISION.md) | Видение продукта, цели, метрики успеха |
-| [FEATURES.md](02-product/FEATURES.md) | Полный список функционала с приоритетами |
-| [USER-FLOWS.md](02-product/USER-FLOWS.md) | Пользовательские сценарии (onboarding, core loop, retention) |
-| [SCREENS.md](02-product/SCREENS.md) | Карта экранов с описанием каждого |
-| [ROADMAP.md](02-product/ROADMAP.md) | Дорожная карта: что делаем когда |
+| Файл | Описание | Статус |
+|------|----------|--------|
+| [ONBOARDING-RESEARCH.md](03-practices/ONBOARDING-RESEARCH.md) | 8-screen flow, <90 sec до aha | ✅ |
+| [PAYWALL-RESEARCH.md](03-practices/PAYWALL-RESEARCH.md) | Soft after 3 free + 5 context paywalls | ✅ |
+| [RETENTION-RESEARCH.md](03-practices/RETENTION-RESEARCH.md) | QAR north star, 12-16 push/year | ✅ |
+| [ASO-RESEARCH.md](03-practices/ASO-RESEARCH.md) | "home repair cost" keyword strategy | ✅ |
+| [PRACTICES-BRIEF.md](03-practices/PRACTICES-BRIEF.md) | Synthesis — unified playbook | ✅ |
 
-### 03 — Дизайн (Design)
-Всё про UI/UX, стилистику, компоненты.
+### 04 — UX дизайн (UX) ✅
 
-| Файл | Описание |
-|------|----------|
-| [DESIGN-SYSTEM.md](03-design/DESIGN-SYSTEM.md) | Цвета, шрифты, отступы, компоненты |
-| [UI-KIT.md](03-design/UI-KIT.md) | Описание UI-компонентов (кнопки, карточки, модалки) |
-| [NAVIGATION.md](03-design/NAVIGATION.md) | Навигационная структура приложения (табы, стеки) |
+| Файл | Описание | Статус |
+|------|----------|--------|
+| [SCREEN-MAP.md](04-ux/SCREEN-MAP.md) | 47 уникальных экранов, 8 групп, priority | ✅ |
+| [USER-FLOWS.md](04-ux/USER-FLOWS.md) | 7 core flows с ASCII diagrams | ✅ |
+| [WIREFRAMES.md](04-ux/WIREFRAMES.md) | 20 ASCII wireframes + component library | ✅ |
+| [UX-SPEC.md](04-ux/UX-SPEC.md) | Haptics, animations, accessibility, copy | ✅ |
+| [FUNNEL.md](04-ux/FUNNEL.md) | 10K cohort projection + A/B roadmap | ✅ |
+| [UX-BRIEF.md](04-ux/UX-BRIEF.md) | Synthesis — decisions + Stage 5 handoff | ✅ |
 
-### 04 — Техническая документация (Technical)
-Ядро: база данных, API, функции, интеграции.
+### 05 — База данных (Database) ⏳
 
-| Файл | Описание |
-|------|----------|
-| [ARCHITECTURE.md](04-technical/ARCHITECTURE.md) | Общая архитектура системы (диаграмма + описание) |
-| **База данных** | |
-| [DATABASE-SCHEMA.md](04-technical/database/DATABASE-SCHEMA.md) | Схема БД: таблицы, связи, индексы |
-| [RLS-POLICIES.md](04-technical/database/RLS-POLICIES.md) | Row Level Security — политики доступа Supabase |
-| [MIGRATIONS.md](04-technical/database/MIGRATIONS.md) | Лог миграций базы данных |
-| **API и функции** | |
-| [API-ENDPOINTS.md](04-technical/api/API-ENDPOINTS.md) | Все API эндпоинты (Edge Functions, REST) |
-| [EDGE-FUNCTIONS.md](04-technical/functions/EDGE-FUNCTIONS.md) | Описание каждой Edge Function: что делает, триггеры |
-| [TRIGGERS-WEBHOOKS.md](04-technical/functions/TRIGGERS-WEBHOOKS.md) | Триггеры БД, вебхуки, cron-задачи |
-| **Интеграции** | |
-| [AUTH.md](04-technical/integrations/AUTH.md) | Аутентификация (Supabase Auth, OAuth провайдеры) |
-| [STORAGE.md](04-technical/integrations/STORAGE.md) | Файловое хранилище (Supabase Storage, CDN) |
-| [AI-INTEGRATIONS.md](04-technical/integrations/AI-INTEGRATIONS.md) | AI-сервисы (OpenAI, Anthropic и т.д.) |
-| [PUSH-NOTIFICATIONS.md](04-technical/integrations/PUSH-NOTIFICATIONS.md) | Пуш-уведомления (FCM, APNs) |
-| [THIRD-PARTY.md](04-technical/integrations/THIRD-PARTY.md) | Прочие внешние сервисы (аналитика, крашлитика) |
+Будет заполнено перед Stage 6 Development. DB schema, migrations, RLS policies.
 
-### 05 — Бизнес-модель (Business)
-Монетизация, цены, подписки, юнит-экономика.
+### 06 — Дизайн (Design) ⏳
 
-| Файл | Описание |
-|------|----------|
-| [MONETIZATION.md](05-business/MONETIZATION.md) | Модель монетизации: подписки, токены, in-app purchases |
-| [PRICING.md](05-business/PRICING.md) | Ценообразование, тарифы, пакеты |
-| [UNIT-ECONOMICS.md](05-business/UNIT-ECONOMICS.md) | Юнит-экономика: LTV, CAC, ARPU, retention |
-| [TOKEN-SYSTEM.md](05-business/TOKEN-SYSTEM.md) | Система токенов / кредитов (если есть) |
+Stage 5 in progress — Лана делает Stitch prompts + design system.
 
-### 06 — Аналитика (Analytics)
-Трекинг, метрики, события.
+### 07 — Разработка (Development) ⏳
 
-| Файл | Описание |
-|------|----------|
-| [EVENTS.md](06-analytics/EVENTS.md) | Список всех аналитических событий |
-| [KPI-DASHBOARD.md](06-analytics/KPI-DASHBOARD.md) | Ключевые метрики и как их отслеживать |
-| [AB-TESTS.md](06-analytics/AB-TESTS.md) | A/B тесты: что тестируем, результаты |
+Стадия 6. Implementation notes, coding guides.
 
-### 07 — Деплой (Deployment)
-Сборка, публикация, CI/CD, среды.
+### 08 — Деплой (Deployment) ⏳
 
-| Файл | Описание |
-|------|----------|
-| [ENVIRONMENTS.md](07-deployment/ENVIRONMENTS.md) | Dev / Staging / Prod — настройки окружений |
-| [BUILD-DEPLOY.md](07-deployment/BUILD-DEPLOY.md) | Как собирать и деплоить |
-| [APP-STORE.md](07-deployment/APP-STORE.md) | Публикация в App Store / Google Play |
+Стадия 7. Store listings, release notes, CI/CD.
 
-### 08 — Changelog
-История изменений.
+---
 
-| Файл | Описание |
-|------|----------|
-| [CHANGELOG.md](08-changelog/CHANGELOG.md) | Лог всех значимых изменений по датам |
-| [DECISIONS.md](08-changelog/DECISIONS.md) | Архитектурные решения (ADR): почему выбрали X вместо Y |
+## Воронка проекта
+
+```
+Stage 1 Research     ✅ → 5 docs, ~20.5K words
+Stage 2 Product      ✅ → 5 docs, ~25.2K words
+Stage 3 Practices    ✅ → 5 docs, ~24K words
+Stage 4 UX Design    ✅ → 6 docs, ~40K words
+Stage 5 Design       ⏳ Лана — Stitch + design system
+Stage 6 Development  ⏳ Лана — Expo + React Native
+Stage 7 Testing      ⏳
+Stage 8 Deployment   ⏳
+```
 
 ---
 
 ## Как пользоваться
 
-1. **Склонируй или скачай** репо `project-docs-template`, переименуй папку под свой проект
-2. **Найди и замени** `[PROJECT_NAME]`, `[AUTHOR]`, `YYYY-MM-DD` на свои значения во всех файлах
-3. **Пройдись по `[TODO: ...]`** плейсхолдерам — они подсказывают, что писать в каждое место
-4. **Заполняй постепенно** — не нужно всё сразу. Минимальный стартовый набор:
-   - `02-product/VISION.md` — зачем делаем
-   - `02-product/FEATURES.md` — что делаем
-   - `04-technical/ARCHITECTURE.md` — как делаем
-   - `00-meta/GLOSSARY.md` — словарь терминов
-5. **Каждый файл** — самостоятельный документ. Не бойся копировать контекст между файлами
-6. **Передавай AI** нужный файл для работы, а не весь проект целиком — так точнее и дешевле по токенам
-7. **Обновляй `Дата:`** в метаблоке при значимых изменениях
+1. **Если ты новый в команде** — начни с [RESEARCH-BRIEF](01-research/RESEARCH-BRIEF.md) → [PRACTICES-BRIEF](03-practices/PRACTICES-BRIEF.md) → [UX-BRIEF](04-ux/UX-BRIEF.md). Три synthesis-документа дают быстрое понимание продукта.
+2. **Если ты дизайнер (Лана)** — начни с [UX-BRIEF](04-ux/UX-BRIEF.md) → [SCREEN-MAP](04-ux/SCREEN-MAP.md) → [WIREFRAMES](04-ux/WIREFRAMES.md). Это материал для Stitch.
+3. **Если ты разработчик** — [CLAUDE.md](../CLAUDE.md) в корне проекта + [FEATURES.md](02-product/FEATURES.md) + [UX-SPEC.md](04-ux/UX-SPEC.md).
+4. **Когда нужен benchmark** — [FUNNEL.md](04-ux/FUNNEL.md) имеет полную таблицу expected metrics.

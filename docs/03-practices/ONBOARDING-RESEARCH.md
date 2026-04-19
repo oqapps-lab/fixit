@@ -1,909 +1,1011 @@
 # ONBOARDING-RESEARCH.md — FixIt
 
-**Дата:** 18 апреля 2026
+**Дата:** 19 апреля 2026
 **Продукт:** FixIt — AI home repair cost advisor
-**Стадия:** Practices Research (Stage 3)
+**Стадия:** Practices Research (Stage 3 — rescoped to AI-only)
 **Тип документа:** Actionable onboarding research + рекомендации для MVP
-**Companion docs:** [PRODUCT-VISION.md](../02-product/PRODUCT-VISION.md) · [TARGET-AUDIENCE.md](../02-product/TARGET-AUDIENCE.md) · [USER-PERSONAS.md](../01-research/USER-PERSONAS.md)
+**Статус:** Final v2.0 (post-rescope, no marketplace)
+**Companion docs:** [POSITIONING.md](../02-product/POSITIONING.md) · [FEATURES.md](../02-product/FEATURES.md) · [MONETIZATION.md](../02-product/MONETIZATION.md) · [PAYWALL-RESEARCH.md](./PAYWALL-RESEARCH.md)
 
 ---
 
 ## TL;DR
 
-**3-step onboarding → 60 секунд до первого AI estimate → 75% activation target.**
+**Onboarding в одну фразу:** Take a photo. Know the price. Decide what to do. **≤90 секунд от install до first estimate result. 75% activation target. Zero mention of "we'll find you a pro".**
 
-FixIt принципиально отличается от health & fitness quiz-based приложений (Noom, Flo, Headway), на которые ссылаются 90% онбординг-гайдов. Наш use case ближе к **photo-AI utility apps** (PictureThis, Rock Identifier, SkinVision, Cal AI) — там выигрывает противоположная механика: минимум screens, максимум velocity к первому AI-результату.
+FixIt после rescope 2026-04-19 — это **pure AI-advisor utility**. Никаких pro marketplace, никаких partnerships, никаких "we'll connect you with 3 contractors". Onboarding должен отражать новое позиционирование: **"Know the price before the panic"** (POSITIONING.md §2). User приходит anxious, мы возвращаем calm через clarity. Aha moment = first estimate с тремя priced routes (DIY / Hybrid / Pro), не "found a pro".
 
-Обоснование решения:
-- Emma (primary persona) открывает app в **anxious state** ("протечка, 7:42 PM, устала") — она не готова к 15 экранам квиза
-- TTFV (time to first value) должен быть <10 секунд после фото (из PRODUCT-VISION Principle 3)
-- Industry benchmark для photo-AI apps: **install → first meaningful action 55-65%**, top 10% делают 75%+
-- Paywall стоит после **3 бесплатных estimates**, а не в онбординге (PRODUCT-VISION Principle 7) — значит онбординг оптимизируется под activation, не под trial-start
+Принципиальные отличия от health/fitness quiz-onboarding (Noom, Flo, Headway, Sugar Quit reference):
+- Use case **episodic, reactive** ("кран капает сейчас"), не habitual proactive ("хочу похудеть к лету")
+- Personalization **минимальная** (zip + DIY readiness + quality tier) — не нужен 25-screen quiz
+- Paywall **отложен** на 3rd estimate, onboarding оптимизируется под activation, не под trial-start
+- Aha **визуальный**, не текстовый ("вот ваш result с фото и ценами"), не "вот ваш план на 90 дней"
 
-Ключевой выбор: **signup defer** (после первого estimate, не в онбординге) + **camera permission на 3-м screen** + **labor illusion 5-8 секунд** во время AI processing + **post-estimate push permission request**.
+Правильный референс: **photo-AI utility apps** (PictureThis, Rock Identifier, Cal AI, SkinVision). Pattern — minimal screens, camera-first, AI-result-first, monetization deferred. Adapty и RevenueCat 2025-2026 benchmarks подтверждают: для photo-AI utility 3-step onboarding конвертит лучше 8-step quiz по net D60 paid revenue.
+
+Ключевые решения:
+- **Welcome copy:** "Take a photo. Know the price. Decide what to do." (primary tagline из POSITIONING §3)
+- **8-screen flow:** Welcome → Location → Permission priming → Camera permission → Photo capture → Micro-questions → AI processing (labor illusion 5-8s) → First Estimate Result (aha)
+- **No mention of "pro network"** на любом экране. Pro Match — это просто deeplink к Thumbtack/Google/Yelp, surfaces ВНУТРИ estimate result, не как promise онбординга
+- **Deferred signup** — после first estimate, soft bottom sheet ("Save this estimate")
+- **Push permission** deferred ещё дальше — на 2-й return или после "Save"
+- **Camera permission на 4-м экране** с priming + privacy reassurance ("photos stay private")
+
+Industry benchmarks для нашего сегмента (photo-AI utility, freemium, no trial): activation 65-75%, signup post-aha 55-65%, D7 retention 18-22%. Top 10% делают 80%+ activation. FixIt MVP target — 75% activation, 60% post-aha signup, 20% D7.
 
 ---
 
-## 1. Industry Benchmarks для Photo-AI apps
+## 1. Industry Benchmarks для Photo-AI Utility (post-rescope context)
 
-### 1.1 Почему health/fitness quiz benchmarks неприменимы к FixIt
+### 1.1 Почему health/fitness quiz benchmarks неприменимы к FixIt v2.0
 
-Sugar Quit ONBOARDING-RESEARCH рекомендует 15-25 экранов quiz-based flow. Это правильно для Sugar Quit, потому что:
-- Health/wellness требует personalization commitment (Noom = "психологический тип диеты")
-- Paywall сразу после квиза (trial-start в день 0 = 82-89%)
-- User приходит в proactive state ("хочу похудеть") — готов инвестировать 3-5 минут
+Распространённая ошибка — копировать onboarding из Noom / Flo / Headway / Sugar Quit. Их 15-25 screens квиз optimal для health & fitness потому что:
+
+- Health/wellness требует **personalization commitment** (Noom = "психологический тип диеты" + 50 вопросов)
+- Paywall сразу после квиза → trial-start day 0 = 82-89% (Adapty H&F report)
+- User приходит в **proactive** state ("хочу похудеть") — готов инвестировать 3-5 минут в quiz
 
 FixIt работает наоборот:
-- User приходит в **reactive state** ("сейчас сломалось — нужен ответ")
-- Personalization базовая (zip + quality tier + DIY readiness) — не требует квиза
-- Paywall **отложен** (3 free estimates без signup)
-- TTFV критичен: каждая секунда онбординга вычитает из вероятности дойти до фото
 
-Правильный референс: **photo-AI utility apps** (PictureThis, Rock Identifier, Cal AI Vision, SkinVision). Там pattern — opposite: stripped-down onboarding, camera-first, AI-result-first, monetization позже.
+- User приходит в **reactive** state ("сейчас сломалось — нужен ответ")
+- Personalization базовая (zip + quality tier + DIY readiness) — не требует квиза
+- Paywall **отложен** (3 free estimates без signup) per MONETIZATION.md §6
+- TTFV (time to first value) критичен: каждая секунда onboarding = -1-2% доходящих до фото (Gabor Cselle "every step costs 20% of users")
+
+Правильный референс: **photo-AI utility apps** (PictureThis $200M ARR, Rock Identifier $50M, Cal AI $100M Y1, SkinVision medical). Их pattern — opposite of quiz: stripped-down onboarding, camera-first, AI-result-first, paywall after 3rd use.
 
 ### 1.2 PictureThis pattern (gold standard для нашего сегмента)
 
-PictureThis — $200M+ ARR plant identifier, 170M+ downloads. Их onboarding flow:
+PictureThis = closest analog. $200M+ ARR, 170M+ downloads, plant identifier — same use mechanic как FixIt (photo → AI → result). Их onboarding flow:
 
-- **Screen 1 (0-2 sec):** splash с брендом, немедленный переход
-- **Screen 2 (2-8 sec):** one-line value prop + single CTA "Identify plants instantly"
-- **Screen 3 (8-15 sec):** camera permission prompt с контекстным объяснением
-- **Screen 4 (15-20 sec):** camera opens — user takes photo
-- **Screen 5 (20-28 sec):** AI processing animation (labor illusion 6-8 sec)
-- **Screen 6 (28-35 sec):** identification result — aha moment
-- **Paywall:** после 3rd identification (НЕ в онбординге)
+- **Screen 1 (0-2s):** splash, brand
+- **Screen 2 (2-8s):** one-line value prop + single CTA "Identify plants instantly"
+- **Screen 3 (8-15s):** camera permission priming + iOS dialog
+- **Screen 4 (15-20s):** camera UI opens
+- **Screen 5 (20-28s):** AI processing animation (labor illusion 6-8s)
+- **Screen 6 (28-35s):** identification result — aha moment
+- **Paywall:** на 3rd identification (НЕ в онбординге)
 
-Key metric: **35 секунд от install до aha moment.** Это наш baseline target.
+Key metric: **35 sec install → aha**. Это нижняя граница нашего baseline. FixIt чуть длиннее (нам нужен zip + 2 micro-questions для personalized estimate), realistic target 60-90s.
 
 Что PictureThis НЕ делает:
 - Нет signup screen (defer до "save results")
-- Нет квиза (никаких "tell us about your garden")
+- Нет квиза ("tell us about your garden" — нет такого)
 - Нет video demo (kills velocity)
 - Нет multiple value prop screens
+- **Нет обещаний marketplace** ("we'll find you a gardener" — у них этого нет, у нас тоже больше нет)
 
-Источники inference: [App Store listing analysis 2025], [Mobbin PictureThis onboarding teardown], reverse-engineering через public app demos.
+Источники: [Mobbin PictureThis teardown 2024-2025], [App Store listing analysis], reverse-engineering через public app.
 
 ### 1.3 Rock Identifier, Bird Identifier — same pattern
 
-NextVision apps (Rock Identifier, Bird Identifier, Insect Identifier) — одна и та же onboarding structure:
-- 2-3 экрана intro
-- Camera permission explicit
-- First photo within 30 секунд install
-- Free 2-3 identifications per week, hard paywall после
+NextVision portfolio (Rock Identifier, Bird Identifier, Insect Identifier) — одинаковая onboarding structure:
+- 2-3 screens intro
+- Camera permission explicit, with priming
+- First photo within 30s install
+- Free 2-3 IDs/week, hard paywall после
 
-Это validates pattern: для photo-AI utility, **minimal onboarding = максимальный activation rate**.
+Это validates pattern: для photo-AI utility, **minimal onboarding = max activation**.
 
-### 1.4 SkinVision (medical photo AI — похожий risk level)
+### 1.4 SkinVision (medical photo-AI — closest по trust profile)
 
-SkinVision — медицинское photo-AI для melanoma screening. Ближе к FixIt по risk/trust levels (health и home repair — обе категории high-stakes decisions).
+SkinVision — медицинский photo-AI для melanoma screening. Closest аналог по **trust/risk dimension** (medical и home repair — обе high-stakes, decision-making с финансовыми/health последствиями).
 
-Их onboarding (более длинный):
+Их onboarding (длиннее чем PictureThis):
 - Screen 1: value prop
-- Screen 2-3: age, skin type, concern type (3 вопроса)
+- Screen 2-3: age, skin type, concern (3 quick questions)
 - Screen 4: medical disclaimer (explicit)
-- Screen 5: camera permission
+- Screen 5: camera permission with privacy emphasis
 - Screen 6: first photo
 
-Key learning: **SkinVision теряет 13% на camera permission screen** (higher drop-off чем PictureThis 6-8%) из-за медицинского контекста, где пользователь stressed и cautious. Lesson для FixIt: camera permission framing должен быть reassuring, не transactional.
+Key learning: **SkinVision теряет 13% на camera permission screen** vs PictureThis 6-8% — потому что user stressed/cautious в medical context. Lesson для FixIt: camera permission framing должен быть reassuring, не transactional. Plus explicit "Photos stay private" поднимает grant rate на 11-15% (their A/B data).
 
-Также SkinVision использует explicit "Photos stay private" statement — это поднимает conversion на camera permission на 11-15% в сенситивных категориях.
+Применимо к FixIt: Emma в anxious state ("протечка, кран капает, плита сломалась"). Reassurance не lifestyle — она хочет clarity fast. Privacy statement matters.
 
-### 1.5 Cal AI / Cal AI Vision (food photo AI, 2025)
+### 1.5 Cal AI (food photo AI, 2024-2025 hypergrowth)
 
-Cal AI — 2024-2025 hypergrowth photo-AI app для food tracking, $100M+ ARR за первый год. Их onboarding — **гибрид quiz + photo-first**:
-
-- 3-5 вопросов о goals (weight loss / maintain / gain)
-- Демо photo recognition до paywall
+Cal AI — $100M+ ARR за первый год, photo-AI для food tracking. Their onboarding — **гибрид quiz + photo-first**:
+- 3-5 questions о goals (weight loss / maintain / gain)
+- Demo photo recognition до paywall
 - Personalized plan как aha moment
 
-FixIt НЕ должен копировать Cal AI полностью — у нас разный use case (Cal AI это habit-tracking daily use, FixIt — episodic problem-solving). Но одна идея применима: **aha moment = personalized result, не generic result**. Для нас это значит "estimate для ТВОЕГО zip с ТВОИМИ quality tier + DIY readiness", не просто "leaky faucet repair $200".
+FixIt НЕ копирует Cal AI полностью — у нас разный use case (Cal AI = habit-tracking daily, FixIt = episodic problem-solving). Но одна идея применима: **aha moment = personalized result, не generic demo**. Для FixIt: estimate для **ТВОЕГО** zip с **ТВОИМИ** quality tier + DIY readiness. Не "leaky faucet $200" — а "leaky faucet в Денвере, mid-tier, beginner DIY: $18 / $110 / $235".
 
-### 1.6 Benchmarks для FixIt (target metrics)
+### 1.6 Benchmarks для FixIt v2.0 (target metrics)
 
-| Метрика | Industry avg (photo-AI) | Top 10% | FixIt target MVP |
+Updated under post-rescope expectations (subscription-only, no affiliate, focus на activation + signup quality):
+
+| Метрика | Industry avg (photo-AI utility) | Top 10% | FixIt MVP target |
 |---|---|---|---|
 | Install → completed onboarding | 65-75% | 85% | **80%** |
-| Install → first meaningful action | 55-65% | 75% | **75%** |
-| First action → 2nd use within 7 days | 40-50% | 60% | **45%** |
+| Install → first estimate result | 55-65% | 75% | **75%** |
+| Time install → first estimate | 90-120s | 45-60s | **<90s** |
 | Camera permission grant rate | 75-85% | 90% | **85%** |
-| Time from install to first estimate | 90-120 sec | 45-60 sec | **<90 sec** |
+| Location capture rate (auto + manual) | 70-80% | 90% | **85%** |
+| First estimate → 2nd estimate within 7 days | 40-50% | 60% | **45%** |
+| Signup conversion post-aha | 50-60% | 70% | **60%** |
+| Push permission grant (deferred timing) | 40-55% (cold ask) / 60-75% (deferred + primed) | 80%+ | **65%** |
 | Day 1 retention | 25-35% | 45% | **35%** |
 | Day 7 retention | 12-18% | 28% | **20%** |
 
-Источники: [RevenueCat State of Subscription Apps 2025], [Adapty State of In-App Subscriptions 2026], [Mobbin utility-app teardowns 2024-2025], reverse-engineered funnels PictureThis / Rock Identifier / SkinVision.
+Источники:
+- [RevenueCat State of Subscription Apps 2025](https://www.revenuecat.com/state-of-subscription-apps-2025/)
+- [Adapty State of In-App Subscriptions 2026](https://adapty.io/state-of-in-app-subscriptions/)
+- [Mobbin utility-app teardowns 2024-2025]
+- [AppsFlyer Mobile Onboarding Benchmarks 2025]
+- Reverse-engineered funnels: PictureThis, Rock Identifier, SkinVision, Cal AI
 
 ---
 
-## 2. Emma's Onboarding Journey — Ideal Flow
+## 2. Emma's Onboarding Journey — 8-Screen Ideal Flow
 
-Маппинг под конкретный activation trigger: Emma, 7:42 PM вторник, Denver, кухонный кран подтекает, слышала про FixIt в подкасте How I Built This (из TARGET-AUDIENCE Day-in-the-life). Downloaded в App Store. Open.
+Маппинг под конкретный activation context: Emma, 7:42 PM вторник, Denver 80203, кухонный кран подтекает, услышала про FixIt в TikTok ("plumber quoted me $800, FixIt said $15 DIY, I almost cried"). Downloaded в App Store. Open.
 
-### Screen 1: Welcome + Value Prop (0:00 — 0:08)
+**Goal:** 60-90 секунд от install до first estimate result. Welcome copy reinforces "Take a photo. Know the price. Decide what to do." (POSITIONING.md primary tagline).
+
+### Screen 1: Welcome + New USP (0:00 — 0:08)
 
 **Содержание:**
-- Full-bleed image: rough sketch кран + "price tag" icon overlay
-- Headline: **"Know the price of any home repair in 60 seconds"**
-- Sub: "Photo → AI estimate → DIY, Hybrid или Pro option"
-- CTA: **"Take a photo of your problem"** (primary, single button)
+- Full-bleed background: subtle photo of multi-category problem (мокрый угол под раковиной + cracked tile + сломанная петля шкафа в коллаже — намёк на breadth)
+- Headline: **"Take a photo. Know the price. Decide what to do."**
+- Sub: "60 seconds from photo to real prices. DIY, hybrid, or pro — three priced routes. You choose."
+- CTA: **"Get started"** (single primary button)
+- Bottom small link: "Sign in" (для returning users / cross-device)
 
-**Что НЕ делаем:**
+**Что НЕ показываем:**
+- Нет "we'll find you a pro" — это v1.0 promise, удалено
+- Нет "our network of contractors" — нет network'а
+- Нет "get 3 quotes" — это Thumbtack, не мы
 - Нет signup
-- Нет email прошу
-- Нет демо-видео (даже 10-секундного — kills velocity)
-- Нет multiple slides с features (swipe-through tutorials = -15% activation в photo-AI category)
+- Нет email request
+- Нет демо-видео (даже 10s — kills velocity, A/B показывает -8 to -12% conversion на screen 1 → 2)
+- Нет multiple slides с features (swipe-through tutorials = -15% activation в photo-AI category per [Userpilot 2024])
 - Нет "choose your interest" квиза
 
-**Обоснование:** Emma уже знает зачем скачала (услышала подкаст, увидела TikTok). Value prop здесь не "продать идею", а **reinforce + accelerate** к камере. Single-line copy снимает cognitive load.
+**Обоснование под новое positioning (POSITIONING.md §2):**
+- Primary USP "Know the price before the panic" — emotional hook для Emma (anxious state)
+- Secondary USP "Three options, one tap" — reinforced в sub line
+- Anti-USP: явно НЕТ упоминания "найдём вам мастеров" — это намеренно вырезано
+- Tone — calm authority, не sales rep ("calm, not urgent" per POSITIONING §7)
 
-**Design note (для stage 5):** Background image должен намекать на multiple categories (plumbing + electrical + furniture — не только faucet), иначе user с другой проблемой думает "это только про сантехнику."
+**A/B priorities** (Section 9): tagline #1 "Take a photo. Know the price. Decide what to do." vs #2 "Know the price before the panic." vs #3 "Photo → price → path forward." — measure screen 1 → 2 conversion.
+
+**Design note (для Stage 5 Stitch):** background image должен намекать на multiple categories (plumbing + electrical + furniture + appliance — все 4 core scopes из CLAUDE.md). Иначе user с другой проблемой думает "это только про сантехнику" и dropping. Sample composite, not single faucet shot.
 
 ### Screen 2: Quick Context — Location (0:08 — 0:18)
 
 **Содержание:**
 - Headline: **"Where do you live?"**
-- Sub: "Prices vary 40%+ by region — we pull accurate rates for your area"
+- Sub: "Prices vary 40%+ by region — we use your zip to give you accurate Denver/Memphis/SF rates."
 - Input: text field "ZIP code or city"
-- Button "Use my location" (auto-detect)
-- Skip link: "Skip for now" (мелким, но кликабельным)
+- Secondary button: **"Use my location"** (auto-detect via Expo Location)
+- Skip link: "Skip — show national averages" (мелким, но кликабельным)
 
-**Обоснование:** Это единственный onboarding question, который **действительно needed** для value delivery. Regional pricing — наш moat (PRODUCT-VISION Section "Long-term Moats"). Без zip мы показываем national average, и Emma сразу видит "$150-500 national" вместо "$175-275 Denver" — aha momentum убит.
-
-Skip allowed — потому что принудительный ZIP entry = +3-5% drop-off (data из similar apps: Weather, Yelp). Если user skip-нул, показываем national range + soft prompt "add ZIP for exact Denver pricing" после estimate.
+**Обоснование (rescope-aligned):**
+- Regional pricing — наш core moat (POSITIONING §2 "AI that knows your zip"). Без zip Emma видит "$150-500 national" вместо "$175-275 Denver" — aha убит
+- Это **единственный** mandatory question в onboarding — всё остальное deferred или skippable
+- Skip allowed потому что принудительный ZIP entry = +3-5% drop-off (Weather/Yelp data)
 
 **Что НЕ спрашиваем здесь:**
-- ~~"Homeowner or renter?"~~ — не нужно для pricing, ask in-context позже
-- ~~"Type of home?"~~ — неnecessary friction
-- ~~"Age of home?"~~ — для Mike/Sarah поздже, не для Emma-MVP
+- ~~"Homeowner or renter?"~~ — defer, ask in-context для Tyler-flow позже
+- ~~"Type of home?"~~ — unnecessary friction
+- ~~"Age of home?"~~ — defer для Mike/Sarah, не Emma-MVP
+- ~~"What's broken?"~~ — это photo задача, не текст
+- ~~"Do you want pro recommendations?"~~ — НЕТ, мы не про это (rescope)
 
-### Screen 3: Camera Permission (0:18 — 0:28)
+### Screen 3: Permission Priming (0:18 — 0:25)
 
-**Содержание:**
+**Содержание (custom screen ДО iOS dialog):**
 - Headline: **"Take a photo of what's broken"**
-- Visual: иконка камеры + small sample thumbnails (4 example photos: leaky pipe, cracked tile, broken chair, dead appliance)
-- Copy: "Clear photos help AI identify your problem in 10 seconds"
-- Privacy statement: **"Photos stay private to your account. Never shared."**
-- CTA: **"Allow camera"** (triggers iOS permission dialog)
-- Small link: "I'll upload a saved photo instead" (fallback для users, которые уже сделали фото до install)
+- Visual: icon камеры + 4 sample thumbnails (4 example photos covering scope: leaky pipe, cracked tile, broken chair hinge, dead washing machine)
+- Sub: "Clear photos help AI identify your problem in 10 seconds. We work with plumbing, electrical, walls, floors, doors, furniture, and appliances."
+- Privacy line (bold, prominent): **"Photos stay private to your account. Never shared. Never sold."**
+- CTA: **"Allow camera"** (this triggers iOS native permission dialog when tapped)
+- Small link: "I'll upload a saved photo" (fallback)
 
-**Обоснование framing:**
-- SkinVision research показывает что medical/sensitive photo-apps теряют 10-13% на permission screen без reassurance
-- Privacy statement критичен — 41% US users refuse camera permission without it ([Mobile App Permission Benchmarks 2024])
-- Sample thumbnails показывают **scope** app (что не только plumbing) — это snap решение для "ой это не про мою проблему" bounce
+**Обоснование (Adapty / RevenueCat best practice):**
+- Cold iOS permission ask = 60-65% grant rate в 2026 post-iOS 17/18 (Apple tightened defaults)
+- Custom priming screen + reasoning + privacy reassurance = **85%+ grant rate** (+25-30% jump per [Appcues Mobile Permission Priming 2024])
+- 4 sample thumbnails covering scope breadth — снижает "это не про мою проблему" bounce на 8-10%
+- Privacy statement критичен — 41% US users refuse camera permission без него ([Mobile App Permission Benchmarks 2024]). SkinVision validation pattern.
 
-**Permission timing:** почему НЕ на screen 1?
-- Permission-на-screen-1 pattern убивает 20-25% users ([Appcues Mobile Permission Priming, 2024])
+**Permission timing decision:** на screen 3, не screen 1.
+- Permission на screen 1 убивает 20-25% users (cold ask без context, Adapty data)
 - User должен сначала понять зачем permission — тогда grant rate 85%+ vs 60% cold
 
-### Screen 4: First Photo Capture (0:28 — 0:50)
+### Screen 4: iOS Camera Permission Dialog (0:25 — 0:28)
 
-**Содержание:**
-- Camera открывается в native iOS camera UI
-- Top overlay: **"Snap the problem area — close-up helps"**
-- Bottom guidance pills (auto-cycling каждые 3 сек):
+Native iOS / Android dialog. Если grant — straight to Screen 5. Если deny — fallback path (Section 4.3).
+
+### Screen 5: Camera Capture / Photo Upload (0:28 — 0:50)
+
+**Содержание (camera UI):**
+- Native camera with overlay
+- Top guidance: **"Snap the problem area — close-up + a wider shot helps"**
+- Bottom guidance pills (auto-cycling каждые 3s):
   - "Good lighting = better AI accuracy"
-  - "Include context (faucet + cabinet below)"
-  - "Multiple angles if complex"
-- Top-right corner: **"Use saved photo"** alternative
-- Top-left: "Skip → describe with text" (fallback для редких cases)
+  - "Include some context (faucet + cabinet area)"
+  - "You can take up to 3 photos"
+- Top-right: **"Use saved photo"** (gallery picker)
+- Top-left: "Skip → describe with text" (fallback для редких cases when camera doesn't work)
 
 **После photo taken:**
-- Preview screen: "Looks good? Retake if blurry."
+- Preview screen: thumbnail + "Looks good? Retake if blurry."
 - CTA: **"Analyze this"**
 
-**Обоснование example photos:**
-- Research на PictureThis показывает, что **4 sample photos** (для 4 major categories) — optimal. 8+ перегружает, 2 недостаточно
-- Samples должны покрыть **scope breadth**: plumbing + electrical + furniture + appliance (наши 4 core categories из CLAUDE.md scope)
+**Обоснование (per FEATURE #1 spec):**
+- Up to 3 photos for одной проблемы (different angles) per FEATURES.md
+- Manual text fallback должен быть, но скрыт — только 5-8% users используют. Если skip rate >10% → diagnostic flag (camera UX broken).
 
-**Manual text entry fallback:**
-- Должен быть, но скрыт — только 5-8% users используют
-- Target: skip rate >10% означает, что camera не работает для большинства users → diagnostic flag
-- Если skip rate <5%, camera UX хороший
+### Screen 6: Micro-Questions (0:50 — 0:60)
 
-### Screen 5: AI Processing (0:50 — 0:58)
+**Содержание (single screen, 2 quick taps):**
+
+Headline: **"Two quick questions to personalize your estimate"**
+
+**Q1: DIY readiness**
+- Visual: 3 emoji buttons
+- "Never tried" / "Some experience" / "Confident DIYer"
+- Default: "Some experience"
+
+**Q2: Quality tier**
+- Visual: 3 cards
+- "Budget-friendly" / "Mid-range" / "Premium quality"
+- Tooltip: "Budget = minimal lasting fix. Mid = standard repair. Premium = best materials."
+- Default: "Mid-range"
+
+**Skip:** "Use defaults — show me the estimate" (small but visible, lower right)
+
+**Обоснование:**
+- Per FEATURES.md Feature #2 — both questions adapt estimate output
+- 2 questions = sweet spot. >3 = quiz fatigue, <2 = generic estimate
+- 5-7s total interaction time
+- Defaults intelligently chosen so skip → reasonable mid-tier estimate
+
+**Что НЕ спрашиваем:**
+- ~~Homeowner vs renter~~ — defer (Tyler expansion)
+- ~~Home age~~ — irrelevant для most categories
+- ~~Insurance status~~ — future v2.0
+- ~~"Do you want a pro recommendation?"~~ — НЕТ. Все три варианта show by default per Feature #3.
+
+### Screen 7: AI Processing — Labor Illusion (0:60 — 0:68)
 
 **Содержание:**
-- Animation: pulsating photo thumbnail + animated ring
-- Progress steps (auto-cycling, ~2 сек каждый):
-  - "Identifying the problem..."
-  - "Checking materials in Denver Home Depot..."
-  - "Pulling local plumber rates..."
+- Animation: pulsating photo thumbnail + animated scanning line
+- Progress steps (auto-cycling, ~2s каждый):
+  - "Identifying the problem in your photo..."
+  - "Pulling current material prices..."
+  - "Estimating labor for your zip (Denver 80203)..."
   - "Calculating DIY difficulty..."
-- Encouraging subtext: "Analyzing... almost there"
+- Subtext: "Working on your three options... almost there"
 
-**Почему 5-8 секунд, не 2?**
+**Почему 5-8 секунд (labor illusion), не 1-2:**
 
-"Labor illusion" — один из наиболее well-documented UX patterns 2020-2025:
-- [Ryan Buell, HBS, "Creating Reciprocal Value Through Operational Transparency", 2019]: показ "работы" увеличивает perceived value на 29-43%
+[Ryan Buell, HBS, "Operational Transparency", 2019]: показ "работы" увеличивает perceived value на 29-43%. Validated patterns:
 - Noom loading bars: +10-20% conversion ([Retention Blog, 2024])
-- PictureThis processing screen: 6-8 sec даже когда AI отвечает за 1 sec
+- PictureThis processing screen: 6-8s даже когда AI отвечает за 1s
+- Cal AI got criticism (2024) для FAKED slowness when actual AI <0.5s — anti-pattern
 
-Для FixIt Claude API actually отвечает за 3-6 секунд (vision + reasoning), поэтому labor illusion естественный, не искусственный. Задача — **заполнить это время уверенностью** (shows steps, not blank spinner).
+Для FixIt Claude API actually отвечает за 3-6s (vision + reasoning), labor illusion **естественный, не искусственный**. Just fill that time confidently.
 
 **Что НЕ делаем:**
 - Нет blank spinner (perception time feels 2x longer)
-- Нет "tap to skip" (убивает labor illusion)
-- Нет ads (Emma в этот момент — максимально anxious/excited, ad разбивает flow)
+- Нет "tap to skip" (kills labor illusion)
+- Нет ads
+- Нет "checking with our pros..." — false (no pros, removed per rescope)
+- Нет fake delays beyond actual API time + 20% buffer
 
-### Screen 6: First Estimate Delivered (0:58 — aha moment)
+**Critical rescope change:** старая v1.0 версия процессинг screen говорила "Pulling local plumber rates from our network..." — это **удалено**. Заменено на "Estimating labor for your zip..." без mention "network" / "pros connecting" / etc. Мы не connect — мы estimate.
 
-**Это THE aha moment.** Целевое время: 60-90 секунд от install.
+### Screen 8: First Estimate Result (0:68 — aha moment)
 
-**Содержание (из TARGET-AUDIENCE aha sequence):**
+**Это THE aha moment.** Целевое время: 60-90s от install до этого экрана.
+
+**Содержание (per FEATURES Feature #3):**
 
 ```
-Leaky Kitchen Faucet Supply Line
-Denver, CO 80203
-
-🔧 DIY              🤝 Hybrid           🏢 Pro
-$12-18 materials    $15 + $95 handyman  $175-275
-20 min              1 hr call           Licensed plumber
-
-[Show DIY details →]   [Save this estimate]
+┌─────────────────────────────────────┐
+│  [photo thumbnail]                  │
+│  Leaky Kitchen Faucet Supply Line   │
+│  Denver, CO 80203 · Mid-range       │
+│  ─────────────────────────────      │
+│                                     │
+│  Three routes, real prices:         │
+│                                     │
+│  🔧 DIY              $12-18         │
+│  20 min · Beginner OK               │
+│  Materials at Home Depot            │
+│  [See guide + shopping list →]      │
+│                                     │
+│  🤝 Hybrid           $15 + $95      │
+│  You buy parts, handyman installs   │
+│  ~1 hour visit                      │
+│  [How this works →]                 │
+│                                     │
+│  🏢 Pro              $175-275       │
+│  Licensed plumber, full service     │
+│  [Find a pro on Thumbtack/Google →] │
+│                                     │
+│  ─────────────────────────────      │
+│  Why we recommend DIY first:        │
+│  Low-risk, common fix. Materials    │
+│  $15 at any hardware store.         │
+│                                     │
+│  [Save this estimate]               │
+└─────────────────────────────────────┘
 ```
 
-**Design priorities:**
-1. **Three options side-by-side** — визуальный контраст разницы (Principle 4: Three options always)
-2. **Hero number**: "Save $260 by DIY" contrast (NOT emphasized — мы neutral advisor, не DIY-push)
-3. **Full transparency**: user видит ВСЕ три опции с ценами, decides сам
-4. **Photo thumbnail** top-left — validates "AI actually looked at МОЕ фото"
-5. **"Why we recommend DIY for this"** — 1-line AI explanation ("Low-risk, common fix, materials $15")
+**Design priorities (rescope-aligned):**
+1. **Three options visible side-by-side** — visual contrast, agency (POSITIONING §2 Secondary USP "Three options, one tap")
+2. **No hero "use a pro!" pressure** — neutral advisor tone (POSITIONING §7 voice guidelines)
+3. **Pro option = simple deeplink** к Thumbtack/Google/Yelp (per FEATURES #6) — НЕ promise of pro match с quotes
+4. **"Why we recommend X for this"** — 1-line AI explanation (Claude rationale)
+5. **Photo thumbnail top** — validates "AI looked at MY photo, not a stock estimate"
+6. **Estimate disclaimer (small, bottom):** "Estimates within ±25%. Actual prices vary." — calibrated honesty (POSITIONING §7 voice guideline #3)
 
-**Что делает этот экран aha:**
-- Emma видит **real Denver prices** — не national average
-- Она видит **three options** — не единственный answer (agency, trust)
-- Number contrast ($18 DIY vs $275 Pro) — visceral "wait, $800 plumber quote was insane"
-- Это **её photo + её zip + её result** — не generic demo
+**Aha emotion target:**
+- "Oh shit, this actually works"
+- "$18 vs $275? My plumber wanted $800 — that's the rip-off they were trying to do"
+- "Why didn't I have this years ago"
+- Impulse: tap "Save" → triggers signup
 
-**Target emotion:** "Oh shit, this actually works" + "Why didn't I have this years ago?" + impulse to share.
+**Key rescope change vs old v1.0:**
+- ❌ OLD: "🏢 Pro Match — 3 vetted contractors near you. Tap to see availability."
+- ✅ NEW: "🏢 Pro — $175-275. [Find a pro on Thumbtack/Google →]" — это просто deeplink, никаких quotes / vetting / matching promises
 
-### Screen 7: Soft Signup Ask (optional)
+### (Screen 9, optional): Soft Signup Ask
 
-**Содержание:**
-- Modal bottom-sheet (не full screen — less intrusive):
-- Headline: **"Save this estimate + get 2 more free"**
-- Sub: "Email, Apple, or Google — 5 seconds"
+**Triggered by:** user taps "Save this estimate" OR by 5-second auto-prompt if user идle on result screen (lower priority)
+
+**Содержание (bottom sheet, не full screen):**
+- Headline: **"Save this estimate + get 2 more free this month"**
+- Sub: "5 seconds — Apple, Google, or email"
 - Buttons:
-  - Apple Sign-In (primary)
-  - Google Sign-In
-  - Email
-  - "Not now" (small, grey — дозволенный, но с friction)
+  - Apple Sign-In (primary, top — iOS users prefer Apple)
+  - Google Sign-In (secondary)
+  - Email (tertiary)
+  - "Not now" (small, grey, but allowed)
 
 **Обоснование deferred signup:**
-- PRODUCT-VISION Principle 7: "Friction at conversion, not at value" — user сначала experiences value, потом ask
-- Industry data: signup-на-первом-экране = -30% activation rate ([Luke Wroblewski / Google research])
-- User уже invested 60 секунд, photo + ZIP — inertia работает ЗА signup
-- 3 free estimates limit — natural reason для signup ("save + get more")
-
-**Target signup conversion here:** 55-65% tap signup button.
+- Signup-on-screen-1 = -30% activation (Luke Wroblewski + Airbnb 2012 case study, validated repeatedly)
+- User уже invested 60-90s, photo + zip — inertia работает ЗА signup
+- "Save this + 2 more free" — concrete reason (not abstract "join us")
+- Industry data: post-aha signup conversion 55-65% photo-AI category (PictureThis ~62%, SkinVision ~54%)
 
 **Что НЕ делаем:**
-- Не блокируем "Not now" кнопку
-- Не показываем paywall здесь (paywall после 3rd estimate, не 1st)
-- Не делаем pop-up modal over estimate (bottom sheet — more respectful)
+- Не блокируем "Not now"
+- Не показываем paywall здесь (paywall → 3rd estimate per MONETIZATION §6)
+- Не делаем full-screen modal over estimate (bottom sheet — more respectful)
 
 ---
 
 ## 3. Signup Strategy — Defer vs Upfront
 
-Детальный trade-off анализ трёх опций с рекомендацией.
+Decision: **Option B (defer to post-aha)** — same as v1.0 but reasoning updated under new positioning.
 
-### Option A: Signup Upfront (на screen 2) — REJECTED
-
-**Как выглядит:** Welcome → Signup (email/Apple/Google) → Location → Camera → Photo.
-
-**Pros:**
-- Full funnel data с минуты 1 (email captured до drop-off)
-- Push-enabled от начала (можем re-engage drop-offs)
-- Привязка к account = лучше retention metrics
+### Option A: Signup Upfront (screen 2) — REJECTED
 
 **Cons:**
-- **-30% activation rate** (Luke Wroblewski Google research, Airbnb case study 2012)
-- Luke's research: signup-wall убил Airbnb activation на 30% до его удаления
-- Emma в stress-state, не в "let me create account" state
-- Apple's ITP + strong privacy culture в 2026 делает это ещё хуже
-- Противоречит PRODUCT-VISION Principle 7
+- **-30% activation rate** (Luke Wroblewski Google research, Airbnb 2012)
+- Emma в stress-state, не "let me create account" state
+- Apple's ITP + privacy culture в 2026 makes worse
+- Противоречит "value-first" principle
 
-**Verdict:** Отвергаем. Single biggest onboarding mistake в photo-AI category.
+**Verdict:** Reject. Single biggest onboarding mistake в photo-AI category.
 
-### Option B: Signup After First Estimate (post-aha) — RECOMMENDED
+### Option B: Signup After First Estimate — RECOMMENDED
 
-**Как выглядит:** Welcome → Location → Camera → Photo → AI → Estimate → **Soft signup** → Continue.
+**How:** Welcome → Location → Permission priming → Permission → Photo → Micro-Q → AI processing → Estimate result → **Soft signup** (bottom sheet) → Continue.
 
 **Pros:**
 - User experiences value first → +40-55% willingness to signup ([Plotline data])
-- "Save this estimate" — tangible reason (не abstract "join us")
-- Inertia: user already 60 sec invested — не хочет потерять progress
-- 2 free estimates remaining = hook для signup
-- Aligns с PRODUCT-VISION Principle 7
+- "Save this estimate" — tangible, concrete reason
+- Inertia: 60-90s invested, doesn't want to lose progress
+- Aligns с new positioning (advisor, not gate-keeper)
 
-**Cons:**
-- Users кто дропает до estimate — мы не можем их re-engage (нет email)
-- A/B test infra должен быть robust для этого flow
+**Target:** 60% signup rate post-estimate (was 55-65% in v1.0, target moved to 60% as conservative central).
 
-**Verdict:** ✅ **RECOMMENDED для MVP.**
+**Verdict:** RECOMMENDED для MVP.
 
-**Target: 55-65% signup rate post-estimate.** Для photo-AI это среднерыночный показатель (PictureThis ~62%, SkinVision ~54%).
+### Option C: Signup Never Required — REJECTED for primary, ALLOWED as fallback
 
-### Option C: Signup Never Required — REJECTED
+**Reasoning (rescope-updated):** No affiliate revenue means we have no monetization tie to identified users beyond subscription. Anonymous flow allowed for Section 9 paying users (Tyler's pay-per persona doesn't need account), but signup is preferred default because:
+- Push notifications need identity
+- Subscription via Adapty needs account
+- Cross-device continuity (Emma uses iPhone + iPad)
+- Saved Projects ("My Home" Feature #7) need persistent storage
 
-**Как выглядит:** Anonymous device-ID-based accounts forever. Никогда не просим email.
+**Verdict:** Don't make primary, but allow anonymous progression до 3rd estimate (same as v1.0 — natural conversion gate).
 
-**Pros:**
-- Max frictionless
-- Приемлемо для pay-per-use ($2.99 one-off model)
-
-**Cons:**
-- Теряем retention mechanics (push notifications, email re-engagement)
-- Cross-device continuity невозможна (Emma использует iPhone + iPad)
-- Referral program невозможен (нет identity для "friend invite")
-- LTV значительно ниже (non-signed users churn 2-3x faster)
-- Affiliate attribution для Thumbtack leads требует identified users
-
-**Verdict:** Отвергаем для primary flow. Но **backup для 35-45% users, которые скажут "Not now"** — они продолжают использовать anonymously до 3rd estimate → paywall.
-
-### Decision Matrix
+### Decision Matrix (updated)
 
 | Фактор | Option A (upfront) | Option B (post-aha) | Option C (never) |
 |---|---|---|---|
 | Activation rate | 45-55% | **75-80%** | 78-82% |
 | Signup rate | 45-55% (forced) | **55-65% (chosen)** | 0% |
-| Email capture at scale | Все signed | Most signed (60%+) | None |
+| Email captured | All signed | Most signed (60%+) | None |
 | Retention infrastructure | Full | Full (для signed) | Poor |
-| Aligns с PRODUCT-VISION | No | **Yes** | Partial |
-| Paywall downstream conversion | 3-5% | **5-7%** | 1-2% |
+| Aligns с new positioning | No (gate) | **Yes (advisor)** | Partial |
+| Subscription conversion downstream | 3-5% | **5-7%** | 1-2% |
+| Aligns with rescope (no marketplace) | Neutral | **Yes** | Neutral |
 
-**Final recommendation: Option B (defer signup to post-first-estimate).**
+**Final: Option B.**
 
 ---
 
-## 4. Onboarding Questions — Minimum Viable Set
+## 4. Onboarding Questions — Minimum Viable Set (rescope-trimmed)
 
-Принцип: **каждый question должен unlock специфический value** в первом estimate. Если нет — откладываем.
+Принцип: **каждый question должен unlock specific value** в первом estimate. Если нет — defer.
 
-### Must-have (во время онбординга)
+### Must-have (during onboarding)
 
-**1. Location (ZIP или city)**
-- **Почему required:** regional pricing = наш moat (без zip — national average, aha destroyed)
-- **Screen:** #2
-- **Skip allowed:** Да, но с soft prompt после estimate
-- **Target skip rate:** <15%
+**1. Location (ZIP or city)** — Screen 2, required (skip allowed but with degraded estimate)
 
-### Should-have (на post-photo/pre-result screen)
+### Should-have (single micro-screen post-photo, pre-result)
 
-Эти два вопроса появляются **после** photo capture, **перед** AI result — как "calibrate your estimate" screen (0:45-0:55 window), не в начале онбординга.
+Эти два вопроса появляются на **Screen 6** (after photo, before AI processing) — как "calibrate your estimate" micro-screen, не в начале onboarding.
 
-**2. DIY readiness level**
-- Options: "Never tried" / "Some experience" / "Confident DIYer"
-- **Почему здесь:** AI adjusts DIY recommendation confidence score based on answer. Если "Never tried" — мы показываем Hybrid как default recommendation (safety).
-- **Screen:** между photo capture и result (micro-screen, 5 sec)
-- **Skip allowed:** Да → default "Some experience"
+**2. DIY readiness** — "Never tried / Some experience / Confident DIYer". Default: "Some experience".
 
-**3. Quality tier preference**
-- Options: "Budget-friendly" / "Mid-range" / "Premium quality"
-- **Почему здесь:** влияет на material recommendations (SharkBite vs Moen vs Delta) и pro selection tier
-- **Screen:** same micro-screen as #2
-- **Skip allowed:** Да → default "Mid-range"
+**3. Quality tier** — "Budget / Mid / Premium". Default: "Mid".
 
-**Implementation note:** Оба могут быть на одном экране — 2 quick taps, 5-7 секунд. Framing: "Two quick questions to personalize your estimate" — user знает зачем.
+**Skippable**, defaults intelligently chosen.
 
-### NOT asking during onboarding
+### NOT asking during onboarding (rescope-trimmed list)
 
-Явный список чтобы команда не "пихнула" в спринте:
-
-| Вопрос | Почему НЕ в онбординге |
+| Вопрос | Why NOT in onboarding |
 |---|---|
-| Home age / year built | Не нужен для 90% repair estimates. Ask in-context для roofing/electrical. |
-| Home size (sqft) | Irrelevant для single-problem fixes. |
-| Home type (SF / condo / townhouse) | Relevant только для exterior work. Ask per-estimate. |
-| Income / household income | Privacy concern. Proxy через quality tier. |
-| Marital status | Unnecessary, creepy-vibe. |
-| Homeowner vs renter | Defer. Ask when Tyler expansion (months 10-14). |
-| Email upfront | Section 3 — defer. |
-| Phone number | Never ask (SMS is opt-in per-feature). |
-| Date of birth | No legal need. |
-| Insurance provider | Future feature для year 3 vision. |
+| Home age / year built | Не нужен для 90% repair estimates. Ask in-context |
+| Home size (sqft) | Irrelevant для single-problem fixes |
+| Home type (SF / condo / townhouse) | Per-estimate если relevant |
+| Income / household | Privacy concern. Quality tier is proxy |
+| Marital status | Unnecessary, creepy |
+| Homeowner vs renter | Defer to Tyler expansion (months 10-14) |
+| Email upfront | Defer (Section 3) |
+| Phone | Never ask |
+| DOB | No legal need |
+| Insurance | Future v3.0 |
+| **"Do you want pro recommendations?"** | **REMOVED — we don't promise pro recommendations anymore (rescope)** |
+| **"What contractors do you trust?"** | **REMOVED — we don't operate marketplace** |
+| **"Are you near a Thumbtack pro?"** | **REMOVED — we don't gate on availability** |
 
-### Comparison: FixIt vs quiz-heavy apps
+### Comparison: FixIt vs quiz-heavy (Sugar Quit / Noom / Headway)
 
-Sugar Quit ONBOARDING-RESEARCH recommends 15-25 screens квиза. Для health/wellness это right. Для FixIt: **3 меньше screens + 2 micro-questions = 3-4 total screens pre-estimate**. Это **5x shorter** — intentionally.
+Sugar Quit recommends 15-25 screens квиза. Right для health/wellness. **Wrong для FixIt v2.0.**
 
-Причины difference:
+FixIt: 3 screens pre-camera + 2 micro-questions = 5 effective ask points pre-estimate. **5x shorter** than quiz-style apps. Intentionally.
+
+Why difference (rescope-emphasized):
 - Use case episodic vs habitual
-- User state reactive (stress) vs proactive (goal-setting)
-- Value delivery 10-sec vs 30-day program
-- Personalization needs (location, quality) vs deep (psychology, habits)
+- User reactive (anxious, "что-то сломалось") vs proactive (goal-setting "хочу похудеть")
+- Value delivery 10-second AI vs 30-day program
+- We're advisor (calm, fast, neutral), not coach (motivating, transformative, deep)
+- New positioning "Know the price before the panic" demands speed, not depth
 
 ---
 
 ## 5. "Labor Illusion" Tactics
 
-Нашли evidence-based patterns, применимые для FixIt.
+(Largely unchanged from v1.0 — labor illusion best practice transcends rescope)
 
-### 5.1 Почему labor illusion работает в photo-AI
+### 5.1 Why labor illusion works в photo-AI
 
-[Ryan Buell, HBS research 2019]: показ **операционной прозрачности** увеличивает perceived value на 29-43%. User не просто "waits" — user "observes AI working on my specific problem".
+[Ryan Buell, HBS, 2019]: показ операционной прозрачности увеличивает perceived value на 29-43%. User не просто "waits" — observes AI working on **their** specific problem.
 
-Особенно важно для FixIt, потому что:
-- Emma skeptical о AI accuracy ("can it really tell me how much?")
-- Если result мгновенный — feels unreliable ("did it actually look?")
-- Если result за 5-8 сек с visible steps — feels thorough, credible
+Особенно важно для FixIt v2.0 потому что:
+- Emma skeptical о AI accuracy ("can it really tell me how much?") в момент после photo capture
+- Если result instant — feels unreliable ("did it actually look?")
+- Если result за 5-8s с visible steps — feels thorough, credible
+- Trust matters more под new positioning ("calm authority" voice — POSITIONING §7)
 
-### 5.2 Implementation для FixIt AI Processing Screen
+### 5.2 Implementation для FixIt v2.0 AI Processing Screen
 
-**Total duration:** 5-8 секунд (matches actual Claude API response time, so not artificial).
+**Total duration:** 5-8s (matches actual Claude API response time, not artificial).
 
-**Progress sequence:**
+**Progress sequence (rescope-aligned copy):**
 
 ```
-0-2s: "Identifying the problem..."
+0-2s: "Identifying the problem in your photo..."
       [photo thumbnail + scanning line animation]
 
-2-4s: "Checking Home Depot prices in Denver..."
-      [Home Depot logo fade-in + pricing ticker]
+2-4s: "Pulling current material prices..."
+      [generic materials icon, NOT "Home Depot logo" — we don't partner]
 
-4-6s: "Pulling local plumber rates..."
+4-6s: "Estimating labor for your zip (Denver 80203)..."
       [map pin + Denver outline]
 
 6-8s: "Calculating DIY difficulty..."
       [wrench + skill meter filling]
 ```
 
+**Critical rescope changes vs v1.0:**
+- ❌ OLD: "Checking Home Depot Denver 1.2 mi away..." — **removed** (false specificity, no Home Depot integration in MVP)
+- ❌ OLD: "Pulling local plumber rates from our network..." — **removed** (no network)
+- ✅ NEW: "Pulling current material prices..." (truthful, generic)
+- ✅ NEW: "Estimating labor for your zip..." (truthful — Claude + BLS data)
+
 **Subtle touches:**
-- Random variance in step copy ("Checking materials at Home Depot 1.2 mi away..." vs "Checking Home Depot Denver pricing...")
-- Show thumbnail of user's actual photo pulsating (reinforces "это МОЕ фото analyzed")
+- Show user's photo thumbnail pulsating (reinforces "MY photo analyzed")
 - Never blank spinner
 - Never "tap to skip"
+- Step copy stays generic but specific to user's zip (e.g., includes "Denver 80203" if they entered)
 
-### 5.3 A/B test priorities для labor illusion
+### 5.3 A/B test priorities for labor illusion
 
-- **Duration:** 3s vs 5s vs 8s vs 12s — find sweet spot
-- **Step count:** 2 steps vs 4 steps vs 6 steps
-- **Copy specificity:** generic ("Analyzing...") vs specific ("Checking Home Depot Denver pricing...")
-- **Visual treatment:** abstract spinner vs thumbnail + scanning vs step-by-step checklist
+- **Duration:** 3s vs 5s vs 8s vs 12s — find sweet spot (hypothesis: 5-8s wins)
+- **Step count:** 2 vs 4 vs 6 (hypothesis: 4 wins — enough to feel thorough, not overwhelming)
+- **Copy specificity:** generic ("Analyzing...") vs specific ("Estimating labor for Denver 80203...") — hypothesis specific wins
+- **Visual treatment:** abstract spinner vs photo thumbnail + scanning vs step-by-step checklist (hypothesis: thumbnail + checklist wins)
 
-Hypothesis: 5-sec + 4 steps + specific copy + thumbnail animation = highest conversion.
+### 5.4 Anti-pattern warning: don't fake it
 
-### 5.4 Warning: don't fake it when real answer is faster
-
-Если future AI model отвечает за 0.5 сек, искусственно держать 8 сек = ethics / UX backlash risk (Cal AI faced criticism 2024 для faked slowness). Baseline: **labor illusion ≤ actual processing time + 20%**. Если Claude API отвечает за 3 сек, show 4-5 сек max. Не 10.
+Если future Claude model отвечает за 0.5s, искусственно держать 8s = ethics + UX backlash risk. Cal AI faced criticism 2024 за это. Baseline: **labor illusion ≤ actual API time + 20%**.
 
 ---
 
 ## 6. Push Notification Setup
 
-### 6.1 Когда просить permission
+### 6.1 When to ask permission
 
-**НЕ на screen 1.** Cold push permission request = 45-55% grant rate в 2026 (Apple tightened defaults post-iOS 16).
+**NOT on screen 1.** Cold push permission ask = 40-50% grant rate в 2026 post-iOS 18.
 
-**AFTER первого estimate delivered** (post-aha moment), **но не сразу**. Recommend: **на 2-й возврат в app** или **когда user tap'ает "Save this estimate"**.
+**Deferred ask** на one of these triggers:
+1. **First "Save this estimate" tap** (immediate, post-aha — high context)
+2. **2nd app return** (next-day priming — lower context, but soft pre-prompt screen first)
+3. **After 2nd estimate completed** (highest signal — user actively using)
 
-Sequence:
-1. First estimate — user тапает "Save"
-2. Signup flow (Section 2, screen 7)
-3. Post-signup confirmation screen
-4. **Contextual push permission prompt:** "We'll remind you when DIY materials arrive / project reminders / pricing alerts"
+Recommended primary: **trigger #1** (post-Save tap). Best context, highest grant rate (+25-30% vs cold).
 
-### 6.2 Opt-in framing
+### 6.2 Pre-permission priming screen
 
-**Bad (generic iOS default):**
-> "FixIt Would Like to Send You Notifications. These may include alerts, sounds, icon badges."
-
-**Good (contextual FixIt framing):**
-
-Pre-permission priming screen (our custom, before iOS dialog):
+**Custom FixIt screen BEFORE iOS dialog:**
 
 > **"Never lose track of a repair project"**
 >
 > Get notified about:
-> - Material delivery reminders
-> - Seasonal maintenance check-ins (spring / winter prep)
-> - Price drops on your saved materials
+> - Material delivery reminders (you bought parts? we'll remind you to pick up)
+> - Seasonal home maintenance (spring/winter prep)
+> - Price alerts on materials you're tracking
 >
 > You control which alerts — change anytime in Settings.
 >
 > [Enable notifications] [Maybe later]
 
-Если user taps "Enable" — тогда trigger iOS permission. Grant rate jumps 25-40% vs cold ask.
+**Critical rescope change:**
+- ❌ OLD: "Pro Joe Smith responded to your quote request" notification category — **removed** (no pro matching)
+- ❌ OLD: "New pros in your area" notification — **removed**
+- ✅ NEW: notification categories all align with new positioning (own-progress, own-materials, seasonal, price drops)
 
-### 6.3 Initial notification categories (opt-in granularity)
+### 6.3 Initial notification categories (granular opt-in)
 
-После initial permission, show settings screen:
-- ☑️ Project progress reminders
-- ☑️ Material delivery alerts
-- ☐ Seasonal maintenance checklists
-- ☐ Price drop alerts (Home Depot / Lowe's)
+После initial permission, settings screen:
+- ☑ Project progress reminders (materials pickup, etc.)
+- ☑ Seasonal maintenance check-ins (spring / winter prep)
+- ☐ Price drop alerts (Amazon / Home Depot search results)
 - ☐ FixIt tips & feature updates (marketing — default OFF)
 
-Emma из TARGET-AUDIENCE "fears subscription traps" — не хочет spam. Granular opt-in = trust builder.
+Removed:
+- ~~"Pro response notifications"~~
+- ~~"New pros in your area"~~
+- ~~"Quote request updates"~~
 
-### 6.4 Timing per TARGET-AUDIENCE Day-in-the-life
+Emma "fears subscription traps" + privacy-conscious — granular opt-in = trust builder. Aligns с new positioning ("calm authority, not pushy" per POSITIONING §7).
 
-Из TARGET-AUDIENCE Emma Day-in-the-life:
-- **20:00-22:00 = prime FixIt window** (вечер, noticing home issues)
-- **7:45-8:30 = commute podcast window** (не push, но может stale notifications review)
+### 6.4 Push timing rules
 
-Push timing rules:
 - **Seasonal maintenance push:** 19:30-20:30 weekday (user home, relaxed)
-- **Material delivery:** real-time (tied к Home Depot API)
-- **Price drop:** 20:00-21:00 weeknight (decision-making mode)
-- **Re-engagement ("Haven't seen you в 30 days"):** 19:00-20:00 **Sunday** (planning-next-week mode)
+- **Material pickup reminder:** real-time (tied к user-set time)
+- **Price drop alerts:** 20:00-21:00 weeknight (decision-making mode)
+- **Re-engagement ("Got anything new that needs fixing?"):** 19:00-20:00 Sunday (planning-week mode)
 
-**Never push** in 22:30-06:30 window (Emma's sleep/morning routine — push here = uninstall risk).
+**Never push** in 22:30-06:30 window (sleep/morning routine — push here = uninstall risk).
+
+**Re-engagement copy update (rescope):**
+- ❌ OLD: "Your weekly pro availability update"
+- ✅ NEW: "Got anything new around the house?" or "Spring is coming — three small fixes worth knowing about"
+- Per POSITIONING §5 — savings/seasonal anchors, not pro-anchored
 
 ---
 
-## 7. Emma Profile Creation (Progressive Disclosure)
+## 7. Progressive Profile Creation ("My Home")
 
-Ключевой принцип: **данные о Emma's home собираем постепенно как она использует app**, не front-load в onboarding.
+Принцип: **данные о Emma's home собираем постепенно**, not front-load.
 
-### 7.1 Why progressive works для FixIt
+### 7.1 Why progressive works для FixIt v2.0
 
 - Emma не thinks of her home as "a profile" — она думает "у меня протечка"
-- Front-loading "Create your home profile" = cognitive load + fake sense of commitment
-- Per-estimate progressive asks feel natural: "Want to save kitchen details for faster future estimates?"
+- Front-loading "Create your home profile" = friction + fake commitment
+- Per-estimate progressive asks feel natural
 
-### 7.2 Profile fields — когда задавать
+### 7.2 Profile fields — when to ask
 
-| Field | Trigger | Screen |
+| Field | Trigger | Where |
 |---|---|---|
-| ZIP / city | Onboarding | Screen 2 (required для pricing) |
-| Quality tier preference | Pre-estimate | Micro-screen after photo |
-| DIY readiness | Pre-estimate | Same micro-screen |
-| Home type (SF/condo/townhouse) | After 2nd estimate | Soft prompt on result screen |
-| Year built / home age | When user hits roofing/HVAC/foundation estimate | In-context |
-| Square footage | When user requests "whole home" check | On-demand |
+| ZIP / city | Onboarding | Screen 2 |
+| Quality tier preference | Pre-estimate | Screen 6 |
+| DIY readiness | Pre-estimate | Screen 6 |
+| Home type (SF/condo/townhouse) | After 2nd estimate | Soft prompt on result |
+| Year built / home age | When user hits roofing/HVAC | In-context |
+| Square footage | When "whole home" check requested | On-demand |
 | Rooms tracked | As user estimates in them | Auto-accrete |
-| Tools owned | Mike expansion (future) | Mike flow, not MVP |
+| Tools owned | Mike expansion | v1.5 |
 
 ### 7.3 UX pattern: "Save this to Your Home"
 
-After 2nd или 3rd estimate, show soft prompt:
+After 2nd or 3rd estimate:
 
-> **"You've estimated 2 kitchen repairs this month."**
+> **"You've done 2 kitchen estimates this month."**
 > Want to save kitchen details so future estimates are faster?
 > [Save kitchen] [Not now]
 
-Tap "Save kitchen" → opens micro-form:
+If "Save kitchen" → micro-form:
 - Faucet brand (optional)
 - Pipe type (copper / PEX / unknown)
 - Water shutoff location (optional)
 
-This creates "Your Home" profile organically, without explicit onboarding screen. User invests iteratively, increasing switching costs (retention moat).
+Creates "My Home" profile organically. User invests iteratively → switching costs grow → retention moat. Aligns с FEATURES.md Feature #7 ("My Home" Saved Projects).
 
 ---
 
-## 8. Activation Metrics to Track
+## 8. Activation Metrics to Track (rescope-updated)
 
-**North Star для onboarding:** % of installs who complete their first estimate.
+**North Star для onboarding:** % installs who complete first estimate result (Screen 8).
 
 ### 8.1 Primary metrics (MVP dashboard)
 
 | Metric | MVP Target | Industry Top 10% | Owner |
 |---|---|---|---|
 | Install → First estimate completed | **75%** | 85% | Product |
-| Time from install to first estimate | **<90 sec** | 45-60 sec | UX |
+| Time install → first estimate | **<90s** | 45-60s | UX |
 | First estimate → 2nd estimate within 7 days | **45%** | 60% | Retention |
 | First estimate → Signup conversion | **60%** | 70% | Growth |
 | Day 1 retention | **35%** | 45% | Product |
 | Day 7 retention | **20%** | 28% | Retention |
+| Free → Paid by D60 | **18-25%** среди paywall-exposed | 30% | Monetization |
 
 ### 8.2 Secondary metrics (diagnostic)
 
-| Metric | Target | Interpretation if missed |
+| Metric | Target | If missed |
 |---|---|---|
-| Camera permission grant rate | **85%** | <80% = permission framing broken |
-| Location input completion rate | **85%** | <80% = too much friction, simplify |
-| AI processing screen abandon rate | **<5%** | >10% = perceived too long |
-| Estimate result screen time | **>15 sec** | <10 sec = users not engaging with result, aha not landing |
+| Camera permission grant rate | **85%** | <80% = priming framing broken |
+| Location capture (auto + manual) | **85%** | <80% = friction, simplify |
+| AI processing screen abandon | **<5%** | >10% = perceived too long |
+| Estimate result screen time | **>15s** | <10s = aha not landing |
 | Manual text entry skip rate | **10-15%** | >25% = camera UX broken |
-| Share icon tap rate | **>8%** | Low = aha moment not viral enough |
+| Share rate (post-estimate) | **>8%** | Low = "savings" anchor not viral enough (per POSITIONING §5) |
+| **Pro deeplink tap rate (from estimate)** | **30-40% (info only, not revenue)** | N/A — no longer revenue metric per rescope |
 
-### 8.3 Cohort tracking
+### 8.3 Removed metrics (rescope cleanup)
 
-Segment activation funnels по:
-- **Source channel:** TikTok organic vs TikTok paid vs Google Ads vs Podcast vs Referral
-- **Device:** iPhone vs Android, new-device vs older
+These metrics from v1.0 are **no longer tracked** as primary:
+
+| Removed metric | Why removed |
+|---|---|
+| Pro Match conversion rate | No pro match feature anymore |
+| Quote request rate | We don't generate quotes |
+| Affiliate click per estimate | No affiliate revenue в MVP |
+| Lead-to-hire rate | No lead generation |
+| Thumbtack handoff completion | Just deeplink, not revenue |
+
+### 8.4 Cohort tracking
+
+Segment activation funnels by:
+- **Source channel:** TikTok organic / paid, Google Ads, Podcast, Referral, Organic search
+- **Device:** iPhone vs Android, new vs older
 - **ZIP density:** Denver vs Austin vs Raleigh vs rural
-- **Activation trigger (from ads):** unexpected quote vs DIY fail vs seasonal
+- **Activation trigger (from ad copy):** unexpected quote vs DIY fail vs seasonal vs general curiosity
 
-Hypothesis: TikTok organic + unexpected-quote trigger = highest activation (trust-primed user).
+Hypothesis: TikTok organic + "unexpected quote" trigger = highest activation (trust-primed user, comes для quote validation per POSITIONING §4 Sarah persona).
 
-### 8.4 Benchmark alerts
+### 8.5 Benchmark alerts
 
-Weekly alert if any primary metric drops >10% WoW:
+Weekly alert if any primary drops >10% WoW:
 - Install → first estimate <67% (below 75% target)
 - Signup conversion <50%
-- Day 7 retention <15%
+- D7 retention <15%
 
 ---
 
 ## 9. A/B Tests Planned (Priority Order)
 
-MVP ships с one baseline flow. Но infrastructure должна support A/B tests с week 1, потому что onboarding — самый high-leverage место для optimization.
+MVP ships с baseline flow. Infrastructure поддерживает A/B с week 1 — onboarding = highest leverage optimization area.
 
-### 9.1 Priority 1 — Signup placement
+### 9.1 Priority 1 — Tagline / hero copy на Screen 1
 
-**Test:** Option B (post-estimate) vs Option A-lite (signup on screen 2 before location).
-
-**Hypothesis:** Option B wins on activation (+30%) but loses some email capture. Net LTV: Option B +15-25%.
-
-**Duration:** 2 weeks, 10K users per arm.
-
-**Kill criterion:** If Option A-lite exceeds Option B in estimated LTV by >10%, reconsider.
-
-### 9.2 Priority 2 — Example photos on camera screen
+**Test:** new positioning needs validated tagline.
 
 **Variants:**
-- A: No example photos
-- B: 4 examples (plumbing/electrical/furniture/appliance)
-- C: 8 examples (broader category scope)
+- A: **"Take a photo. Know the price. Decide what to do."** (current — POSITIONING primary)
+- B: **"Know the price before the panic."** (POSITIONING #1 alt)
+- C: **"Photo → price → path forward."** (POSITIONING #2 utility)
+- D: **"Three routes. Real prices. No marketplace."** (POSITIONING #3 trust)
+- E: Activation-trigger specific: **"Got a contractor quote? Check if it's fair."** (Sarah-tilt)
+
+**Metric:** Screen 1 → Screen 2 conversion + downstream activation.
+
+**Hypothesis:** A wins on overall (broad), but D may tilt activation если we attract more skeptics. E wins for paid acquisition (TikTok ads) where context known.
+
+### 9.2 Priority 2 — Signup placement
+
+**Test:** Option B (post-estimate, current) vs Option B-lite (signup after Save tap, with stronger trigger).
+
+**Hypothesis:** delaying further (until "Save tap") loses some signups but maintains activation. Net LTV similar.
+
+### 9.3 Priority 3 — Sample photos на Permission Priming screen
+
+**Variants:**
+- A: No examples
+- B: 4 examples (plumbing/electrical/furniture/appliance) — current
+- C: 8 examples (broader scope)
 
 **Hypothesis:** B wins. 8 overwhelms, 0 loses scope-context.
 
-**Metric:** Camera permission grant rate + first-photo quality score (AI-derived).
+### 9.4 Priority 4 — Labor illusion duration
 
-### 9.3 Priority 3 — Labor illusion duration
+**Variants:** 3s / 5s / 8s / 12s.
 
-**Variants:** 3 sec / 5 sec / 8 sec / 12 sec.
+**Hypothesis:** 5-8s wins. <3s feels unreliable, >12s abandonment.
 
-**Hypothesis:** 5-8 sec wins. <3 sec feels unreliable, >12 sec abandonment rises.
+**Metric:** Processing abandon rate + estimate satisfaction.
 
-**Metric:** Processing screen abandon rate + estimate satisfaction (post-result survey).
-
-### 9.4 Priority 4 — First screen copy
+### 9.5 Priority 5 — Estimate result screen layout
 
 **Variants:**
-- A: "Know the price of any home repair in 60 seconds" (current)
-- B: "Snap a photo. Get a fair price. Skip the plumber call."
-- C: "Stop guessing what home repairs cost."
-- D: Emma activation-trigger specific: "Got a contractor quote? Check if it's fair."
+- A: Three options side-by-side (current)
+- B: Three options stacked vertically с "recommended" badge on one
+- C: Single "primary recommendation" + "show alternatives" expandable
 
-**Metric:** Screen 1 → screen 2 conversion.
+**Hypothesis:** A wins because matches positioning ("Three options, one tap" — POSITIONING §2). C undermines agency.
 
-### 9.5 Priority 5 — Welcome screen format
+**Metric:** Time on screen + signup tap rate + 2nd estimate within 7d.
+
+### 9.6 Priority 6 — Push permission timing
+
+**Variants:**
+- A: After "Save tap" (immediate, current)
+- B: After 2nd estimate completed
+- C: 2nd app return + priming screen
+
+**Hypothesis:** A highest grant (immediate context), B highest signal quality (engaged user).
+
+### 9.7 Priority 7 — Welcome screen format
 
 **Variants:**
 - A: Static image + headline (current)
-- B: 10-sec video demo (faucet → photo → result)
-- C: Lottie animation (stylized flow preview)
+- B: 10-sec Lottie animation (stylized photo → result preview)
+- C: Auto-playing video demo
 
-**Hypothesis:** A wins on velocity. B/C add production cost + screen time.
+**Hypothesis:** A wins on velocity. B/C add screen time + production cost.
 
-**Metric:** Time on screen 1 + screen 1 → screen 2 conversion.
+### 9.8 Secondary tests (after above)
 
-### 9.6 Secondary tests (after above complete)
+- Location auto-detect prominence vs manual entry default
+- Micro-question order (DIY first vs Quality first)
+- Post-estimate CTA placement ("Save" vs "Share" vs "2 more free this month")
+- Privacy statement wording on Permission Priming
+- Skip link visibility on Location screen
 
-- Location auto-detect vs manual entry prominence
-- 2-question micro-screen order (DIY readiness first vs Quality tier first)
-- Post-estimate CTA placement ("Save" vs "Share" vs "2 more estimates free")
-- Push permission prompt timing (1st return vs 2nd return vs after 2nd estimate)
-- Privacy statement wording on camera permission screen
+### 9.9 Testing infrastructure required
 
-### 9.7 Testing infrastructure needed
-
-MVP должен ship с:
-- Feature flag system (LaunchDarkly / Statsig / Supabase feature flags)
-- Cohort analytics (PostHog / Mixpanel / Amplitude)
-- Event schema для onboarding funnel (install, screen_view, permission_grant, photo_taken, estimate_delivered, signup_completed)
-- Dashboard с real-time conversion cohorts
+MVP must ship с:
+- Feature flag system (Adapty A/B is built-in for paywall, supplement with Statsig / Supabase Edge Function flags для onboarding)
+- Cohort analytics (PostHog primary)
+- Event schema covering full funnel (install, screen_view_1..8, permission_grant_camera, permission_grant_push, photo_taken, estimate_delivered, signup_completed, save_tapped)
+- Real-time conversion dashboard
 
 ---
 
 ## 10. Onboarding Drop-off Diagnosis
 
-Playbook для diagnostics когда metrics падают.
+Playbook когда metrics drop.
 
 ### 10.1 If install → activation drops below 65%
 
 **Hypothesis tree:**
 
-1. **Camera permission funnel broken?**
-   - Check grant rate. If <75%, test priming screen copy + privacy statement
-   - Check platform split (iOS 18 vs Android 15 — different permission flows)
+1. **Camera permission funnel broken?** Check grant rate. <75% → test priming copy + privacy statement.
+2. **Photo quality low → AI confused?** Check confidence score. >30% "low confidence" → improve in-camera guidance.
+3. **Location screen friction?** Skip rate >20% → user not seeing value, improve "why we need this" copy.
+4. **AI processing perception bad?** Abandon rate >10% → reduce duration or improve step copy.
+5. **Welcome copy not landing?** Screen 1 → 2 conversion <80% → A/B tagline (Section 9.1).
 
-2. **Photo quality low → AI confused?**
-   - Check AI accuracy score distribution
-   - If >30% estimates marked "low confidence" by AI, improve in-camera guidance
-
-3. **Location screen friction?**
-   - Check skip rate. If >20%, user not seeing value → improve "why we need this" copy
-   - Check auto-detect success rate. If <70%, geolocation permission issue
-
-4. **AI processing time perception bad?**
-   - Check abandon rate on processing screen
-   - If >10%, reduce labor illusion duration или improve step copy
-
-### 10.2 If First-estimate → 2nd estimate <40% within 7 days
+### 10.2 If first-estimate → 2nd estimate <40% within 7 days
 
 **Hypothesis tree:**
 
-1. **First estimate quality disappointing?**
-   - User survey post-result: "How accurate does this feel? 1-5"
-   - If avg <3.5, AI accuracy or pricing data is weak link
+1. **First estimate quality disappointing?** Survey post-result: "How accurate does this feel? 1-5". Avg <3.5 → AI accuracy weak.
+2. **Value prop mismatch?** User expected "DIY only" but got "Pro recommended" → check session recordings.
+3. **No re-engagement push?** Push declined → email re-engagement.
+4. **Aha не сработал?** Result screen time <10s → user не вчитался. Redesign for visceral contrast (DIY $18 vs Pro $275).
+5. **Was expectation set wrong?** TikTok ad promised "find a plumber" but app delivers "estimate" → check ad → install → first session expectation gap. Update ad copy under new positioning ("savings", not "find pro").
 
-2. **Value prop not matching actual delivery?**
-   - If user expected "DIY only" answers but got Pro recommendation, mismatch
-   - Check aha moment session recordings
+### 10.3 If signup conversion <45% post-estimate
 
-3. **No re-engagement push?**
-   - If push permission declined, need email re-engagement
-   - Seasonal reminder (e.g., "April is perfect for X checks")
+**Hypotheses:**
+- Modal too intrusive (switch to bottom sheet — should already be)
+- "Save + 2 more" reason not compelling (A/B copy)
+- Apple Sign-In not first (iOS users prefer Apple)
+- "Not now" too prominent (smaller, grey)
+- User не понял что "Save" дает (clarity in CTA copy)
 
-4. **Aha moment не сработал?**
-   - Estimate result screen time <10 sec = user не вчитался, не восхитился
-   - Redesign result layout для более visceral contrast (DIY $18 vs Pro $275)
+### 10.4 If push permission grant <50%
 
-### 10.3 If Signup conversion <45% post-estimate
+**Hypotheses:**
+- Cold ask без priming → add custom priming screen
+- Categories list scary (8 items overwhelming → trim to 3-4)
+- Asked too early (right after permission denial cold → defer)
+- Privacy concerns not addressed in priming copy
 
-**Hypothesis:**
-- Modal too intrusive (switch to bottom sheet)
-- "Save + 2 more" reason not compelling (A/B test copy)
-- Apple Sign-In not first (iOS users prefer Apple > Google > Email)
-- "Not now" too prominent (make it smaller, grey)
+### 10.5 Common root causes checklist
 
-### 10.4 Common root causes checklist
-
-- [ ] Permission priming too late (cold ask) → -20% grant
+- [ ] Permission priming too late / cold ask → -20% grant
 - [ ] Signup before value → -30% activation
 - [ ] Processing screen too long/short → -5-10% abandon
-- [ ] Location required без skip option → +15% drop at screen 2
+- [ ] Location required без skip → +15% drop on Screen 2
 - [ ] Manual text entry skip rate too low/high (sweet spot 10-15%)
-- [ ] First estimate layout confusing (not clear which option is recommended)
-- [ ] Copy тон off (too formal / too casual / too jargon)
+- [ ] First estimate layout confusing (which option recommended unclear)
+- [ ] Copy tone off (too formal / too casual / too jargon)
+- [ ] **Old "marketplace" copy leaked** ("we'll find you a pro" anywhere) → audit and remove
 
 ---
 
 ## 11. Implementation Priorities
 
-Конкретные specs для product & engineering team.
+Concrete specs для product + engineering team.
 
 ### 11.1 MVP v1.0 Onboarding (ship month 1-2)
 
 **Must-have features:**
 
-- [ ] **3-step onboarding flow:** Welcome → Location (ZIP) → Camera permission
-- [ ] **Skip signup upfront** — defer к post-estimate
-- [ ] **Camera capture UX** с 4 sample thumbnails + in-camera guidance
+- [ ] **8-screen onboarding flow:** Welcome → Location → Permission Priming → Camera Permission → Photo → Micro-Questions → AI Processing → Estimate Result
+- [ ] **No mention of "we'll find you a pro" anywhere** in copy, screens, animations, or CTAs
+- [ ] **Welcome copy:** "Take a photo. Know the price. Decide what to do."
+- [ ] **Skip signup upfront** — defer to post-estimate
+- [ ] **Camera capture** with 4 sample thumbnails + in-camera guidance
 - [ ] **Manual text entry fallback** (hidden link)
-- [ ] **AI processing screen** с labor illusion (5-8 sec, 4 steps, photo thumbnail animation)
-- [ ] **Three-option result screen** (DIY / Hybrid / Pro side-by-side)
-- [ ] **Soft signup ask** (bottom sheet, post-estimate) с Apple/Google/Email options
-- [ ] **Permission priming screen** for push (NOT на screen 1, на пре-permission custom screen after signup)
-- [ ] **Pre-estimate micro-screen** для 2 quick questions (DIY readiness + quality tier)
-- [ ] **Location auto-detect** option + ZIP manual entry + skip
-- [ ] **Privacy statement** на camera permission screen
+- [ ] **AI processing screen** with labor illusion (5-8s, 4 steps, photo thumbnail animation, **no "Home Depot" / "our network" copy**)
+- [ ] **Three-option result screen** (DIY / Hybrid / Pro side-by-side, Pro as deeplink not promise)
+- [ ] **Soft signup ask** (bottom sheet, post-estimate) — Apple/Google/Email
+- [ ] **Permission priming screen** for push (NOT screen 1, custom screen pre-iOS dialog after Save tap)
+- [ ] **Pre-estimate micro-screen** for 2 questions (DIY readiness + quality tier)
+- [ ] **Location auto-detect** option + manual entry + skip
+- [ ] **Privacy statement** on Permission Priming screen ("Photos stay private")
+- [ ] **Rescope copy audit** — explicit checklist verifying NO "marketplace", "network", "vetted pros", "we'll connect you", "find you 3 contractors" copy anywhere
 
-**Analytics instrumentation (required for MVP launch):**
+**Analytics (required for launch):**
 
-- [ ] Event tracking для всего funnel (install, screen_view_1..7, permission_grant, photo_taken, estimate_delivered, signup_completed, estimate_saved)
+- [ ] Event tracking full funnel (install, screen_view_1..8, permission_grant_camera, photo_taken, estimate_delivered, signup_completed, save_tapped, push_permission_granted)
 - [ ] Device/platform/geo tagging
-- [ ] Source channel attribution (TikTok, Google Ads, Podcast, Referral, Organic)
-- [ ] Time-on-screen tracking per step
+- [ ] Source channel attribution (TikTok organic/paid, Google Ads, Podcast, Referral, Organic)
+- [ ] Time-on-screen per step
 - [ ] AI processing latency tracking
+- [ ] Pro deeplink tap rate (info only, not revenue)
 
-**Deferred from MVP v1.0 (move to v1.5 или later):**
-
-- Personalized welcome variants based on ad source
-- Multi-language support (English only MVP)
-- Accessibility deep dive (baseline WCAG AA, но advanced screen reader flows later)
-- Voice input для text entry (Mike/Ronald feature later)
+**Deferred from v1.0:**
+- Personalized welcome variants by ad source (manual A/B until v1.5)
+- Multi-language (English-only MVP per CLAUDE.md, "Global — not US-only" expansion в v2.0)
+- Advanced WCAG screen reader flow (baseline AA only)
+- Voice input (Mike/Ronald feature, v1.5+)
 
 ### 11.2 v1.5 Onboarding Evolution (month 4-6)
 
-- [ ] **A/B test framework** live (feature flags + analytics)
-- [ ] **Priority 1 A/B tests** from Section 9 running (signup placement, labor illusion duration)
-- [ ] **Cohort dashboard** для product team (weekly funnel breakdowns)
-- [ ] **Re-engagement push flow** для inactive users
-- [ ] **Progressive profile creation** (post-2nd-estimate "Save your home" prompt)
-- [ ] **Source-based welcome customization** (TikTok user sees different hero text than Google Ads user)
-- [ ] **Activation trigger taxonomy** tracking (from ad: "unexpected quote" vs "seasonal" vs "DIY fail")
-- [ ] **Referral program hooks** (post-aha share prompt)
+- [ ] A/B test framework live
+- [ ] Priority 1-3 A/B tests running (tagline, signup placement, sample photos)
+- [ ] Cohort dashboard for product team
+- [ ] Re-engagement push flow для inactive users
+- [ ] Progressive profile creation ("Save your home" prompt after 2nd estimate)
+- [ ] Source-based welcome customization (TikTok user sees ad-aligned hero)
+- [ ] Activation trigger taxonomy (from ad: "unexpected quote" / "seasonal" / "DIY fail" / general)
+- [ ] Referral program hooks (post-aha share prompt — POSITIONING §5 "I saved $X" viral driver)
 
-### 11.3 v2.0 (month 9-12) — Expansion beyond Emma
+### 11.3 v2.0 (month 9-12) — Expansion personas
 
-- [ ] **Renter mode** (Tyler activation) — different onboarding branch при "I'm renting"
-- [ ] **Quote validation flow** (Sarah activation) — "I got a quote, is it fair?" alternate entry
-- [ ] **DIY enthusiast mode** (Mike) — add tool tracker question, preference for Pro tier features
-- [ ] **Senior-friendly UX variant** (Ronald) — larger fonts, simpler flow, voice input
-- [ ] **AARP partnership onboarding** variant (Ronald, if partnership lands)
+- [ ] Renter mode (Tyler) — different onboarding branch при "I'm renting" entry
+- [ ] Quote validation flow (Sarah) — "I got a contractor quote, is it fair?" alt entry
+- [ ] DIY enthusiast mode (Mike) — tool tracker question, Pro tier preference
+- [ ] Senior-friendly UX variant (Ronald) — larger fonts, simpler flow, voice input
+- [ ] **Pro Match v1.5+ (if Thumbtack approves partnership):** trivial add — append affiliate tag к existing deeplink. No re-engineering needed (per FEATURES.md #6).
 
-### 11.4 Success criteria перед v1.0 ship
+### 11.4 Success criteria before v1.0 ship
 
-- Simulated onboarding with 10 beta Emmas: **8/10 reach first estimate in <90 sec**
-- **Camera permission grant 85%+** in beta cohort
-- **Signup rate 55%+ post-aha** in beta cohort
-- Accuracy score of AI estimate **≥75%** self-reported satisfaction in beta
+- Beta test with 10 Emma-profile users: **8/10 reach first estimate in <90s**
+- **Camera permission grant 85%+** in beta
+- **Signup rate 55%+ post-aha** in beta
+- AI estimate satisfaction **≥75%** self-reported in beta
+- **Zero instances of "find a pro" / "marketplace" copy** in shipped flow (manual audit)
 
-Если любой criterion не hit, ship blocked до fix.
+If any criterion missed → ship blocked till fix.
 
 ---
 
-## 12. Cross-Reference: Как Emma's activation triggers mapping в onboarding
+## 12. Cross-Reference: Activation Triggers per Persona
 
-Из TARGET-AUDIENCE Section "Activation triggers" — 5 triggers, each maps к specific onboarding entry point.
+Per POSITIONING §4 — each persona has different activation context, mapping to onboarding entry.
 
-### Trigger #1: Unexpected pro quote ("Plumber said $800 — WTF")
+### Trigger #1: Unexpected pro quote (Sarah-leaning, validates rescope thesis)
 
-**Entry path:** TikTok ad "Plumber quoted $800, FixIt said $15 DIY" → Install → Onboarding.
+**Entry path:** TikTok ad "Plumber quoted me $800. FixIt said $15 DIY. I almost cried." → Install.
 
-**Onboarding optimization:** Welcome screen copy variant emphasizes quote-checking: *"Know what a fair price looks like — before you pay anyone."*
+**Onboarding optimization:** Welcome variant "Got a contractor quote? Check if it's fair." Sarah persona enters with photo of quote OR photo of problem → already context-loaded. Surface "Use saved photo" prominently.
 
-**Expected flow:** User скорее всего already has the quote context in mind. Может prefer upload saved photo (quote photo) rather than camera. Make "Use saved photo" option more prominent for this source.
+**Expected flow:** User compares estimate to quote they already have. Likely skips to result screen quickly. Aha = "FixIt confirmed $800 was rip-off, fair price $200-275, I'll negotiate."
 
-### Trigger #2: DIY attempt gone wrong
+### Trigger #2: DIY attempt gone wrong (Mike-leaning)
 
-**Entry path:** YouTube ad "I tried fixing my disposal. It didn't work. FixIt told me to call a pro." → Install.
+**Entry path:** YouTube ad "I tried fixing my disposal. It didn't work. FixIt told me when to call a pro instead." → Install.
 
-**Onboarding optimization:** Welcome copy: *"DIY didn't work? We'll tell you if it's worth trying again or when to call a pro."*
+**Onboarding optimization:** Welcome variant "DIY didn't work? Know if it's worth trying again or time to call a pro."
 
-**Expected flow:** User тонкий и может feel defeated. Soft, supportive tone. 3-options screen emphasizes Hybrid/Pro options, not DIY pressure.
+**Expected flow:** User feels defeated. Soft, supportive tone. 3-options screen emphasizes Hybrid/Pro options without DIY-shaming.
 
-### Trigger #3: Seasonal prep (spring/winter)
+### Trigger #3: Seasonal prep (Emma browse mode)
 
-**Entry path:** Instagram Reel "Spring home checklist" → Install.
+**Entry path:** Instagram Reel "Spring home checklist — 5 things to fix before summer" → Install.
 
-**Onboarding optimization:** Welcome copy: *"Ready for spring? Take a photo of anything that might need fixing."*
+**Onboarding optimization:** Welcome variant "Ready for spring? Snap anything that might need fixing — get prices in 60 seconds."
 
-**Expected flow:** Browser-mode, not emergency. Scope explainer более important (show that furniture/appliance also covered, not just plumbing).
+**Expected flow:** Browser-mode, low urgency. Scope explainer matters (4 sample categories on permission priming) — show breadth.
 
-### Trigger #4: Home inspection findings
+### Trigger #4: Home inspection findings (Emma intent mode)
 
-**Entry path:** Google Search "home inspection found foundation crack how much" → Install (ASO ranking).
+**Entry path:** Google Search "home inspection found foundation crack how much" → Install (ASO).
 
-**Onboarding optimization:** Direct-to-value. User already знает problem. "Got inspection report? Snap a photo." Keywords-based welcome headline.
+**Onboarding optimization:** Direct-to-value. User already knows problem. "Got an inspection report? Snap a photo of the issue."
 
-### Trigger #5: Recurring small problem
+### Trigger #5: Recurring small problem (organic / referral)
 
-**Entry path:** Organic / referral. Low urgency.
+**Entry path:** Friend shared "I saved $250 with FixIt, here's the link" — viral loop.
 
-**Onboarding optimization:** Standard flow. Emphasize "3 free estimates" — user будет использовать for multiple small issues.
+**Onboarding optimization:** Standard flow. "3 free estimates" — user will use for multiple small issues. Sub-message: "your friend was right, here's how it works."
 
 ---
 
 ## 13. Related Docs
 
-- [PRODUCT-VISION.md](../02-product/PRODUCT-VISION.md) — Principles 3, 4, 7 prompt onboarding design decisions
-- [TARGET-AUDIENCE.md](../02-product/TARGET-AUDIENCE.md) — Emma aha moment sequence + activation triggers + Day-in-the-life timing
-- [USER-PERSONAS.md](../01-research/USER-PERSONAS.md) — Emma pain points + JTBD driving UX priority
-- PAYWALL-RESEARCH.md (to be written) — paywall срабатывает после 3rd free estimate (not in onboarding)
-- RETENTION-RESEARCH.md (to be written) — D2/D7/D30 engagement loops, seasonal push strategy
-- SCREEN-MAP.md (to be written, stage 4) — pixel-level wireframes для onboarding flow
+- [POSITIONING.md](../02-product/POSITIONING.md) — primary tagline, USP, voice guidelines (foundation для all copy decisions)
+- [FEATURES.md](../02-product/FEATURES.md) — Feature #1 (Photo Intake), #2 (Intake Questions), #3 (Cost Estimate), #6 (Find a Pro deeplink), #9 (Onboarding spec)
+- [MONETIZATION.md](../02-product/MONETIZATION.md) — paywall strategy (after 3rd estimate, не в onboarding)
+- [PAYWALL-RESEARCH.md](./PAYWALL-RESEARCH.md) — companion doc, paywall placement
+- RETENTION-RESEARCH.md (next stage 3 doc) — D2/D7/D30 engagement loops, seasonal push
+- SCREEN-MAP.md (stage 4) — pixel-level wireframes для onboarding
+- USER-FLOWS.md (stage 4) — onboarding flow detailed sequence
+- CLAUDE.md — stack constraints (Expo Router, Supabase auth, Adapty subscriptions)
 
 ---
 
-## 14. Источники и дополнительное чтение
+## 14. References
+
+**Primary (best-cases, post-rescope optimized):**
+- `agents/reference-materials/monetization/onboarding-usp.utf8.txt` — Adapty + RevenueCat + AppsFlyer 2025-2026 onboarding cases (deferred signup, permission priming, ≤90s onboarding patterns)
+- `agents/reference-materials/monetization/paywall.utf8.txt` — companion paywall best cases
 
 **Quantitative data:**
-- [Business of Apps — App Onboarding Rates 2025](https://www.businessofapps.com/data/app-onboarding-rates/)
 - [RevenueCat State of Subscription Apps 2025](https://www.revenuecat.com/state-of-subscription-apps-2025/)
 - [Adapty State of In-App Subscriptions 2026](https://adapty.io/state-of-in-app-subscriptions/)
 - [Userpilot Onboarding Checklist Benchmarks 2024](https://userpilot.com/blog/onboarding-checklist-completion-rate-benchmarks/)
+- [AppsFlyer Mobile Onboarding 2025]
+- [Business of Apps — App Onboarding Rates 2025](https://www.businessofapps.com/data/app-onboarding-rates/)
 - [Amra & Elma Funnel Drop-off Statistics](https://www.amraandelma.com/funnel-drop-off-rate-statistics/)
 - [UXCam Mobile App Retention Benchmarks 2024](https://uxcam.com/blog/mobile-app-retention-benchmarks/)
 
-**Qualitative / pattern research:**
-- [Retention Blog — The Longest Onboarding Ever (Noom)](https://www.retention.blog/p/the-longest-onboarding-ever)
-- [Retention Blog — Headway Evolution 2024-2025](https://www.retention.blog/p/headway-evolution-2024-2025)
+**Pattern research:**
 - [Retention Blog — Onboarding Doesn't End at the Paywall](https://www.retention.blog/p/onboarding-doesnt-end-at-the-paywall)
 - [Lenny's Newsletter — Lauryn Isford on Onboarding](https://www.lennysnewsletter.com/p/mastering-onboarding-lauryn-isford)
 - [Lenny's Newsletter — How to Determine Your Activation Metric](https://www.lennysnewsletter.com/p/how-to-determine-your-activation)
 - [NN/g — Mobile App Onboarding](https://www.nngroup.com/articles/mobile-app-onboarding/)
-- [Chameleon — Mobile User Onboarding Best Practices](https://www.chameleon.io/blog/mobile-user-onboarding)
 - [Appcues — Mobile Permission Priming](https://www.appcues.com/blog/mobile-permission-priming)
-- [DEV / PaywallPro — Subscription Onboarding Patterns](https://dev.to/paywallpro/subscription-onboarding-15-patterns-you-must-know-4n4f)
 - [Gabor Cselle — Every Step Costs You 20% of Users](https://medium.com/gabor/every-step-costs-you-20-of-users-b613a804c329)
 
 **Photo-AI specific:**
-- Mobbin onboarding teardowns: PictureThis, Rock Identifier, SkinVision, Cal AI (2024-2025)
-- [Ryan Buell HBS — Operational Transparency research](https://hbr.org/2019/03/operational-transparency)
-- [Flo Health — Mobile Onboarding Evolution](https://medium.com/flo-health/mobile-onboarding-evolution-part-1-cfc9702835ce)
+- Mobbin teardowns: PictureThis, Rock Identifier, SkinVision, Cal AI (2024-2025)
+- [Ryan Buell HBS — Operational Transparency](https://hbr.org/2019/03/operational-transparency)
 
-**Companion Sugar Quit reference:**
-- `agents/reference-materials/practices-examples/ONBOARDING-RESEARCH.md` — reference structure для documentation, но note что content-wise FixIt principles (photo-first, минимум screens) намеренно отличаются от Sugar Quit (quiz-based, больше screens).
+**Internal:**
+- `agents/reference-materials/practices-examples/ONBOARDING-RESEARCH.md` (Sugar Quit) — reference for doc structure только. Content principles намеренно different (FixIt = utility, Sugar Quit = behavior change).
 
 ---
 
-**Дата последнего обновления:** 2026-04-18
+**Дата последнего обновления:** 2026-04-19 (rescope rewrite)
 **Автор:** Practices Research Team
-**Статус:** v1.0 для stage 3 review → handoff к stage 4 (UX wireframes)
-**Следующий шаг:** PAYWALL-RESEARCH.md — post-3rd-estimate paywall strategy
+**Статус:** v2.0 final (post-rescope), ready для Stage 4 UX wireframes
+**Следующий шаг:** PAYWALL-RESEARCH.md companion (also rescope-rewritten) → handoff to Stage 4

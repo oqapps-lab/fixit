@@ -1,21 +1,30 @@
 # UX-SPEC.md — FixIt
 
-**Дата:** 18 апреля 2026
+**Дата:** 20 апреля 2026
 **Продукт:** FixIt — AI home repair cost advisor
-**Стадия:** UX Design (Stage 4)
+**Стадия:** UX Design (Stage 4, post-rescope v2.0)
 **Автор:** UX Team (Лана + Amanda)
-**Статус:** Final v1.0
-**Companion docs:** [PRODUCT-VISION.md](../02-product/PRODUCT-VISION.md) | [MONETIZATION.md](../02-product/MONETIZATION.md) | [PAYWALL-RESEARCH.md](../03-practices/PAYWALL-RESEARCH.md) | [RETENTION-RESEARCH.md](../03-practices/RETENTION-RESEARCH.md) | [FUNNEL.md](./FUNNEL.md)
+**Статус:** Final v2.0 (post-rescope — pure AI-advisor utility, no marketplace)
+**Companion docs:** [POSITIONING.md](../02-product/POSITIONING.md) | [PRODUCT-VISION.md](../02-product/PRODUCT-VISION.md) | [MONETIZATION.md](../02-product/MONETIZATION.md) | [PAYWALL-RESEARCH.md](../03-practices/PAYWALL-RESEARCH.md) | [RETENTION-RESEARCH.md](../03-practices/RETENTION-RESEARCH.md) | [FUNNEL.md](./FUNNEL.md) | [WIREFRAMES.md](./WIREFRAMES.md)
 
 ---
 
 ## TL;DR
 
-UX-спецификация FixIt построена вокруг семи product principles из PRODUCT-VISION.md. Core interaction — **photo → estimate → three options** за 60 секунд. Приложение infrequent-use, поэтому UX оптимизирован под стрессовый момент ("что-то сломалось, надо решить сейчас"): один тап до фотокамеры с любого экрана, 5-8 секундная labor-illusion анимация после upload, tab-based presentation трёх опций (DIY / Hybrid / Pro) на едином экране.
+UX-спецификация FixIt построена вокруг семи product principles из PRODUCT-VISION.md и new positioning USP — **"Know the price before the panic"** (POSITIONING §2). Core interaction — **photo → estimate → three routes** за 60 секунд. Приложение infrequent-use, поэтому UX оптимизирован под стрессовый момент ("что-то сломалось, надо решить сейчас"): один тап до фотокамеры с любого экрана, 5-8 секундная labor-illusion анимация после upload, tab-based presentation трёх опций (DIY / Hybrid / Pro) на едином экране.
+
+### Что изменилось vs v1.0 (rescope 2026-04-19)
+
+После re-scoping FixIt в чистую AI-advisor утилиту без marketplace, UX-spec обновлён:
+
+- **Brand voice сместился** — с "friendly marketplace helper" на **"calm advisor"** (POSITIONING §7). Signature phrases: Know / Decide / Understand. Anti-phrases: Connect / Match / Request quote.
+- **Notification spec переписан** — push copy больше не про pro activity ("Pro Joe responded", "new pros in your area"). Теперь — savings milestones, seasonal check-ins, home health reminders.
+- **Empty / Loading / Error states** — очищены от pro-matching references. Loading state для "Pro match results" удалён (feature больше не requires API call — это simple deeplink).
+- **Persona-tuned copy для Emma** — обновлён под "reassurance through clarity" framing (POSITIONING §4).
 
 Ключевые отличия от high-frequency apps: нет daily streaks (infrequent use), нет gamification через badges (конфликт с neutral advisor positioning), нет прогресс-баров "долга" (конфликт с "save money, stay smart"). Вместо этого — lifetime savings counter как персистентный anchor, seasonal maintenance cards как soft-retention hook, before/after gallery как social-currency driver.
 
-Этот документ определяет interaction patterns, animations, haptics, accessibility, copy voice, empty/error/loading states и responsive behavior. Для флоу и screen map см. USER-FLOWS.md и SCREEN-MAP.md (создаются параллельно).
+Этот документ определяет interaction patterns, animations, haptics, accessibility, copy voice, empty/error/loading states и responsive behavior. Для флоу и screen map см. USER-FLOWS.md и SCREEN-MAP.md.
 
 ---
 
@@ -25,7 +34,7 @@ UX-спецификация FixIt построена вокруг семи produ
 
 ### 1.1 Neutral advisor — не push к pros
 
-**UX следствие:** Три опции (DIY / Hybrid / Pro) всегда показываются **в порядке возрастания цены**, не в порядке affiliate revenue. Если DIY стоит $15, он — первая вкладка на screen. Никаких "Recommended" badges поверх Pro option. Никаких красных-жёлтых флагов предупреждающих "сложно, лучше позвоните pro". Только honest disclaimer: "This option requires basic plumbing skills — see tutorial before deciding."
+**UX следствие:** Три опции (DIY / Hybrid / Pro) всегда показываются **в порядке возрастания цены**, не в порядке revenue incentive. Если DIY стоит $15, он — первая вкладка на screen. Никаких "Recommended" badges поверх Pro option. Никаких красных-жёлтых флагов предупреждающих "сложно, лучше позвоните pro". Только honest disclaimer: "This option requires basic plumbing skills — see tutorial before deciding." Pro option на estimate screen заканчивается нейтральным "Find on Thumbtack" sub-CTA, не "Request quote from our pros" (у нас нет pros).
 
 **Anti-pattern:** Thumbtack-style "Find a pro now →" huge CTA, скрывающая DIY. У нас DIY = first-class citizen в UI.
 
@@ -41,9 +50,11 @@ UX-спецификация FixIt построена вокруг семи produ
 
 **Anti-pattern:** Quiz-heavy onboarding Noom-style (80+ screens) — убивает speed, не подходит к нашему use case ("leak на полу прямо сейчас").
 
-### 1.4 Three options, always
+### 1.4 Three routes, always
 
 **UX следствие:** Estimate-screen использует **horizontal swipe tabs** (DIY | Hybrid | Pro), не dropdown, не accordions. Три опции видны одновременно через tab indicator в top of screen. Tab selection с haptic + animated underline. Никогда один-option screen — даже если одна плохая, показываем с honest "Not recommended because..." текстом.
+
+**Voice note:** Мы говорим "routes" not "options" в user-facing copy (per POSITIONING §7) — "Three routes, you decide." В inner team-facing docs обе термины interchangeable.
 
 **Anti-pattern:** Hide expensive option если AI думает DIY лучше. Disrespect к user agency.
 
@@ -55,7 +66,7 @@ UX-спецификация FixIt построена вокруг семи produ
 
 ### 1.6 Selective disclaimers — only where needed
 
-**UX следствие:** Gas lines / full electrical rewiring / structural / load-bearing walls → **hard stop screen**: "This repair requires a licensed professional. We don't provide DIY options for [category] due to safety and code compliance." + single CTA "Find a licensed pro." Для всего остального — light-touch disclaimer в small-print при bottom of estimate: "Estimate based on photo; actual cost may vary ±15%. Consult professional for complex cases."
+**UX следствие:** Gas lines / full electrical rewiring / structural / load-bearing walls → **hard stop screen**: "This repair requires a licensed professional. We don't provide DIY options for [category] due to safety and code compliance." + single CTA "Find a licensed pro" → opens Pro Match deeplink sheet (Thumbtack/Google/Yelp). Для всего остального — light-touch disclaimer в small-print при bottom of estimate: "Estimate based on photo; actual cost may vary ±25%. Consult professional for complex cases."
 
 **Anti-pattern:** Fear-mongering disclaimers на каждом screen ("DANGER! Could electrocute you!"). Конфликт с empowering tone.
 
@@ -83,6 +94,7 @@ UX-спецификация FixIt построена вокруг семи produ
 | **Icon-only buttons (close X, share)** | 44×44pt touch target (icon внутри 24×24pt) | Прыгающий padding для touch comfort |
 | **List row tap targets** | 56pt min row height | Two-line rows (title + subtitle) |
 | **Segmented control tabs (DIY/Hybrid/Pro)** | 44pt height, equal-width | iOS segmented control pattern |
+| **Pro Match platform pills** | 72pt height, full-width minus 32pt margin | Emphasize tap-ability на bottom sheet; three equal-weight buttons |
 
 ### 2.2 Gestures
 
@@ -90,7 +102,7 @@ UX-спецификация FixIt построена вокруг семи produ
 |---|---|---|
 | **Swipe horizontal** | Estimate screen | Переключает DIY ↔ Hybrid ↔ Pro tabs |
 | **Swipe horizontal** | Photo preview | Навигация между несколькими photos одного estimate |
-| **Swipe vertical down** | Modal screens | Dismiss modal (paywall, photo viewer, share sheet) |
+| **Swipe vertical down** | Modal screens | Dismiss modal (paywall, photo viewer, share sheet, Pro Match sheet) |
 | **Swipe right** | Push-stacked screens | Back navigation (iOS standard) |
 | **Pull-to-refresh** | History tab, saved projects | Reload с server |
 | **Long-press** | Estimate card в History | Quick actions menu (Share / Delete / Re-estimate / Add note) |
@@ -125,7 +137,7 @@ UX-спецификация FixIt построена вокруг семи produ
 | **Estimate reveal** | 400ms | Ease-out (decelerate) | Hero card fade-in + 20pt upward translate |
 | **Tab transition (DIY/Hybrid/Pro)** | 250ms | Spring (iOS UISpringTimingParameters) | Horizontal slide on tab select/swipe |
 | **Count-up number (costs)** | 800ms | Ease-out | On estimate reveal: $0 → $247 rolling counter |
-| **Modal present (paywall, photo viewer)** | 300ms | Ease-out | Slide up from bottom, 90% opacity backdrop fade |
+| **Modal present (paywall, photo viewer, Pro Match sheet)** | 300ms | Ease-out | Slide up from bottom, 90% opacity backdrop fade |
 | **Modal dismiss** | 250ms | Ease-in | Slide down, backdrop fade |
 | **Button press** | 150ms | Spring | Scale 0.95 on tap down, spring back on release |
 | **Toggle / switch** | 200ms | Ease-in-out | iOS UISwitch default |
@@ -135,6 +147,7 @@ UX-спецификация FixIt построена вокруг семи produ
 | **Haptic confirmation (post-capture)** | 300ms | Spring | Checkmark icon pop-in (scale 0→1.1→1.0) |
 | **Tab bar camera button pulse** | 2000ms loop (only Day 1) | Ease-in-out | Subtle scale 1.0→1.05→1.0, только первый день |
 | **Pull-to-refresh spinner** | Native | System default | iOS UIRefreshControl, Android SwipeRefresh |
+| **Pro Match sheet pills tap** | 150ms | Spring | Scale 0.97 on tap down, external deeplink transition takes over |
 
 ### 3.2 Labor illusion detail
 
@@ -143,16 +156,18 @@ UX-спецификация FixIt построена вокруг семи produ
 **Structure:**
 ```
 [0.0-1.5s]  "Analyzing your photo..."      [●○○○○]
-[1.5-3.0s]  "Identifying materials..."     [●●○○○]
+[1.5-3.0s]  "Identifying the problem..."   [●●○○○]
 [3.0-4.5s]  "Pulling Denver prices..."     [●●●○○]
-[4.5-6.0s]  "Calculating labor costs..."   [●●●●○]
-[6.0-7.5s]  "Finalizing your options..."   [●●●●●]
+[4.5-6.0s]  "Understanding DIY path..."    [●●●●○]
+[6.0-7.5s]  "Finalizing your routes..."    [●●●●●]
 [7.5-8.0s]  Smooth transition → result
 ```
 
+Text copy обновлён под new voice (POSITIONING §7) — verbs **Analyzing / Identifying / Understanding / Finalizing** (advisor doing work), not **Matching / Finding / Connecting** (marketplace framing).
+
 Progress bar fills linearly. Text swaps every 1.5s. Location-personalized (ZIP → city name). No bail-out button (seals commitment → reduces early abandon rate).
 
-**Если actual API finishes faster** (e.g., 2 секунды) → animation continues running to minimum 5 секунд, чтобы perceived value не "cheapen". Если API slower than 8 секунд → "Just a moment, finding the best estimate for your home..." extends gracefully without anxiety text.
+**Если actual API finishes faster** (e.g., 2 секунды) → animation continues running to minimum 5 секунд, чтобы perceived value не "cheapen". Если API slower than 8 секунд → "Just a moment, finalizing your routes for Denver..." extends gracefully without anxiety text.
 
 ### 3.3 Reduce Motion support
 
@@ -170,7 +185,7 @@ Functional animations (tab switching direction indicator, loading spinners) ос
 ### 3.4 Anti-patterns
 
 - **Parallax backgrounds** — motion sickness risk, low value
-- **Confetti / celebration particles** — конфликт с "we saved you money, это не игра" tone; mimics gamification apps которых мы не хотим копировать
+- **Confetti / celebration particles** — конфликт с "we saved you money, это не игра" tone; mimics gamification apps которых мы не хотим копировать (exception: subscription success moment — one-shot celebration is OK)
 - **Bouncy springy everywhere** — appropriate на CTA, не на каждом tap
 - **Auto-playing videos** — battery, data, attention cost; only opt-in
 - **Slow fades >500ms на core actions** — feels laggy, не "premium"
@@ -194,6 +209,7 @@ Haptic feedback — subtle, purposeful, never excessive. Android uses Haptics.im
 | Pull-to-refresh trigger | Light impact | `Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)` |
 | Swipe dismiss modal | Selection | `Haptics.selectionAsync()` |
 | Paywall tier select | Light impact | `Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)` |
+| Pro Match platform pill tap | Light impact | `Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light)` |
 
 **Respect system setting:** If "Reduce Haptic Feedback" in Accessibility Settings → disable all but critical error notifications.
 
@@ -230,14 +246,18 @@ Haptic feedback — subtle, purposeful, never excessive. Android uses Haptics.im
 | Element | A11y label |
 |---|---|
 | Camera CTA (home screen) | `accessibilityLabel: "Take a photo of the repair problem"`, `accessibilityHint: "Opens the camera to capture damage for cost estimate"` |
-| Estimate tab (DIY) | `accessibilityLabel: "Do it yourself option, estimated $15, 20 minutes"`, `accessibilityRole: "tab"` |
-| Estimate tab (Hybrid) | `accessibilityLabel: "Hybrid option, you buy materials and hire installer, estimated $95"` |
-| Estimate tab (Pro) | `accessibilityLabel: "Full professional option, estimated $275"` |
+| Estimate tab (DIY) | `accessibilityLabel: "Do it yourself route, estimated $15, 20 minutes"`, `accessibilityRole: "tab"` |
+| Estimate tab (Hybrid) | `accessibilityLabel: "Hybrid route, you buy materials and hire installer, estimated $95"` |
+| Estimate tab (Pro) | `accessibilityLabel: "Professional route, estimated $275"` |
 | Savings counter | `accessibilityLabel: "Lifetime FixIt savings: $847 across 6 repairs"` |
 | Photo thumbnail | `accessibilityLabel: "Photo of leaky kitchen faucet, taken April 18"` |
-| Paywall tier cards | `accessibilityLabel: "Annual plan, $49.99 per year, equals $4.17 per month, 48% savings vs monthly, most popular"` |
+| Paywall tier cards | `accessibilityLabel: "Annual plan, $49.99 per year, equals $4.17 per month, 58% savings vs monthly, best value"` |
 | ZIP entry field | `accessibilityLabel: "Your ZIP code for regional pricing"`, `accessibilityHint: "Five digit US ZIP required for accurate labor rates"` |
-| "Three options" screen container | `accessibilityLabel: "Three repair options: DIY, Hybrid, Pro. Swipe left and right to compare."` |
+| "Three routes" screen container | `accessibilityLabel: "Three repair routes: DIY, Hybrid, Pro. Swipe left and right to compare."` |
+| Pro Match sheet (Thumbtack pill) | `accessibilityLabel: "Open Thumbtack to get multiple quotes from local plumbers"` |
+| Pro Match sheet (Google Maps pill) | `accessibilityLabel: "Open Google Maps to find plumbers near 80203"` |
+| Pro Match sheet (Yelp pill) | `accessibilityLabel: "Open Yelp to read reviews of local plumbers"` |
+| Pro Match disclaimer | `accessibilityLabel: "We don't earn from these links. You find, you decide."` |
 
 ### 5.4 Typography scale
 
@@ -285,6 +305,7 @@ danger/error:       light #D83A3A / dark #FF5A5A
 - **Brand logo:** Two-asset variant (light logo / dark logo) — auto-swap
 - **Illustrations (empty states):** Two-asset variant (outlines + fills adapt)
 - **Screenshots (App Store marketing):** Dark + light pair submitted
+- **Pro Match platform pills:** Brand colors (Thumbtack blue / Google green / Yelp red) slightly tint-adjusted in dark mode для contrast compliance (4.5:1 on dark background)
 
 ---
 
@@ -305,9 +326,9 @@ danger/error:       light #D83A3A / dark #FF5A5A
 
 1. After labor illusion finishes → background crossfades к estimate screen (400ms)
 2. Hero card (photo + diagnosed problem) fades in с 20pt upward translate (400ms ease-out)
-3. **Three option cards** stagger-reveal (100ms delay between each), each с subtle shimmer on edge (500ms)
+3. **Three route cards** stagger-reveal (100ms delay between each), each с subtle shimmer on edge (500ms)
 4. Cost numbers **count-up animation** (800ms ease-out): $0 → $15 (DIY), $0 → $95 (Hybrid), $0 → $275 (Pro)
-5. Cheapest option card gets subtle green tint border (success/accent) — signals "you could save"
+5. Cheapest route card gets subtle green tint border (success/accent) — signals "you could save"
 6. Haptic Success notification fires at peak of count-up (300ms in)
 
 ### 7.3 Soft paywall enter
@@ -318,13 +339,13 @@ danger/error:       light #D83A3A / dark #FF5A5A
 4. Personalized savings line reveals с count-up: "You've saved $247 on 3 repairs with FixIt"
 5. Pre-selected Annual tier card has **1500ms subtle pulse** animation (scale 1.0→1.02→1.0)
 6. Tap tier → 150ms border highlight + haptic Light
-7. Tap "Unlock Unlimited Access" CTA → haptic Light + loading spinner replaces CTA text
+7. Tap "Unlock Unlimited" CTA → haptic Light + loading spinner replaces CTA text
 
 ### 7.4 History swipe actions
 
 1. User swipes left on history row → reveals two actions (Share / Delete)
 2. Each action 64pt wide, full row height, colour-coded (accent / danger)
-3. Tap Share → native share sheet с pre-filled "I just saved $X on this [repair] using FixIt!"
+3. Tap Share → native share sheet с pre-filled "FixIt saved me $X on this [repair]!"
 4. Tap Delete → haptic Medium + confirmation inline banner "Delete this estimate? Undo" (5s window to undo)
 
 ### 7.5 Savings counter increment
@@ -338,6 +359,15 @@ Triggered на two moments:
 2. **On app open** (after return visit):
    - Counter shows animated tally as if adding up past savings
    - "Your lifetime FixIt savings" subtitle
+
+### 7.6 Pro Match sheet open
+
+1. User taps "Find on Thumbtack" sub-CTA on Pro route card → haptic Light
+2. Bottom sheet slides up (300ms ease-out, 90% opacity backdrop)
+3. Header + context line + 3 platform pills appear simultaneously (no stagger — utility feel, not "wow moment")
+4. Tap any platform pill → haptic Light + pill scales 0.97 briefly
+5. System transitions к external app (Safari / native app via deeplink)
+6. User returning к FixIt sees estimate screen (state preserved)
 
 ---
 
@@ -378,7 +408,7 @@ Every list/collection screen has empty state — никогда blank screen.
 
 **Visual:** Seasonal icon (leaf, snowflake, sun)
 **Headline:** "Nothing urgent this [season]"
-**Body:** "We'll notify you when seasonal maintenance windows open for your area."
+**Body:** "We'll let you know when seasonal maintenance windows open for your area."
 
 **Rule:** Every empty state answers two questions: (1) "What is this?" (2) "What should I do next?"
 
@@ -392,7 +422,7 @@ Every list/collection screen has empty state — никогда blank screen.
 **Visual:**
 - Full-screen with subtle blurred background
 - Central animated icon (AI brain + magnifying glass morph loop, 2s cycle)
-- Progressive text updates (5 stages)
+- Progressive text updates (5 stages, all advisor-voice per §3.2)
 - Linear progress bar (5 segments, fills sequentially)
 - **No bailout option** (seals commitment)
 
@@ -410,16 +440,16 @@ Rules:
 - **Estimate detail load:** Skeleton for hero photo, 3 tabs, cost cards
 - **Profile / settings:** Skeleton for avatar, 3-4 settings rows
 
-### 9.3 Thumbtack pro match loading
+### 9.3 Pro Match sheet open
 
-**Context:** User tapped "See local pros" on Pro tab → API call to Thumbtack partner endpoint
-**Duration:** 2-4 sec typical
-**Visual:** Inline loading card с text "Finding pros in Denver 80203..." and 3 skeleton pro cards
-**Fallback:** If >8s or error → "Couldn't load pros right now. Try again in a moment."
+**Context:** User tapped "Find on Thumbtack" sub-CTA on Pro route card → opens bottom sheet с 3 platform pills
+**Duration:** Instant — no API call, purely UI transition
+**Visual:** Bottom sheet slide-up animation (§7.6). No spinner, no loading indicator.
+**Note:** Previously (v1.0) this screen called Thumbtack API for vetted pro listings с 2-4 sec load time. Post-rescope — no API, no loading, no fallback needed. Just deeplink buttons.
 
 ### 9.4 Subscription purchase processing
 
-**Trigger:** User taps "Unlock Unlimited Access" on paywall
+**Trigger:** User taps "Unlock Unlimited" on paywall
 **Visual:** CTA text replaces с spinner + "Processing..." (400ms minimum, max 6s)
 **Success:** Haptic Heavy + checkmark animation + auto-dismiss paywall to "Welcome to Pro!" screen
 **Error:** Haptic Error + "Payment didn't go through. Try again or use different card."
@@ -460,7 +490,14 @@ Tone: **empathetic, actionable, never-blaming-user.**
 - Browse past estimates (cached)
 - View saved tutorials (if downloaded)
 - Draft new photo (queued for upload when back online)
+
+**Unavailable:**
+- New estimate (AI required)
+- Price updates
+
 **Retry:** Bottom sheet banner с "Retry" button, auto-polls every 10s
+
+**Voice note:** Previously listed "Pro match" as unavailable offline — removed post-rescope. Pro Match deeplink doesn't require FixIt server; если external app (Thumbtack/Google/Yelp) has own offline handling, not our concern.
 
 ### 10.4 AI can't identify problem
 
@@ -489,14 +526,15 @@ Tone: **empathetic, actionable, never-blaming-user.**
 2. "Use different card" (secondary — re-opens Apple Pay / Google Pay / card selector)
 3. "Contact support" (tertiary link)
 
-### 10.7 Thumbtack API unavailable
+### 10.7 Pro Match deeplink fails
 
-**Context:** User tapped "See local pros" — API returns error
-**Inline error:** "Couldn't load pros in your area right now. Try again, or we can email them to you when available."
+**Context:** User taps a platform pill in Pro Match sheet → deeplink fails (external app crashes, browser unreachable, etc.)
+**Inline error (bottom sheet banner):** "Couldn't open [Thumbtack / Google Maps / Yelp]. Try a different option below or check your connection."
 **Options:**
-1. "Retry" (primary)
-2. "Email when available" (secondary — captures email for async delivery)
-3. "See DIY option instead" (tertiary — switches to DIY tab)
+1. User can tap any of other 2 pills still in sheet
+2. [X close] dismisses sheet back to estimate screen
+
+**Voice note:** Previously we had "10.7 Thumbtack API unavailable" — deleted post-rescope. No API call exists anymore; deeplink either works or doesn't. Fallback = user picks a different platform pill, not a server-retry flow.
 
 ### 10.8 Generic fallback
 
@@ -576,7 +614,7 @@ If error type unknown / unhandled:
 - **useSafeAreaInsets()** для top/bottom safe areas
 - **aspectRatio** для images — enforce photo aspect, не hardcoded heights
 - **Flex-based layouts** — stack на narrow, row на wide
-- **Horizontal scroll** fallback для content that can't stack (чipс rows, tab bars)
+- **Horizontal scroll** fallback для content that can't stack (chips rows, tab bars)
 
 ### 12.3 Orientation
 
@@ -589,6 +627,7 @@ If error type unknown / unhandled:
 | **Estimate detail** | ✅ | ✅ (comfortable reading на tablet especially) |
 | History list | ✅ | ❌ |
 | Paywall | ✅ | ❌ |
+| Pro Match sheet | ✅ | ❌ (locks к portrait as bottom sheet) |
 | Settings | ✅ | ❌ |
 
 ### 12.4 iPad support (v1.5+)
@@ -604,42 +643,78 @@ If error type unknown / unhandled:
 
 ### 13.1 Tone
 
-**Brand voice:** friendly authority — knowledgeable friend who doesn't talk down, doesn't oversell, doesn't scare-monger.
+**Brand voice (post-rescope v2.0):** **calm advisor** — knowledgeable friend who doesn't talk down, doesn't oversell, doesn't scare-monger, doesn't push toward pro services. Think "дед-мастер объясняет племяннице", not "sales rep closing a lead" (POSITIONING §7).
 
 Five pillars:
-1. **Direct** — "This leak costs $15 to DIY or $275 for a pro" — not "Your plumbing situation presents several interesting options..."
-2. **Empowering, not patronizing** — "You can fix this" — not "Don't worry, even *you* can do it!"
-3. **Data-driven, not vague** — "$247 saved" — not "many dollars saved"
-4. **Jargon-free** — "water shut-off valve" not "quarter-turn ball valve PRV"
-5. **Honest about uncertainty** — "Range $180-$220, depends on exact part" — not "$200 flat" when we don't know
+1. **Calm, not urgent** — "Here's what it costs. Breathe. Decide." — not "ACT NOW — water damage costs $5K!"
+2. **Informative, not pushy** — "If you need a pro, here's where to find one." — not "Our pros are standing by!"
+3. **Honest about uncertainty** — "Range $180-$220, depends on exact part" — not "$200 flat" when we don't know
+4. **Jargon-free but precise** — "supply line" not "quarter-turn ball valve PRV"; "A leaky cartridge. An easy fix." — not "Your plumbing situation presents several interesting options..."
+5. **Celebrates user agency** — "You chose DIY — here's your guide." — not "Ready for pro match?"
 
 ### 13.2 Signature phrases
 
-- "Know the price" (brand tagline)
-- "60-second estimate" (speed promise)
-- "3 paths forward" (options framing)
-- "Save money, stay smart" (value promise)
-- "Fair pricing, your ZIP" (regional truth hook)
-- "Let's figure it out" (empowering action)
+Новый post-rescope vocabulary — built around "know / decide / understand" verbs (POSITIONING §7, primary USP §2.1):
+
+- **"Know the price before the panic"** (primary tagline, welcome screen)
+- **"Know the price. Decide what to do."** (alt tagline)
+- **"60-second estimate"** (speed promise)
+- **"Three routes forward"** (options framing — **"routes"** not "options")
+- **"Your 3 routes"** (estimate screen header)
+- **"Here's what it costs"** (diagnosis handoff)
+- **"Fair pricing, your ZIP"** (regional truth hook)
+- **"Let's figure it out"** (empowering action)
+- **"You could save $X"** (DIY contrast)
+- **"Find a pro near you"** (Pro Match sheet header — calm, not "Get matched!")
+- **"We don't earn from these links"** (Pro Match disclaimer — trust signal)
 
 ### 13.3 Anti-copy (things we never write)
 
+**General anti-patterns:**
 - **"Click here"** — iOS language is "Tap" (we're mobile-first)
-- **Excessive exclamation marks** — "You can do it!!!" (too much — one !, тhoughtfully)
+- **Excessive exclamation marks** — "You can do it!!!" (too much — one !, thoughtfully)
 - **Fake urgency** — "LIMITED TIME! 50% OFF!" Unless true and time-bound
 - **Scare tactics** — "Your house is dangerous! Call a pro NOW!" (conflicts с neutral advisor)
 - **Patronizing encouragement** — "Good job!" after normal actions (feels like talking to a child)
 - **Vague promises** — "Save tons of money!" ("tons" = weak, we have real numbers)
 - **Corporate speak** — "At FixIt, we strive to..." (say what we do, not how we feel about it)
 
+**v2.0 post-rescope — marketplace-voice anti-patterns (added):**
+- **"Connect with pros"** — we don't broker, never use "connect"
+- **"Match you with contractors"** — we don't match
+- **"Request a quote"** — we don't intermediate quote requests
+- **"Our vetted pros"** / **"trusted network"** — we have no pros, no network
+- **"Priority pro matching"** — doesn't exist in v2.0 (was Pro-tier benefit in v1.0)
+- **"Pros standing by"** — no pros, nobody standing by
+- **"Free quotes from our network"** — no network
+- **"Compare contractor bids"** — we don't compare bids
+- **"Book a pro"** — we don't have booking
+
+**Rule of thumb:** If copy implies FixIt knows/controls/vets individual contractors — it's wrong voice. FixIt knows prices, routes, and best practices. Users find their own pros.
+
 ### 13.4 Persona-tuned copy
 
-Per MONETIZATION.md §5, paywall copy varies по detected persona. Extended to in-app copy where clear signal:
+Per MONETIZATION.md §5 + POSITIONING §4, paywall copy and in-app messaging varies по detected persona. Extended under new advisor voice:
 
-- **Emma (first-time HO):** empowering, teaching — "Here's what plumbers know that homeowners usually don't"
-- **Mike (DIY enthusiast):** efficient, respectful of skill — "Tools you'll need (you probably have these)"
-- **Sarah (single HO):** protective, anti-ripoff — "Fair pricing in your ZIP — no contractor surprises"
-- **Ronald (aging HO):** simple, large text, no jargon — "This is a small fix. Here's what it should cost."
+- **Emma (first-time HO, primary):** **"reassurance through clarity"** — "Know if it's bad news before you call" (POSITIONING §4). Empowering, teaching: "Here's what plumbers know that homeowners usually don't." Emphasizes emotional safety — она может breathe when FixIt gives clear range.
+- **Mike (DIY enthusiast):** efficient, respectful of skill — "Tools you'll need (you probably have these)" + "AI-generated DIY guide, per your specific problem" (POSITIONING §4).
+- **Sarah (quote validator):** **anti-ripoff framing** — "Snap the problem, see what it should cost. If the quote is higher — negotiate." (POSITIONING §4). "Fair pricing in your ZIP — no contractor surprises."
+- **Tyler (renter):** **deposit protection** — "Pay $2.99 once — know exactly which fixes to do before move-out." (POSITIONING §4)
+- **Ronald (senior):** simple, large text, no jargon — **"Photo → clear answer. No confusing apps, no 10-call carousel."** (POSITIONING §4) — "This is a small fix. Here's what it should cost."
+
+### 13.5 Example copy transformations (v1.0 → v2.0)
+
+Reference table for copywriters reviewing existing strings:
+
+| Context | v1.0 (old) | v2.0 (new) |
+|---|---|---|
+| Welcome hero | "FixIt helps you find honest pros and save money" | "Know the price before the panic" |
+| After first estimate | "Ready to find a pro?" | "Here are your three routes. Start with what feels right." |
+| Soft paywall header | "Unlock unlimited estimates AND priority pro matching" | "Unlock unlimited estimates, saved projects, price alerts" |
+| Pro route sub-CTA | "Connect with local pros" / "Request quote" | "Find on Thumbtack" (honest handoff) |
+| Home greeting | "Welcome back. Need a pro for something?" | "Welcome back. Anything new around the house?" |
+| Viral share message | "I found a great plumber via FixIt" | "FixIt saved me $185 — I did it myself" |
+| Paywall benefit line | "✓ Priority pro matching" | "✓ Saved projects unlimited" / "✓ Price alerts" |
 
 ---
 
@@ -665,19 +740,42 @@ Per MONETIZATION.md §5, paywall copy varies по detected persona. Extended to 
 **Format:**
 - Title: <10 words, <90 chars
 - Body: specific, actionable, includes city name when relevant
-- Deep-link to relevant screen (seasonal tip → maintenance dashboard, etc.)
+- Deep-link to relevant screen (seasonal tip → maintenance dashboard, savings milestone → home tab, etc.)
 - Respect DND / quiet hours (iOS handles automatically with time-sensitive flag)
 
-**Good examples (copy):**
-- "Denver HVAC pros booked out 3 weeks — estimate your fix first"
-- "Your FixIt savings: $340. Anything worth a quick estimate?"
-- "12 neighbors in 80203 fixed gutters this week — fall rains starting"
-- "6 months ago you fixed your faucet. Still working? 30-sec check-in"
+**Good examples (copy, post-rescope v2.0):**
+- **"Savings milestone: $500 saved this year"** (savings anchor — new viral moment per POSITIONING §5)
+- **"Spring check-in — 3 small fixes worth knowing about"** (seasonal, calm advisor tone)
+- **"Home Health check-in — how's that faucet holding up?"** (re-engagement на past estimates)
+- **"Denver HVAC booked out 3 weeks — estimate first, decide with confidence"** (quote validation hook, no pro push)
+- **"Your FixIt savings: $340. Anything worth a quick estimate?"** (savings anchor + gentle CTA)
+- **"6 months ago you fixed your faucet. Still working? 30-sec check-in"** (home health)
 
-**Bad examples (avoid):**
-- "Come back to FixIt! We miss you!" (generic, pleading)
-- "Save on home repair!" (vague, promotional)
-- "You haven't used FixIt in a while" (guilt-based)
+**Bad examples (avoid, v1.0 marketplace pusher tone — REMOVED):**
+- ❌ **"Pro Joe Smith responded to your request"** — no pros, no responses
+- ❌ **"Your weekly pro update"** — nothing to update
+- ❌ **"3 new pros in your area near 80203"** — no pro onboarding, no "new pros"
+- ❌ **"Your pro is available Tuesday 2pm"** — we don't schedule
+- ❌ **"Come back to FixIt! We miss you!"** (generic, pleading)
+- ❌ **"Save on home repair!"** (vague, promotional)
+- ❌ **"You haven't used FixIt in a while"** (guilt-based)
+
+**Push categories (v2.0 post-rescope):**
+
+| Category | Frequency | Example |
+|---|---|---|
+| **Savings milestones** | Quarterly, as hit | "You've saved $500 this year with FixIt 💪" |
+| **Seasonal check-ins** | 2-3x per year (spring/summer/fall/winter) | "Spring check-in — gutters, HVAC filter, 3 quick photos" |
+| **Home Health check-ins** | 6 months after past estimate | "6 months since your faucet fix. Still holding up?" |
+| **Price alerts (Pro tier)** | As triggered | "Your tracked part (SharkBite washer) dropped to $2.79 at Home Depot" |
+| **Feature announcements** | 2-4x per year | "New: PDF export for insurance reports" |
+| **App updates / critical** | Rare | "Version 1.2 — new accuracy improvements" |
+
+**REMOVED categories (v1.0):**
+- ❌ Pro response notifications (no pros)
+- ❌ Pro availability updates (no schedule)
+- ❌ New pros in area (no onboarding)
+- ❌ Quote received notifications (no quotes)
 
 ### 14.3 Permission timing
 
@@ -691,6 +789,8 @@ Per MONETIZATION.md §5, paywall copy varies по detected persona. Extended to 
 - Only if user taps "Yes" → trigger native iOS permission prompt
 - Grant rate with context: ~60% (vs ~25% without)
 
+**Copy note:** "seasonal home maintenance reminders" framing emphasizes calm / advisor / periodic — not "alerts" or "urgent" или "pro updates" (which would misalign с brand voice).
+
 ---
 
 ## 15. Prototype Testing Plan
@@ -700,16 +800,16 @@ Before final Stitch generation в Stage 5:
 ### 15.1 Figma clickable prototype
 
 Top 10 screens clickable:
-1. Welcome / permission primer
+1. Welcome / permission primer (с new tagline)
 2. ZIP entry
 3. Camera screen (simulated)
 4. Photo preview
 5. Answer-questions (quality tier)
-6. Labor illusion
-7. Estimate result — DIY tab default
-8. Estimate result — Pro tab
-9. Soft paywall
-10. History tab with saved estimates
+6. Labor illusion (с updated stepped copy)
+7. Estimate result — DIY tab default (с "three routes" framing)
+8. Estimate result — Pro tab (с "Find on Thumbtack" sub-CTA)
+9. Pro Match deeplink sheet (new v2.0 simplified)
+10. Soft paywall (с updated benefits list)
 
 ### 15.2 User tests (Emma persona primary)
 
@@ -727,7 +827,11 @@ Top 10 screens clickable:
 | Tab switch rate on estimate screen | >70% users try at least 2 tabs | <40% |
 | Paywall click rate | 20-30% tap CTA | <10% |
 | Confusion moments (think-aloud) | <2 per session | >5 |
-| Task completion (can user reach "Pro match" from photo in <5 taps?) | >80% | <50% |
+| Task completion (can user get to Pro Match sheet from photo in <5 taps?) | >80% | <50% |
+| Voice test — does "Know the price before the panic" resonate в think-aloud? | >60% positive | <30% |
+| Pro Match sheet — do users understand it's a handoff, not a booking? | >80% correct interpretation | <60% |
+
+**New v2.0 tests:** tagline resonance + Pro Match sheet interpretation — both critical для validating rescoping thesis.
 
 ### 15.4 Iteration plan
 
@@ -742,51 +846,64 @@ Top 10 screens clickable:
 
 ### 16.1 UX team → Design (Stage 5)
 
-- [x] UX-SPEC.md (this document) — principles, interactions, states, a11y
-- [ ] USER-FLOWS.md — 6-8 key user scenarios with happy path + edge cases (create next)
-- [ ] SCREEN-MAP.md — full screen inventory с navigation (create next)
-- [ ] WIREFRAMES.md — 15-20 ASCII wireframes with data + action notes (create next)
-- [x] FUNNEL.md — conversion funnel metrics (companion to this doc)
+- [x] UX-SPEC.md (this document, v2.0) — principles, interactions, states, a11y
+- [ ] USER-FLOWS.md — 6-8 key user scenarios с happy path + edge cases (rewrite for v2.0 — Pro Match flow simplified)
+- [ ] SCREEN-MAP.md — full screen inventory с navigation (update for v2.0 — Screen 5.2 removed, 7.1 simplified)
+- [x] WIREFRAMES.md (v2.0) — 19 ASCII wireframes с data + action notes
+- [x] FUNNEL.md — conversion funnel metrics (update Pro Match = 0 revenue attribution)
 
 ### 16.2 Design team deliverables (Stage 5 output)
 
 - [ ] Design system: colours, typography, iconography, component library
-- [ ] High-fidelity mockups для все ~35 screens
+- [ ] High-fidelity mockups для all ~33 screens (was ~35, reduced post-rescope — no Pro Match Results full screen, no Context Paywall Pro Match)
 - [ ] Figma interactive prototype (10 key screens clickable)
-- [ ] Animation specs: labor illusion, estimate reveal, modal transitions (Lottie / Rive where needed)
+- [ ] Animation specs: labor illusion, estimate reveal, modal transitions, Pro Match sheet open (Lottie / Rive where needed)
 - [ ] Dark mode variants для all screens
-- [ ] App Store screenshots (6-8 benefit-driven)
+- [ ] App Store screenshots (6-8 benefit-driven, с "Know the price" tagline hero)
 - [ ] App icon A/B variants (minimum 3)
 
 ### 16.3 Priority order for Design
 
 1. **Photo → Estimate flow** (core aha-moment — must be flawless)
-2. **Onboarding** (ZIP, permissions, soft intros)
+2. **Onboarding** (ZIP, permissions, soft intros, welcome с new tagline)
 3. **Home dashboard** (both empty Day-1 state и mature state with savings counter)
-4. **Paywall** (soft primary + context variants)
-5. **History + saved projects**
-6. **My Home dashboard (v1.5 preview)**
-7. **Settings + Profile**
-8. **Error + empty states**
-9. **System screens** (offline, force-update)
+4. **Paywall** (soft primary с new benefits list, Trial A/B variant)
+5. **Pro Match deeplink sheet** (new v2.0 simplified UX — must clearly read as handoff, not marketplace)
+6. **History + saved projects**
+7. **My Home dashboard (v1.5 preview)**
+8. **Settings + Profile** (updated Pro features list)
+9. **Error + empty states**
+10. **System screens** (offline, force-update)
 
 ---
 
 ## 17. Related Documents
 
+- [POSITIONING.md](../02-product/POSITIONING.md) — **primary reference for v2.0 voice/messaging/USP**
+- [MONETIZATION.md](../02-product/MONETIZATION.md) — **Pro benefits stack, pricing, subscription model**
 - [PRODUCT-VISION.md](../02-product/PRODUCT-VISION.md) — seven principles, north star, guiding beliefs
-- [MONETIZATION.md](../02-product/MONETIZATION.md) — paywall funnel, pricing, conversion tactics
 - [PAYWALL-RESEARCH.md](../03-practices/PAYWALL-RESEARCH.md) — soft paywall deep-dive, Emma journey
 - [RETENTION-RESEARCH.md](../03-practices/RETENTION-RESEARCH.md) — seasonal engagement, push strategy
 - [FUNNEL.md](./FUNNEL.md) — stage-by-stage conversion metrics (this doc's companion)
-- [USER-FLOWS.md](./USER-FLOWS.md) — core flows (TBD next)
-- [SCREEN-MAP.md](./SCREEN-MAP.md) — screen inventory (TBD next)
-- [WIREFRAMES.md](./WIREFRAMES.md) — ASCII wireframes (TBD next)
+- [USER-FLOWS.md](./USER-FLOWS.md) — core flows
+- [SCREEN-MAP.md](./SCREEN-MAP.md) — screen inventory
+- [WIREFRAMES.md](./WIREFRAMES.md) — 19 ASCII wireframes (v2.0)
 
 ---
 
-**Дата последнего обновления:** 2026-04-18
-**Следующий шаг:** USER-FLOWS.md — детализация flows по сценариям Emma / Mike / Sarah / Tyler / Ronald.
+**Дата последнего обновления:** 2026-04-20 (post-rescope v2.0)
+**Следующий шаг:** USER-FLOWS.md + SCREEN-MAP.md rewrites под v2.0 (Pro Match flow simplification + Screen 5.2 removal).
+
+**Changelog v2.0 (2026-04-19):**
+- Brand voice rewritten under POSITIONING §7 "calm advisor" — signature phrases: Know / Decide / Understand. Anti-phrases: Connect / Match / Request quote. Full anti-copy list added §13.3.
+- Notification spec (§14.2) — removed pro-activity push categories (pro responses, availability, new pros in area), added savings milestones, seasonal check-ins, Home Health check-ins.
+- Loading states §9.3 — Pro Match loading deleted (no API call anymore — instant bottom sheet).
+- Error states §10.7 — Thumbtack API error replaced с deeplink-fail error (user tries different platform pill).
+- Offline state §10.3 — "Pro match" removed from unavailable features list.
+- Persona-tuned copy §13.4 — Emma framing updated to "reassurance through clarity" per POSITIONING §4.
+- Example copy transformations table §13.5 added — migration guide for copywriters.
+- Pro Match-specific additions: haptics entry §4, gesture §2.2, animation §3.1, micro-interaction §7.6, accessibility labels §5.3, dark mode note §6.3, orientation §12.3.
+- Voice terminology shift — "three routes" preferred over "three options" in user-facing copy.
 
 **Approved by:**
 - [ ] Amanda (Owner)

@@ -1,43 +1,43 @@
 # FUNNEL.md — FixIt
 
-**Дата:** 18 апреля 2026
+**Дата:** 2026-04-20
 **Продукт:** FixIt — AI home repair cost advisor
-**Стадия:** UX Design (Stage 4)
+**Стадия:** UX Design (Stage 4) — rewritten v2.0 post-rescope
 **Автор:** Product Team (Лана + Amanda)
-**Статус:** Final v1.0
-**Companion docs:** [PRODUCT-VISION.md](../02-product/PRODUCT-VISION.md) | [MONETIZATION.md](../02-product/MONETIZATION.md) | [PAYWALL-RESEARCH.md](../03-practices/PAYWALL-RESEARCH.md) | [RETENTION-RESEARCH.md](../03-practices/RETENTION-RESEARCH.md) | [UX-SPEC.md](./UX-SPEC.md)
-
----
-
-> ⚠️ **RESCOPE NOTE (2026-04-19):** Affiliate revenue stream **removed** from MVP funnel (Thumbtack/Angi partnership rolled back). See [MONETIZATION.md v2.0](../02-product/MONETIZATION.md) for new numbers. Funnel still accurate for subscription + pay-per + Amazon Associates bonus, but **all "Affiliate clicks / Qualified leads / Affiliate revenue" rows below should be interpreted as v1.5+ aspirational, not MVP targets**. Core conversion funnel (install → onboarding → first estimate → paid subscription) unchanged. Revenue projection Y1: $9-11K per 10K cohort (down from $14-16K in v1 plan).
+**Статус:** Final v2.0 (subscription-only MVP)
+**Companion docs:** [POSITIONING.md](../02-product/POSITIONING.md) | [MONETIZATION.md](../02-product/MONETIZATION.md) | [PAYWALL-RESEARCH.md](../03-practices/PAYWALL-RESEARCH.md) | [RETENTION-RESEARCH.md](../03-practices/RETENTION-RESEARCH.md) | [UX-SPEC.md](./UX-SPEC.md)
 
 ---
 
 ## TL;DR
 
-Полная воронка FixIt от install до long-term subscription с expected rates для 10K cohort, стадия-за-стадией метриками, red flag thresholds, cohort analysis framework и A/B testing roadmap. Воронка структурно отличается от high-frequency apps — **soft paywall после 3-го estimate**, не hard paywall; **freemium без forced trial**; **affiliate revenue как second stream** закрывающий 80% free users.
+Полная воронка FixIt от install до long-term subscription с expected rates для 10K cohort, стадия-за-стадией метриками, red flag thresholds, cohort framework и A/B testing roadmap. После rescope 2026-04-19 — **subscription-only + pay-per + tiny Amazon Associates bonus**. Аффилиатного стрима (Thumbtack/Angi $15-40/lead) больше нет.
 
 Ключевые expected rates (US market, mature state Y2+):
-- Install → First estimate: **74.8%** (85% onboarding × 88% estimate completion)
-- First estimate → W1 return: **45%**
-- Paid conversion by D60: **18-25%** среди hit-limit users (≈20% blended of installs)
-- Affiliate revenue per free user: **$8-15/year**
-- W4 retention (all cohorts): **40%** (above PictureThis baseline 35%)
+- Install → First estimate: **74.8%** (85% onboarding × 88% estimate completion) — unchanged
+- First estimate → W1 return: **45%** — unchanged
+- Paid conversion by D60: **18-25%** среди hit-limit users (≈20% blended of installs) — unchanged
+- **Amazon Associates revenue per active user: $0.05/year** (tiny, ~$500 Y1 на 10K cohort)
+- W4 retention (all cohorts): **40%** (above PictureThis baseline 35%) — unchanged
+- **Y1 revenue per 10K cohort: $9-11K** (было $14-16K с affiliate) — lower ceiling but zero partnership risk
 
-Метрики отслеживаются weekly / monthly / quarterly cadence с red flag escalation. Первые 90 дней post-launch — 8 priority A/B tests в pricing / onboarding / paywall.
+Метрики отслеживаются weekly/monthly/quarterly cadence с red flag escalation. Первые 90 дней post-launch — 8 priority A/B tests в pricing / onboarding / paywall (affiliate-related tests removed, savings-anchor tests added).
 
 ---
 
 ## 1. Overview
 
-Funnel FixIt — **multi-path**, не linear:
+Funnel FixIt — **simpler chain**, 3 parallel revenue streams (был 4):
 
-- **Core path:** Install → Onboarding → First estimate → Return → Paid
-- **Affiliate path:** First estimate → Pro tab → Thumbtack click → Qualified lead → Revenue (независимо от subscription)
+- **Core subscription path:** Install → Onboarding → First estimate → Return → Paid
 - **Pay-per path:** Hit limit → Pay-per-estimate $2.99 (bypasses subscription decision)
-- **Viral path:** Successful DIY → Share → Friend installs → New cohort
+- **Amazon Associates path:** Shopping list click → Amazon purchase within 24hr → 1-3% commission (passive, tiny)
+- **Viral path:** Successful DIY → Share savings → Friend installs → New cohort
 
-Воронка измеряется через AARRR (Acquisition / Activation / Retention / Revenue / Referral) с двумя дополнительными enriched slices: **Affiliate conversion** и **Cohort LTV progression**.
+**УДАЛЕНО v1 → v2:**
+- ❌ Affiliate path (First estimate → Pro tab → Thumbtack click → Qualified lead → Revenue) — больше не existing в MVP
+
+Воронка измеряется через AARRR (Acquisition / Activation / Retention / Revenue / Referral) с одним enriched slice: **Cohort LTV progression**.
 
 Источники benchmark: [MONETIZATION.md §7.1](../02-product/MONETIZATION.md), [PAYWALL-RESEARCH.md §1.1 / §11.3](../03-practices/PAYWALL-RESEARCH.md), [RETENTION-RESEARCH.md §1.3](../03-practices/RETENTION-RESEARCH.md), RevenueCat State of Subscription 2026, Adapty 2026 H&F data.
 
@@ -47,580 +47,379 @@ Funnel FixIt — **multi-path**, не linear:
 
 ```
 App Store Impressions: ~30,000
-    ↓ [33% listing CVR]  ────────── ASO benchmark H&F 30.8%
+    ↓ [33% listing CVR]  ────────── ASO benchmark Utilities 32-35%
 Install: 10,000
-    ↓ [85% complete onboarding]  ── Light onboarding (4-5 screens)
+    ↓ [85% complete onboarding]  ── Light onboarding (3-5 screens)
 Onboarding completed: 8,500
     ↓ [88% reach first estimate]  ─ Photo flow well-optimized
 First estimate: 7,480
-    ↓ [45% return within 7 days]  ─ Seasonal / urgency retention
+    ↓ [45% return within 7 days]  ─ Seasonal/urgency retention
 Return user (W1): 3,366
     ↓ [40% return within W4]  ──── Above PictureThis 35% baseline
 Return user (W4): 1,346
     ↓ [50% hit 3-estimate limit by D60]
 Paywall exposed: 673
-    ↓ [36% convert среди exposed by D60]
+    ↓ [36% convert среди exposed by D60] ── No affiliate to subsidize; conversion target matters MORE
 Paid user: 242 from cohort
     ↓ [35% choose annual]
 Annual subscribers: 85
     ↓ [65% renew at 12 months]
 Long-term paid: 55
 
-Parallel — affiliate revenue stream:
-    ↓ [8% of estimates → affiliate click]
-Affiliate clicks: ~1,500 (from ~18,700 total estimates in Y1)
-    ↓ [25% qualified lead]
-Qualified leads: ~375
-    ↓ $25 avg commission
-Affiliate revenue: ~$9,375 (Y1)
-
 Parallel — pay-per-estimate stream:
     ↓ [3% of free users buy at least 1]
-Pay-per purchases: ~225
-    ↓ $2.99-9.99 avg
-Pay-per revenue: ~$1,100 (Y1)
+Pay-per purchases: ~225 × avg 1.5 purchases
+Pay-per revenue: ~$1,010 (Y1)
+
+Parallel — Amazon Associates (tiny):
+    ↓ [~3% of DIY estimates → Amazon click → 25% convert]
+Affiliate clicks: ~225 × 25% conversion × ~$0.90 avg commission
+Amazon revenue: ~$50-200 (Y1)
 ```
 
 **Y1 revenue summary (10K cohort):**
-- Subscription ARR: ~$40,500
-- Affiliate: ~$9,375
-- Pay-per: ~$1,100
-- **Total Y1 revenue from 10K cohort: ~$51,000**
-- **Total cumulative cohort LTV (Y1-Y3): ~$180,000**
-- With CAC $15 × 10K installs = $150K spend → **cohort LTV:CAC = 1.2x Y1 → 8x by Y3 mature state**
+
+| Stream | Amount | % of total |
+|---|---|---|
+| Subscriptions (annual $49.99 × 85 + monthly partial × 103 × avg 5 mo) | ~$8,694 | ~86% |
+| Pay-per ($2.99 × 225 purchases × avg 1.5) | ~$1,010 | ~10% |
+| Amazon Associates (passive) | ~$150 | ~1.5% |
+| **Total Y1 revenue (10K cohort):** | **~$9,854** | 100% |
+| Y1 ARPU per install | $0.99 | |
+| Y1 ARPU per paying user | ~$47 | |
+
+**Y2 improvements** (annual renewals + cohort maturation):
+- 65% annual renewal (~55 users × $49.99) = $2,750 in pure renewal revenue
+- Y1 cohort late converts (~25 new paying in Y2) add ~$1,175
+- Y2 cumulative cohort revenue: ~$15-18K
 
 ---
 
-## 3. Stage-by-Stage Metrics
+## 3. Stage-by-stage metrics (AARRR)
 
-### 3.1 Stage 1: Acquisition (App Store Impression → Install)
+### Acquisition
 
-| Metric | Target | Benchmark | Notes |
+| Metric | Target (mature) | Ramp period | Source |
 |---|---|---|---|
-| App Store listing CVR | 33% | H&F 30.8% (Adapty) | ASO-driven |
-| Organic install ratio | 60% Y1 → 80% Y3 | Consumer SaaS typical | TikTok #hometok + App Store SEO |
-| Paid install CPI (blended) | <$15 | H&F target $30 | |
-| TikTok / Reels CPI | $8-12 | Growing channel | Primary for Emma |
-| Facebook/Instagram CPI | $18-25 | Mature | Secondary |
-| Google UAC CPI | $15-20 | Intent-driven | Keyword: "how much does [X] repair cost" |
-| App Preview video visible | 100% of listings | Adapty: +2.9x conversion | Mandatory |
+| Impression → Install (listing CVR) | 33% | 25-28% first 30 days | Adapty ASO 2026 H&F Utilities |
+| Organic install share | 70%+ | 50% first 90 days | ASO-driven, no paid marketing budget MVP |
+| CPI (if paid) — cap | $3.50 | $5+ first test | Sanity-check; ASA if LTV/CAC allows |
 
-**Measurement stack:** Apple Search Ads, Google UAC dashboard, TikTok Ads Manager, AppsFlyer for attribution.
+### Activation
 
-### 3.2 Stage 2: Activation (Onboarding)
-
-| Metric | Target | Benchmark | Red flag |
+| Metric | Target | Status | Notes |
 |---|---|---|---|
-| Onboarding completion rate | 85% | H&F 75-85% | <70% |
-| Drop-off at Welcome screen | <5% | — | >15% |
-| Drop-off at ZIP entry | <8% | — | >20% |
-| Drop-off at camera permission prompt | <20% | 15-25% typical | >40% |
-| Time to complete onboarding | <90s median | Speed principle | >3 min |
-| Push permission grant rate | 60% | Context-framed; без context 25% | <40% |
+| Install → Onboarding complete | 85% | Core unchanged | 3-5 screens, camera permission priming |
+| Onboarding → First estimate | 88% | Core unchanged | Photo flow well-optimized |
+| Install → Aha moment (≤90 sec) | 74.8% | **Primary North Star** для activation | 85% × 88% |
+| First estimate within 2 min of install | 70%+ | Tracking signal | If low, camera friction |
 
-**Key insight (из RETENTION-RESEARCH §7.5):** Push permission asked **after** first successful estimate, не on onboarding. 2.4× higher grant rate.
+### Retention
 
-### 3.3 Stage 3: First Value (Aha moment)
+| Metric | Target | Adjusted post-rescope? |
+|---|---|---|
+| D1 retention | 45% | Unchanged |
+| W1 return | 45% | Unchanged |
+| W4 return | 40% | Unchanged (above PictureThis 35%) |
+| D90 retention | 25% | Unchanged |
+| Save-to-My-Home rate (per estimate) | 40% | **NEW primary retention signal** |
+| Push opt-in rate | 60%+ | Notification copy now savings/seasonal, not "pro updates" |
+| Seasonal push open rate | 35% | Target per RETENTION-RESEARCH §3.2 |
 
-| Metric | Target | Benchmark | Rationale |
+### Revenue
+
+| Metric | Target (v2.0) | Was (v1.0) | Why changed |
 |---|---|---|---|
-| Time to first estimate (install → result visible) | <4 min median | Competitor: 10+ min | Speed principle #3 |
-| Estimate completion rate (start photo → see estimate) | >88% | PictureThis 85% | Photo flow optimization |
-| Photo retake rate | 20-30% | First-try success acceptable | Not a failure signal |
-| AI identification confidence (acceptable threshold) | >80% | Accuracy target Y1 | Fall-back to text if <60% |
-| "Wow" signal (share/save/retake-with-intent) | >25% of first estimates | Proxy для aha-moment | |
+| Paywall exposure rate (hit 3-limit) | 50% of W4 | 50% | Unchanged |
+| Paid conversion среди exposed (D60) | **36%** | 36% | Unchanged — critical target (no affiliate backstop) |
+| Blended install → paid conversion | 18-25% | 18-25% | Unchanged |
+| Annual tier share среди paid | 35% | 40% | Slightly lower without "best value" annual-only feature differentiation |
+| Pay-per attach rate среди free rejecting sub | 3% | 3% | Unchanged |
+| ~~Affiliate click rate per estimate~~ | ~~N/A~~ | ~~8-15%~~ | **REMOVED** |
+| ~~Affiliate-to-qualified-lead~~ | ~~N/A~~ | ~~20-30%~~ | **REMOVED** |
+| Amazon Associates click rate (DIY users) | 20-25% | — | NEW (small) |
+| Amazon conversion (~25% of clicks) | ~25% | — | NEW (industry avg) |
 
-**Aha-moment proxy metrics** (measurable behaviors signaling "this worked"):
-- User tapped ≥2 tabs (DIY/Hybrid/Pro) → explored options = engaged
-- User expanded "See full plan" → deeper interest
-- User screenshot on estimate screen → implicit share intent
-- User returned within 2 weeks → trust established
+### Referral
 
-### 3.4 Stage 4: Return / Retention
-
-Per [RETENTION-RESEARCH.md §2.3](../03-practices/RETENTION-RESEARCH.md) — infrequent-use app, не optimize против daily retention.
-
-| Metric | Target Y1 | Target Y3 | Benchmark (PictureThis) |
-|---|---|---|---|
-| D2 return (any activity) | 32% | 40% | 35% |
-| W1 return | 45% | 55% | 42% |
-| W4 return | 40% | 50% | 35% |
-| D90 return (any activity) | 25% | 35% | 22% |
-| Annual retention | 32% | 45% | 28% |
-| **QAR (North Star proxy)** | 50% | 80% | — |
-| WEPA (Weekly Estimates Per Active) | 0.35 | 1.2 | PictureThis 2.5 (higher freq.) |
-
-**Supporting retention metrics:**
-- Seasonal push CTR: >8%
-- Savings counter views per user per year: >3
-- Project follow-up response rate (Loop 2): >40%
-
-### 3.5 Stage 5: Monetization
-
-| Metric | Target | Benchmark | Rationale |
-|---|---|---|---|
-| Paywall exposure rate (installs exposed to paywall by D60) | 45-50% | Hit-limit behavior | User must do 3 estimates first |
-| Paywall conversion среди exposed | 18-25% | PictureThis 20%, H&F Adapty 11.2% | Soft paywall with aha-moment |
-| Blended install → paid by D60 | 8-12% | H&F 5-8% typical | Above benchmark |
-| Monthly vs Annual split (of paid) | 55% / 45% | H&F 40% / 60% annual dominant | Lower annual early (infreq. use) |
-| Annual discount framing uplift | +10-15% | "2 months free" proven best | Validated A/B |
-| Trial-to-paid conversion (if trial offered) | 42% | H&F 35-49.9% | Phase 2+ experiment |
-| Monthly churn (paying users) | 5-6% | H&F median 7.2% | Below median target |
-| Affiliate click-through rate (estimates → affiliate link) | 8-15% | — | Core second revenue stream |
-| Affiliate click → qualified lead | 20-30% | Thumbtack partner avg | |
-| Pay-per-estimate purchase rate (of free users) | 3% | — | Fills non-subscriber gap |
-| Pay-per → subscription upsell | 25-35% | "You've spent $9, Pro is $7.99" | Retention lever |
-
-### 3.6 Stage 6: Advocacy / Referral
-
-| Metric | Target Y1 | Target Y3 | Source |
-|---|---|---|---|
-| NPS (Emma segment) | ≥50 | ≥60 | PRODUCT-VISION target |
-| K-factor (viral coefficient) | 0.4 | 0.7 | Each user brings 0.4 new |
-| App Store rating | 4.6+ | 4.7+ | PictureThis 4.8 |
-| App Store reviews per month | 500 | 5,000 | Prompt after Win moment |
-| Social share rate (estimate → share) | 5-8% | 10%+ | TikTok/Instagram amplification |
-| Before/after photo share rate (v1.5+) | 15% of successful DIY | — | RETENTION-RESEARCH Loop 3 |
-| Referral signup rate (friend invited → install) | 30% | 40% | With incentive |
+| Metric | Target | Notes |
+|---|---|---|
+| Share rate per aha user | **15%** | Was 12% — higher because savings-anchor share is stronger viral hook than "found a pro" |
+| K-factor (viral coefficient) | **0.4-0.6** | Was 0.3 — savings social proof ("I saved $185") stronger |
+| Share → install conversion | 18% | Utility benchmark |
+| First-DIY-success share rate | 25% | Peak emotional positive moment |
 
 ---
 
-## 4. Conversion Benchmarks per Persona
+## 4. Conversion benchmarks per persona
 
-Voronka rates materially differ across personas из [USER-PERSONAS.md](../01-research/USER-PERSONAS.md):
+Assumed distribution (from USER-PERSONAS.md): Emma 40% / Mike 25% / Sarah 20% / Tyler 10% / Ronald 5%
 
-| Stage | Emma (primary) | Mike (DIY) | Sarah (single HO) | Tyler (renter) | Ronald (aging HO) |
+| Metric | Emma | Mike | Sarah | Tyler | Ronald |
 |---|---|---|---|---|---|
-| Install → First estimate | 78% | 85% | 72% | 65% | 55% |
-| First estimate → W1 return | 48% | 60% | 42% | 20% | 28% |
-| W4 retention | 42% | 55% | 45% | 15% | 32% |
-| Free → Paid D60 | 22% | 38% | 28% | 5% | 18% |
-| Annual selection среди paid | 30% | 60% | 50% | 0% | 70% |
-| Affiliate click rate | 10% | 15% | 8% | 5% | 6% |
-| Pay-per purchase rate (of non-subscribers) | 4% | 2% | 5% | 15% | 3% |
-| 12-month retention | 60% | 75% | 70% | 25% | 55% |
-| LTV | $120 | $195 | $174 | $18 | $105 |
-| CAC | $15 | $10 | $18 | $7 | $25 |
-| LTV:CAC | 8.0x | 19.5x | 9.7x | 2.6x | 4.2x |
+| Onboarding complete | 85% | 90% | 82% | 75% | 70% |
+| First estimate | 88% | 92% | 85% | 80% | 75% |
+| W1 return | 48% | 55% | 40% | 20% | 30% |
+| Save-to-My-Home | 45% | 55% | 30% | 15% | 25% |
+| Paywall exposed by D60 | 55% | 65% | 60% | 10% | 30% |
+| Paid conversion среди exposed | 42% | 35% | 48% | 5% | 30% |
+| Pay-per conversion | 2% | 1% | 3% | **20%** | **12%** |
+| Amazon click (DIY) | 20% | 35% | 10% | 15% | 15% |
+| Annual tier share (среди paid) | 45% | 28% | 60% | — | 55% |
+| Share savings rate | 20% | 15% | 12% | 5% | 8% |
 
-**Key insights:**
-- **Mike** — самый здоровый сегмент (highest LTV:CAC, lowest CAC due to DIY community organic reach)
-- **Sarah** — slowest to convert, но sticky at 50% annual ("insurance" mental model)
-- **Tyler** — borderline LTV:CAC, accepted because viral coefficient + low CAC
-- **Emma** — primary MVP target, balanced economics
-- **Ronald** — highest CAC (AARP/senior-targeted ads expensive), but 70% annual uptake compensates
+Key insights:
+- **Sarah** — highest paid conversion (48%) but lower W1 return (her use case is episodic — she has specific quote to validate)
+- **Tyler** — pay-per dominant (20% vs 2-3% others) because never subscribes
+- **Mike** — highest Amazon click (35%) because DIY-heavy
+- **Emma** — baseline across all metrics, balanced persona
 
 ---
 
 ## 5. Red Flag Thresholds
 
-Escalation triggers. Если metric падает ниже threshold — immediate investigation + potential rollback:
+Что считать проблемой на каждой стадии funnel:
 
-| Metric | Healthy | Alarm | Critical | Action |
+| Metric | Healthy | 🟡 Alarm | 🔴 Critical | Response |
 |---|---|---|---|---|
-| Onboarding drop-off | <15% | 15-30% | >30% | Review screen-by-screen abandonment; simplify if Critical |
-| First estimate completion | >85% | 70-85% | <70% | AI quality issue OR UX friction; QA photo pipeline |
-| Paywall conversion среди exposed | >18% | 12-18% | <12% | Pricing too high OR wrong tier OR copy weak; A/B test variants |
-| W4 retention | >35% | 25-35% | <25% | No habit forming; seasonal push effectiveness review |
-| Monthly churn (paying) | <6% | 6-9% | >9% | Value prop degrading; conduct cancel-reason survey |
-| D90 retention | >22% | 15-22% | <15% | Structural retention issue; review feature adoption |
-| Affiliate CTR | >8% | 5-8% | <5% | Messaging off OR pro match quality low; review UX |
-| Affiliate click → lead | >22% | 15-22% | <15% | Thumbtack partnership quality issue; review lead pass criteria |
-| App Store rating | >4.5 | 4.0-4.5 | <4.0 | Major product/trust issue; emergency sprint to fix |
-| Crash rate | <0.5% | 0.5-1.5% | >1.5% | Immediate hotfix priority |
-| Refund rate | <2% | 2-6% | >6% | Misleading paywall/copy; trust violation; review messaging |
-| Install → first estimate | >70% | 55-70% | <55% | Photo pipeline broken OR AI rejection too aggressive |
+| Install → First estimate | >70% | 60-70% | <60% | Critical: camera/onboarding broken, investigate within 7 days |
+| W1 return | >40% | 30-40% | <30% | Aha moment not strong enough; redesign estimate result screen |
+| Paywall exposed → Paid | >30% | 22-30% | <22% | Pricing/copy issue; run A/B immediately |
+| Blended paid conversion | >18% | 13-18% | <13% | Kill-metric; pricing/paywall timing issue, major rework |
+| Churn (monthly sub) | <6% | 6-10% | >10% | Retention broken; re-engagement email/push |
+| Annual renewal rate | >60% | 50-60% | <50% | Value prop unclear at renewal; prompt refresh needed |
+| Push opt-out rate | <3% | 3-5% | >5% | Notification fatigue; cut frequency |
+| ~~Affiliate click rate~~ | ~~N/A — removed from MVP tracking~~ | | | |
+| Save-to-My-Home | >35% | 25-35% | <25% | Savings prompts/UI not sticky |
 
-**Red-flag response protocol:**
-1. **Alarm:** Investigate root cause within 1 week, propose fix
-2. **Critical:** Emergency sprint, rollback recent changes if correlated, daily stand-up until resolved
+**Protocol:** any 🔴 critical metric triggers weekly war-room until resolved. 🟡 alarm logs in Monday review.
 
 ---
 
 ## 6. Metrics Dashboard Priorities
 
-### 6.1 Weekly tracking (ops cadence)
+### Weekly review (Monday standup)
 
-Watched by Лана + Amanda every Monday morning review:
-
-| Metric | Display | Source |
+| Dashboard | Source | Owner |
 |---|---|---|
-| CPI by channel (TikTok / FB / Google / Organic) | Stacked bar | AppsFlyer dashboard |
-| Daily installs (by source) | Line chart 7-day | App Store Connect + Play Console |
-| Install → first estimate (7-day rolling) | Gauge | Amplitude |
-| Paywall exposure rate | Gauge | Amplitude |
-| Paywall conversion среди exposed | Gauge | Adapty + Amplitude |
-| New MRR this week | Number + trend | Adapty |
-| Churn events this week | List с reason tags | Adapty + in-app survey |
-| Affiliate clicks & leads (Thumbtack + Angi + Home Depot) | Table | Partner dashboards |
-| Crash rate | Number (threshold alert) | Sentry / Crashlytics |
-| Support tickets (volume + top categories) | Bar chart | Intercom / Zendesk |
+| Install + onboarding funnel | Supabase + Firebase Analytics | Лана |
+| Paid conversion breakdown | Adapty dashboard | Amanda |
+| Push open rates | Supabase (sent/opened tracking) | Лана |
+| Crash-free rate | Sentry / Firebase Crashlytics | Лана |
+| Save-to-My-Home rate | Supabase query | Amanda |
 
-### 6.2 Monthly tracking (strategic cadence)
+### Monthly review
 
-Monthly business review first Friday of month:
-
-| Metric | Display |
+| Dashboard | Source |
 |---|---|
-| Cohort retention curves (W1 / W4 / W12 / M6 / M12) | Line chart per cohort |
-| Cohort LTV progression (Y1 actual vs target) | Stacked bar |
-| QAR (Quarterly Active Rate) | Gauge |
-| MRR growth + decomposition (new / expansion / churn / reactivation) | Waterfall chart |
-| Persona mix drift (% Emma / Mike / Sarah / Tyler / Ronald) | Stacked 100% bar |
-| Feature adoption (% users used feature in month) | Heatmap |
-| Seasonal signal (activity by region × month) | Heatmap |
-| Affiliate revenue mix (Thumbtack vs Angi vs Home Depot vs Amazon) | Pie chart |
-| NPS score (Emma segment) | Monthly snapshot |
-| App Store rating trend | Line chart |
+| Cohort retention curves (D1 / W1 / W4 / D90) | Mixpanel or custom | Amanda |
+| MRR growth + churn | Adapty | Amanda |
+| ASO ranking for key keywords | App Radar / AppTweak | Amanda |
+| Review volume + sentiment | App Store Connect / Play Console | Amanda |
+| Amazon Associates earnings (tiny stream, tracked for bonus) | Amazon Associates dashboard | Лана |
 
-### 6.3 Quarterly strategic review
+### Quarterly review
 
-- **Unit economics health check:** Any segment LTV:CAC <3x?
-- **Seasonal engagement lift:** Did spring/fall push campaigns work?
-- **Feature velocity:** Shipped vs roadmap?
-- **Competitive landscape:** HomeWyse, Thumbtack new features?
-- **Affiliate partner performance review:** Renegotiate rates if volume ramp?
-- **Persona expansion readiness:** When to activate Sarah / Tyler / Ronald?
-- **CAC channel reallocation:** Which channel converts best this quarter?
+| Dashboard | Purpose |
+|---|---|
+| Financial projection vs actual | Cash flow management |
+| Persona distribution actual vs target | Positioning validation |
+| Competitive landscape update | Market awareness |
+| Feature ROI (RICE retrospective) | Priority calibration |
+| Partnership feasibility re-assessment | **NEW Q2 Y2:** Thumbtack/Angi possible partnership if we have traction (5K+ MAU) |
 
 ---
 
-## 7. A/B Testing Roadmap
+## 7. A/B Testing Roadmap (first 90 days post-launch)
 
-Первые 90 дней post-launch — **8 priority A/B tests**, organized by funnel stage. Tests ordered by expected impact (highest ROI first, per Adapty: pricing tests = 2-5x uplift vs visual).
+8 priority tests:
 
-### 7.1 Acquisition-level
+### Pricing tests (highest impact)
 
-**Test A1: Ad creative per persona**
-- Variants: Generic "save money on repairs" vs Emma-specific "first-time homeowner" vs Mike-specific "DIY tools"
-- Metric: Install CPI + install→activation rate
-- Platform: TikTok + Facebook Ads
-- Duration: 2 weeks × 3 creatives × 2 audiences
+1. **Monthly price elasticity** — $7.99 vs $9.99 vs $11.99 monthly. Does lower price increase conversion enough to offset ARPU hit? Target: identify sweet spot by D60.
 
-**Test A2: App Store listing variants**
-- Variants: Screenshot order (damage photo first vs savings counter first vs estimate result first)
-- Metric: Listing CVR (impression → install)
-- Platform: App Store Connect experiments
-- Duration: 4 weeks
+2. **Annual anchor discount** — 48% vs 58% vs 65% off monthly (annual at $39.99 vs $49.99 vs $59.99). Does more aggressive discount drive more annual share? Target: annual share >40% with ARPU maintained.
 
-### 7.2 Activation-level
+3. **Free tier size** — 2 vs 3 vs 5 estimates/mo. Does generosity drive word-of-mouth + long-term paid conversion? Target: identify generosity sweet spot.
 
-**Test B1: Onboarding length (speed vs thoroughness)**
-- Variants: 3 screens (Welcome → ZIP → Camera) vs 5 screens (Welcome → Value prop → ZIP → DIY readiness → Camera)
-- Metric: Onboarding completion × W1 retention
-- Hypothesis: 3 screens wins для speed; 5 screens might win for Mike/Sarah engagement
-- Duration: 3 weeks
+### Paywall tests
 
-**Test B2: Signup placement (account creation timing)**
-- Variants: Signup мандатory после onboarding vs optional on paywall vs only при history access
-- Metric: Install → first estimate × D7 retention
-- Hypothesis: Optional signup best (preserves aha-moment)
-- Duration: 3 weeks
+4. **Savings anchor in soft paywall** — "You've saved $485 — keep going" (savings-anchored) vs "Unlock unlimited estimates" (feature-anchored). Which converts higher? Hypothesis: savings-anchored wins for Emma/Sarah, feature-anchored for Mike.
 
-### 7.3 First-value-level
+5. **Pay-per visibility** — show $2.99 option in soft paywall vs hide until sub rejected. Hypothesis: visible option cannibalizes subscription, should be hidden OR shown only after rejection.
 
-**Test C1: Labor illusion duration**
-- Variants: 3s / 5s / 8s / 10s
-- Metric: Paywall conversion (downstream) + perceived quality survey
-- Hypothesis: 5-8s sweet spot; <3s feels cheap, >10s feels slow
-- Duration: 2 weeks
+### Onboarding tests
 
-**Test C2: Estimate presentation format**
-- Variants: Three vertical cards vs horizontal tabs (DIY/Hybrid/Pro) vs single card with toggle
-- Metric: Time on estimate screen × tab switch rate × paywall conversion
-- Hypothesis: Horizontal tabs (baseline) — but validate
-- Duration: 3 weeks
+6. **Welcome tagline** — "Know the price before the panic" vs "Take a photo. Know the price. Decide what to do." vs "Snap. Know. Decide." Which drives highest Install → First estimate conversion?
 
-### 7.4 Retention-level
+7. **Permission priming sequence** — camera permission priming screen YES/NO before system dialog. Does priming lift grant rate from 68% to 85%?
 
-**Test D1: Push frequency**
-- Variants: 1/month seasonal vs 2/month (seasonal + savings reminder)
-- Metric: W4 / W12 retention × push opt-out rate
-- Hypothesis: 1/month = same retention, lower opt-out
-- Duration: 90 days
+### Share tests
 
-**Test D2: Seasonal messaging copy**
-- Variants: Generic "Spring maintenance" vs zip-personalized "Denver spring check"
-- Metric: Push CTR × re-engagement rate
-- Hypothesis: Zip-personalized 2× CTR (per RETENTION-RESEARCH §4.1)
-- Duration: 2 seasonal cycles (60 days)
+8. **Share card format** — "I saved $185 going DIY" text card vs painted scene card vs before/after photo. Which drives highest share rate + K-factor?
 
-### 7.5 Monetization-level (highest priority — per PAYWALL-RESEARCH)
+### REMOVED v1 → v2
 
-**Test E1: Monthly price**
-- Variants: $4.99 / $7.99 / $9.99
-- Metric: D90 Revenue per Install
-- Hypothesis: $7.99 — sweet spot volume × ARPU
-- Sample size: 3K users per variant
-- Duration: 4-6 weeks (needs D90 data)
-
-**Test E2: Free tier limit**
-- Variants: 1 / 3 / 5 estimates/mo
-- Metric: Free→Paid D60 + W4 retention + WoM signals
-- Hypothesis: 3 = sweet spot
-- Duration: 6-8 weeks (needs D60 data)
-
-**Test E3: Annual price**
-- Variants: $39.99 / $49.99 / $59.99
-- Metric: Annual % of paid + total paid revenue
-- Hypothesis: $49.99 lies under "$50 psychological" + upper quartile H&F
-- Duration: 4-6 weeks
-
-**Test E4: Annual discount framing**
-- Variants: "Save 48%" / "$4.17/mo" / "2 months free"
-- Metric: Annual uptake среди paid
-- Hypothesis: "2 months free" easiest to parse → +10-15% uptake
-- Duration: 2-3 weeks
-
-**Test E5: Paywall CTA copy**
-- Variants: "Upgrade" / "Start Saving" / "Go Pro" / "Unlock Unlimited"
-- Metric: CTA tap rate × downstream conversion
-- Duration: 2 weeks
-
-**Test E6: Trial inclusion**
-- Variants: No trial / 7-day free trial / 7-day opt-out trial
-- Metric: Install → Paid D90 + net revenue
-- Hypothesis (phase 2): freemium wins initially; opt-out trial might edge freemium at maturity
-- Duration: 8 weeks (needs D90)
-
-### 7.6 Test sequencing
-
-- **Month 1:** A1, A2, B1, E1 (baseline acquisition + pricing)
-- **Month 2:** B2, C1, C2, E2 (activation + free-tier limit)
-- **Month 3:** D1, D2, E3, E4 (retention + annual framing)
-- **Month 4+:** E5, E6, combinatorial tests once priority singles done
-
-**Do NOT test simultaneously same-audience variants that interact** (e.g., price + free-tier-limit simultaneously — confound each other).
+- ~~**Pro Match conversion test** — different pro-list layouts~~ — feature removed
+- ~~**Affiliate attribution test** — Thumbtack vs Angi routing~~ — stream removed
+- ~~**Pro Match context paywall copy**~~ — paywall removed
 
 ---
 
 ## 8. Growth Loops
 
-### 8.1 Viral loop (referral)
+3 growth loops (было 4 — affiliate loop удалён):
 
-```
-1. User completes DIY estimate → saves $200
-2. User posts TikTok: "OMG FixIt saved me $200, scan your kitchen!"
-3. Follower downloads → completes estimate → saves money
-4. New user shares → cycle repeats
-```
+### Loop 1: Viral (primary — savings share)
 
-**K-factor target:** 0.4 Y1 → 0.7 Y3.
+**Mechanism:** Successful DIY → celebratory UI → "I saved $185 going DIY with FixIt" share card → friend installs → new cohort.
 
-**Amplifiers:**
-- Pre-built share templates in estimate screen (Instagram Story, TikTok, X/Twitter cards)
-- Before/after photo gallery (v1.5) с optimized share composition
-- Savings counter as social-currency ("Look, $847 saved")
-- Referral program: invite friend → both get 1 month free Pro (Y1.5 feature)
+K-factor target: 0.4-0.6. Stronger than v1 (0.3) because savings claim is concrete + impressive ("$185 saved" vs generic "check this app").
 
-### 8.2 Content loop (SEO)
+**Key drivers:**
+- First DIY success rate >60%
+- Share rate per success moment >25%
+- Share → install conversion >18%
 
-```
-1. Google search "how much does it cost to replace a faucet Austin"
-2. FixIt SEO page ranks в top 3 (generated from anonymized estimates)
-3. User clicks → lands on FixIt blog article
-4. CTA: "Get your own photo-based estimate → download app"
-5. Install → estimate → potential SEO contribution if they opt-in to public share
-```
+### Loop 2: Content (ASO-driven)
 
-**Target Y3:** 500+ zip+repair permutations indexed, each driving 50-200 organic installs/year.
+**Mechanism:** Long-tail "home repair cost" searches → App Store listing → install → organic ASO lift from reviews.
 
-Similar strategy довела Zillow до $7B+ evaluation. Key: anonymized aggregate, not individual user data.
+Target: 70% organic install share by Y2 H1.
 
-### 8.3 Data loop (compounding accuracy)
+**Key drivers:**
+- Keyword rankings (top-5 for "home repair cost", top-10 for "repair estimate")
+- Review volume (aim 4.5+ stars, 500+ reviews by Y1 Q4)
+- Category leader positioning in Utilities/Tools
 
-```
-1. More estimates → more corrections from user feedback
-2. More corrections → better AI price accuracy model
-3. Better accuracy → happier users → more estimates
-4. Accuracy compounds → competitor can't easily replicate
-```
+### Loop 3: Data (estimate accuracy flywheel)
 
-**Target:** AI accuracy 82% Y1 → 90% Y3 (top-30 categories).
+**Mechanism:** User completes fix → self-reports actual cost → feeds back into Claude prompt accuracy → better estimates for next user → higher NPS → more reviews → more installs.
 
-Measurement: user post-estimate survey "was this accurate?" + eventual ground truth from actual cost reports.
+Not immediate revenue driver but defensibility layer (data moat grows with scale).
 
-### 8.4 Affiliate loop (partnership compounding)
+**Key drivers:**
+- Mark-complete rate >20% of estimates
+- Self-reported actual cost accuracy within 25% of estimate (validation signal)
 
-```
-1. User hires через FixIt → Thumbtack referral → Thumbtack visibility into FixIt volume
-2. Thumbtack sees quality leads → gives FixIt better rates + exclusivity
-3. Better rates = stronger partnership = more exclusive pro access
-4. FixIt visitors become trusted source для Thumbtack retargeting (double monetization)
-```
+### REMOVED
+
+- ~~Loop 4 Affiliate — removed~~
 
 ---
 
 ## 9. Cohort Analysis Framework
 
-### 9.1 Cohort definitions
+Stratify cohorts по 7 slices для понимания что работает:
 
-**Tracked cohort slices:**
+1. **Acquisition source** — organic vs paid vs viral vs referral
+2. **Device** — iOS vs Android (different payment flows)
+3. **Geography** — US vs UK/CA/AU (post-v1.5)
+4. **Season** — spring (maintenance) vs fall (winter prep) vs emergency (plumbing winter)
+5. **Persona signal** — based on onboarding answers (DIY level + quality tier → proxy для Emma/Mike/Sarah)
+6. **First-estimate category** — plumbing vs electrical vs furniture (different engagement patterns)
+7. **Urgency** — emergency (broken pipe) vs preventive (seasonal) — different retention
 
-| Cohort type | Definition | Purpose |
+Compare cohorts on:
+- D30 / D60 / D90 retention
+- Paid conversion
+- LTV
+- Share rate
+- Most-used features
+
+**Example insight:** Spring-acquired Emma cohort may show 55% paid conversion (high urgency + "before summer" planning) vs Fall-acquired Emma 35% (less urgency until winter).
+
+---
+
+## 10. Financial Projection Y1-Y3 (post-rescope)
+
+**Break-even analysis:**
+
+Cost side (monthly, per 10K cohort, month 6):
+- Claude API (Haiku + Sonnet mix): ~$120/mo at scale (3K estimates/mo cohort-wide)
+- Supabase (Pro plan + storage): ~$45/mo
+- Adapty ($25/mo minimum for subscription infra): $25/mo
+- App Store + Google Play fees: 30% of gross revenue first year
+- Total fixed ops: ~$190/mo
+
+Revenue Y1 trajectory (per 10K cohort, cumulative):
+
+| Month | Cumulative paid users | Monthly revenue | Cumulative revenue |
+|---|---|---|---|
+| 1 | 8 | $65 | $65 |
+| 2 | 22 | $180 | $245 |
+| 3 | 55 | $450 | $695 |
+| 6 | 142 | $1,160 | $4,280 |
+| 9 | 200 | $1,630 | $8,600 |
+| 12 | 242 | $1,970 | **$9,854** |
+
+Per-install economics:
+- **Y1 ARPU per install: $0.99**
+- **Y1 ARPU per paying user: ~$47**
+- **Gross margin: ~97%** (Claude API ~$0.02/estimate, revenue ~$0.50-$2.50/estimate)
+- **Blended LTV Y1: ~$35-50** (accounting for churn + renewal)
+- **CAC target (blended): $15-20** via ASO + low-cost viral
+- **LTV:CAC ratio: 2.5-3.5x Y1, improving to 4-5x Y2-3**
+
+**Path to $1M ARR:**
+- Need ~18,000 paying subscribers concurrently (at $47 ARPU)
+- At 2% install → paid blended, need **900,000 installs cumulative**
+- Realistic by **Y2 H2** with ASO-driven + viral growth + modest ASA spend
+
+**Path to $10M ARR:**
+- Need 180,000 paying users
+- Requires ~9M installs cumulative
+- Y3-4 territory with scaled acquisition
+
+---
+
+## 11. Ship Criteria (Stage 4 → Stage 5 checkpoint)
+
+Before starting Stage 5 Design, verify:
+
+- [x] POSITIONING.md finalized
+- [x] FEATURES.md rewritten under AI-only model
+- [x] MONETIZATION.md v2.0 (subscription-only)
+- [x] SCREEN-MAP.md v2.0 (42 screens, Pro Match simplified)
+- [x] USER-FLOWS.md v2.0 (7 flows, Flow 4 & 7 rewritten)
+- [x] WIREFRAMES.md v2.0 (19 wireframes, Pro Match sheet simplified)
+- [x] UX-SPEC.md v2.0 (brand voice updated)
+- [x] ONBOARDING-RESEARCH v2.0
+- [x] PAYWALL-RESEARCH v2.0 (4 context paywalls, no Pro Match gate)
+- [x] RETENTION-RESEARCH v2.0 (savings anniversary, seasonal, home health — no "new pros")
+- [x] ASO-RESEARCH v2.0 ("home repair cost" keyword primary)
+- [x] PRACTICES-BRIEF v2.0 (synthesis)
+- [x] FUNNEL v2.0 (this doc — affiliate stream removed)
+- [ ] UX-BRIEF v2.0 (next — synthesis of Stage 4)
+
+**Status:** 13/14 ready. Finalizing UX-BRIEF next.
+
+---
+
+## 12. Open questions for post-launch validation
+
+1. **Savings anchor effectiveness** — does "$X saved this year" in soft paywall actually convert better than feature-list framing? (A/B test 4 above)
+2. **Pay-per cannibalization** — does $2.99 option kill sub conversion? (A/B test 5)
+3. **Find-a-Pro sheet abandonment** — do users actually click Thumbtack/Google/Yelp or just close? If <30% click-through, rethink UX.
+4. **Emma vs Sarah persona actual distribution** — USER-PERSONAS projected 40% Emma / 20% Sarah; may shift based on actual traffic mix.
+5. **Seasonal push fatigue** — do 4 seasonal push/year feel helpful or annoying? Opt-out rate tracks this.
+6. **Home Health score engagement** — do users actually check their home health after initial reveal? Retention signal for My Home tab depth.
+7. **Partnership readiness signal** — at what MAU threshold (5K? 10K?) should we apply for Thumbtack partnership? Plus affiliate tag to existing deeplink = trivial add once approved.
+
+---
+
+## 13. Change log v1.0 → v2.0
+
+| Area | v1.0 | v2.0 |
 |---|---|---|
-| **Install week** | Users by week-of-install | Standard retention curves |
-| **Install source** | TikTok / FB / Google / Organic | Channel quality comparison |
-| **Persona** | Emma / Mike / Sarah / Tyler / Ronald (detected via behavior signals) | Segment-level strategy tuning |
-| **Region** | Northeast / Midwest / South / West / Rural | Regional retention differences |
-| **First-repair category** | Plumbing / Electrical / HVAC / Appliance / Furniture | Onboarding path quality |
-| **Device tier** | iPhone 14+ / iPhone 12-13 / SE / Android | UX fidelity correlation |
-| **Season of install** | Spring / Summer / Fall / Winter | Seasonal cycle impact |
-
-### 9.2 Compared metrics across cohorts
-
-For each cohort slice, compare:
-- Retention curves (W1 / W4 / W12 / M6 / M12)
-- Cumulative LTV progression
-- Feature adoption rates
-- Paywall exposure rate
-- Paywall conversion rate
-- Churn rate
-- Affiliate click-through rate
-- Referral rate (k-factor per cohort)
-
-### 9.3 Cohort analysis cadence
-
-- **Weekly:** Most recent 8 weekly cohorts, retention curves overlay
-- **Monthly:** All cohorts YTD, LTV progression
-- **Quarterly:** Deep dive per segment — which cohorts outperform/underperform, why?
-
-### 9.4 Key analytical questions
-
-1. **Does install source correlate с LTV?** (Expected: organic = higher LTV)
-2. **Do Emma cohorts accelerate over time?** (Expected: yes, as brand matures)
-3. **Does winter install cohort retain worse?** (Expected: yes, less repair activity; adjust acquisition)
-4. **Do first-repair-was-plumbing cohorts retain differently vs first-was-furniture?** (Valuable для positioning)
-5. **Does device tier correlate с paywall conversion?** (High-end iPhone users ≈ higher income ≈ pay more? Validate)
+| Revenue streams | 4 (sub + affiliate + pay-per + future B2B) | **3** (sub + pay-per + tiny Amazon Associates) |
+| Y1 revenue per 10K cohort | $14-16K | **$9-11K** |
+| Blended ARPU per install | $1.40 | **$0.99** |
+| Growth loops | 4 (viral + content + data + affiliate) | **3** (viral + content + data) |
+| A/B tests priority | 8 (including Pro Match + affiliate routing) | **8** (Pro Match tests replaced with savings anchor + share card format) |
+| Red flag metrics | Includes affiliate CR threshold | **Affiliate row removed** |
+| Funnel diagram parallel paths | 4 (core + affiliate + pay-per + viral) | **3** (core + pay-per + viral) + tiny passive Amazon |
 
 ---
 
-## 10. Funnel Integrity Checks
-
-### 10.1 Daily sanity checks
-
-Automated alerts Slack-posted если:
-- Daily install count diverges >40% from 7-day avg (could signal ad-account paused or listing broken)
-- Onboarding completion drops >10% day-over-day
-- Paywall view count drops >20% day-over-day
-- Crash rate spikes >1%
-- Affiliate API failure (>5% error rate)
-- Adapty subscription transaction failure rate >2%
-
-### 10.2 Weekly sanity checks
-
-- First-estimate completion rate within target range
-- Paywall exposure rate tracking (should grow as cohorts mature)
-- Support ticket volume vs 7-day avg
-
-### 10.3 Monthly sanity checks
-
-- Cohort retention curves match forecast (or investigate)
-- Revenue mix (sub / affiliate / pay-per) within 5% of target ratio
-- ARPU vs forecast
-
----
-
-## 11. Financial Projection on 10K Cohort (Y1-Y3)
-
-Re-stating from MONETIZATION.md §7.2 with funnel context:
-
-**Year 1 (10K cohort, launch to month 12):**
-```
-10,000 installs
-  ↓ 85% onboard → 8,500
-  ↓ 88% first estimate → 7,480
-  ↓ 45% W1 return → 3,366
-  ↓ 40% W4 return → 1,346
-  ↓ 50% hit paywall by D60 → 673
-  ↓ 36% convert → 242 paid users
-     ↓ 35% annual × $49.99 = $4,249
-     ↓ 65% monthly × $7.99 × 9 mo avg = $11,303
-     Subscription Y1 = ~$15,550
-Plus affiliate (all 10K users exposed):
-  ↓ 10K × 6-8 estimates/yr × 10% click × 25% lead × $25 = ~$37,500
-Plus pay-per:
-  ↓ 3% × 10K × $4 avg × 1.5 transactions = $1,800
-Y1 revenue from 10K cohort: ~$55,000
-Y1 costs (blended CAC $15): $150,000
-Y1 net: -$95,000 (expected — cohort ripens over Y2-Y3)
-```
-
-**Year 2 continuation (same cohort):**
-```
-Retained paid: 242 × 65% Y2 retention = 157
-  ↓ Y2 subscription revenue ~$9,500
-Affiliate Y2 (retention-driven): $20K
-Pay-per Y2: $500
-Y2 revenue from cohort: ~$30,000
-```
-
-**Year 3 continuation:**
-```
-Retained paid: 157 × 80% Y3 retention = 126
-  ↓ Y3 subscription revenue ~$7,500
-Affiliate Y3: $15K
-Y3 revenue from cohort: ~$22,500
-```
-
-**Cumulative Y1-Y3 LTV:CAC:**
-- Cohort LTV = $55K + $30K + $22.5K = ~$107,500 (conservative)
-- Plus referrals generated (k=0.4 × 10K × some portion monetize) = +$20K-30K
-- Total cohort value ≈ $130K
-- Cohort spend $150K
-- **LTV:CAC Y1-Y3 direct = 0.9x, but with referral compounding = 1.1-1.3x**
-- **Full LTV:CAC over 5-year horizon with mature affiliate = 7-8x** (matches MONETIZATION.md §6)
-
-**Conclusion:** Cohort economics break even Y3-Y4, profitable Y4+. Matches SaaS B2C norms.
-
----
-
-## 12. Ship Criteria for Stage Transition
-
-Per CLAUDE.md workflow, Stage 4 → Stage 5 (Design) transition checkpoint:
-
-- [x] **UX-SPEC.md** — principles, interactions, states, a11y (companion document)
-- [x] **FUNNEL.md** — this document ✅
-- [ ] **USER-FLOWS.md** — 6-8 user scenarios с happy path + edge cases (TBD next)
-- [ ] **SCREEN-MAP.md** — full screen inventory с navigation (TBD next)
-- [ ] **WIREFRAMES.md** — 15-20 ASCII wireframes (TBD next)
-- [x] **Metrics dashboard specced** — weekly/monthly/quarterly cadence defined
-- [x] **A/B testing priorities set** — 8 priority tests в 90-day roadmap
-- [x] **Red flag thresholds defined** — escalation protocols clear
-- [x] **Cohort analysis framework defined** — slices и comparison metrics
-
-**→ Ready to begin Stage 5 Design** после USER-FLOWS + SCREEN-MAP + WIREFRAMES.
-
----
-
-## 13. Related Documents
-
-- [PRODUCT-VISION.md](../02-product/PRODUCT-VISION.md) — North Star WEPA, target trajectory, metrics framework
-- [MONETIZATION.md](../02-product/MONETIZATION.md) — pricing tiers, revenue streams, unit economics
-- [PAYWALL-RESEARCH.md](../03-practices/PAYWALL-RESEARCH.md) — soft paywall strategy, Emma journey, A/B priorities
-- [RETENTION-RESEARCH.md](../03-practices/RETENTION-RESEARCH.md) — seasonal engagement, QAR definition, push strategy
-- [USER-PERSONAS.md](../01-research/USER-PERSONAS.md) — 5 personas, willingness-to-pay, retention anchors
-- [UX-SPEC.md](./UX-SPEC.md) — interaction patterns, animations, a11y (this doc's companion)
-- [USER-FLOWS.md](./USER-FLOWS.md) — TBD next
-- [SCREEN-MAP.md](./SCREEN-MAP.md) — TBD next
-
----
-
-## 14. Open Questions (validate in Stage 4-5)
-
-1. **Will Thumbtack partnership approval land by launch?** Affects affiliate ramp timeline. Backup: Angi only.
-2. **Is 5-8s labor illusion optimal?** User testing needed to validate (Stage 5 prototype).
-3. **Is seasonal push engagement enough for W4 retention?** Test in Q1 post-launch.
-4. **Does Tyler (renter) deserve dedicated pay-per paywall messaging?** Depends on early cohort mix.
-5. **Should we introduce a 7-day opt-out trial in Phase 2?** Adapty H&F data suggests yes, but FixIt infrequent-use may differ.
-6. **At what point does "My Home" dashboard (v1.5 feature) justify re-launching onboarding flow?** Depends on user research post-MVP.
-7. **Does "Save project" context paywall cannibalize "hit limit" soft paywall or add to it?** A/B test Phase 2.
-
----
-
-**Дата последнего обновления:** 2026-04-18
-**Следующий шаг:** USER-FLOWS.md — 6-8 user scenarios с happy path + error handling per persona.
-
-**Approved by:**
-- [ ] Amanda (Owner)
-- [ ] Лана (Project Manager)
+**Approval:** Amanda 2026-04-19 (rescope decision). Лана briefed. Stage 5 Design proceeds with simplified Pro Match UX.

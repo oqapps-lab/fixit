@@ -1,103 +1,178 @@
 # ASO-RESEARCH.md — FixIt
 
-**Дата:** 18 апреля 2026
+**Дата:** 2026-04-19
 **Продукт:** FixIt — AI home repair cost advisor
-**Стадия:** Practices (Stage 3)
+**Стадия:** Practices (Stage 3) — rewritten v2.0 post-rescope
 **Автор:** Growth Team
-**Статус:** Draft v1.0
-**Source docs:** [PRODUCT-VISION.md](../02-product/PRODUCT-VISION.md) | [TARGET-AUDIENCE.md](../02-product/TARGET-AUDIENCE.md) | [COMPETITOR-ANALYSIS.md](../01-research/COMPETITOR-ANALYSIS.md)
+**Статус:** Final v2.0 (под pure AI-advisor positioning, no marketplace)
+**Companion docs:** [POSITIONING.md](../02-product/POSITIONING.md) | [FEATURES.md](../02-product/FEATURES.md) | [MONETIZATION.md](../02-product/MONETIZATION.md) | [ONBOARDING-RESEARCH.md](./ONBOARDING-RESEARCH.md) | [PAYWALL-RESEARCH.md](./PAYWALL-RESEARCH.md) | [RETENTION-RESEARCH.md](./RETENTION-RESEARCH.md)
 
 ---
 
 ## TL;DR
 
-Primary keyword cluster: **"home repair cost"** + **"fix it yourself"** + trade-specific ("plumber cost", "electrician estimate"). Secondary: "house repair app", "DIY estimator", "home improvement calculator". Стратегия App Store: owned title `FixIt: Home Repair Costs` + subtitle `Photo → real price, 60 sec` + keywords field на 100 символов с long-tail коктейлем. Скриншоты: 6 фреймов, первые 3 показывают pain → photo → 3-option result (90% users не скроллят дальше третьего). Ratings target: 4.6+ через in-app prompts после money-saved moments. Launch: "New Apps We Love" pitch к Apple Editorial за 3-4 недели до релиза + Google Play Featured Apps program. CPP (Custom Product Pages) на 3 trigger-кластера: "leaky faucet", "contractor quote check", "DIY project planner". Локализация: US-first, UK/CA/AU в Year 1, Spanish в Year 2.
+После rescope 2026-04-19 FixIt — **pure AI-advisor utility**, не marketplace. ASO стратегия радикально сместилась: мы больше **не конкурируем за "find a plumber" / "find a contractor" keyword cluster** (Thumbtack/Angi/HomeAdvisor territory) и **намеренно избегаем** associate ourselves с этим пластом. Наш keyword cluster — **"home repair cost", "repair estimate", "AI repair advisor", "know repair cost", "fix it yourself", "DIY repair estimate", "home maintenance calendar"**. Эта ниша всё ещё open field — HomeWyse не в App Store, Thumbtack/Angi не оптимизированы под cost-intent, PictureThis показал что photo-AI utility может достичь $200M+ ARR через чистый cost-discovery позиционирование.
 
-Стратегическая рамка: **никто из прямых конкурентов не владеет "cost" keyword в App Store.** Thumbtack/Angi стоят на "find a pro" и "home services". HomeWyse — web-only, mobile keyword поле пустое. Это open field для FixIt на 12-18 месяцев.
+**App Store title:** `FixIt: Home Repair Costs` (24 chars). **Subtitle:** `Photo repair cost advisor` (26 chars) — per POSITIONING.md §3. **Category:** Utilities / Tools (App Store) / Tools (Google Play) — **НЕ "Services"**, мы not a service marketplace. **Screenshots:** 6 frames, показывают photo → diagnosis → 3 options → DIY guide → savings, **без "pro profile cards"** (они не существуют больше). **Review acquisition:** in-app prompt после successful DIY completion (peak emotional positive). **Localization:** English MVP, UK/AU/CA post-PMF (month 6-9), Spanish v1.5+ (month 12+). **Reference playbooks:** PictureThis, Rock Identifier, TripIt — photo-AI / infrequent-use utility, не marketplace apps.
+
+**Что намеренно убрано vs v1.0 ASO plan:**
+
+- ❌ "plumber near me", "find a contractor", "pro marketplace", "home services" — **не наши keywords**, мы сидим выше по funnel
+- ❌ "Find trusted pros fast" subtitle — positioning lie, мы не find pros
+- ❌ Screenshots с pro profile cards, reviews stars on contractors, "3 pros responded" — никогда не существовало, теперь намеренно not showing
+- ❌ "Services" category — мы не service marketplace, это ASO misfire
+- ❌ Affiliate conversion keywords ("lead generation", "contractor leads") — нерелевантны
+
+**Что добавлено / усилено:**
+
+- ✅ "fix it yourself", "DIY repair estimate", "know repair cost", "home maintenance calendar" — core cluster
+- ✅ "AI repair advisor" — category-creator keyword (мы создаём новую ASO category de facto)
+- ✅ Screenshots показывающие "Know the price before the panic" — savings visualization, не marketplace UI
+- ✅ Review prompt timing — после DIY completion (user saved money, peak positive)
+- ✅ Utilities category — matches "photo utility" playbook (PictureThis, Rock ID)
+
+**Стратегическая рамка:** никто из прямых конкурентов не владеет "home repair cost" keyword cluster в App Store. Thumbtack/Angi/HomeAdvisor стоят на "find a pro" и "home services" — **намеренно другая category**. HomeWyse — web-only. iFixit — device repair, не home. Это open field на 12-18 months. С новым positioning мы не competing с marketplaces — мы **adjacent**, new category. Это упрощает ASO: меньше conflict zones, более дешёвая ASA (Apple Search Ads), чище targeting.
+
+**Target metrics (MVP):**
+
+| Метрика | Target Y1 |
+|---|---|
+| Install page CVR (App Store) | 28%+ |
+| App Store rating | 4.6+ (4.7+ by month 6) |
+| Reviews count | 2500+ by month 6, 8000+ by Y1 |
+| Keyword rank "home repair cost" | Top-5 by month 6, Top-3 by Y1 |
+| Keyword rank "AI repair advisor" | #1-2 by month 3 (category-creator) |
+| Keyword rank "DIY repair estimate" | Top-3 by month 6 |
+| Organic installs share | 60%+ by month 6 (vs paid 40%) |
+| ASA CPT (Apple Search Ads) | <$1.20 (cheaper than marketplace category) |
 
 ---
 
-## 1. Keyword Research
+## 1. Keyword Research (Post-Rescope)
 
-### 1.1 Приоритетные английские keywords
+### 1.1 Primary keyword cluster
 
-Оценки volume — собранные через Apple Search Ads Keyword Popularity (0-100 scale, приблизительный перевод в absolute monthly searches), AppTweak benchmarks для Lifestyle/Utilities категории, Google Keyword Planner для cross-reference. Где нет hard data — помечено "est.".
+После rescope наши primary keywords смещаются от "pro marketplace" intent к **"cost discovery" intent**. Это fundamentally разный search query:
 
-| Keyword | Est. monthly search volume | Difficulty (1-10) | Intent | FixIt Fit |
+- User типа "find a plumber denver" — хочет marketplace (Thumbtack territory) — **НЕ наш user**
+- User типа "leaky faucet repair cost" — хочет estimate (наш territory)
+- User типа "how much does it cost to fix a leak" — хочет advisor (наш territory)
+- User типа "DIY leak repair" — хочет DIY guide (наш territory)
+
+Новый primary cluster:
+
+| Keyword | Est. monthly search volume (US) | Difficulty (1-10) | Intent | FixIt Fit |
 |---|---|---|---|---|
-| home repair cost | 60K+ | 6 | High buy | ✅✅✅ Perfect core |
-| home repair calculator | 22K | 5 | High buy | ✅✅✅ Core |
-| fix it yourself | 35K | 5 | High DIY | ✅✅✅ Brand match |
-| how to fix [X] | 800K+ (aggregate long-tail) | 4 | High learn→buy | ✅✅✅ |
-| plumber cost estimator | 18K | 4 | High buy | ✅✅✅ Trade trigger |
-| electrician price check | 12K | 4 | High buy | ✅✅✅ Trade trigger |
-| handyman prices | 25K | 5 | Medium-high | ✅✅ |
-| contractor quote check | 8K | 3 | High buy | ✅✅✅ Niche gem |
-| home maintenance app | 30K | 5 | Medium | ✅✅ |
-| DIY estimator | 9K | 3 | High | ✅✅✅ Low comp |
-| house repair app | 15K | 4 | High | ✅✅ |
-| repair cost guide | 14K | 4 | Medium-high | ✅✅ |
-| home improvement calculator | 20K | 6 | Medium | ✅ |
-| DIY home improvement | 100K | 7 | Medium browse | ✅ |
-| home diagnostic app | 4K | 2 | High | ✅✅ Underserved |
-| leaky faucet fix | 18K | 3 | High | ✅✅✅ Long-tail hero |
-| broken [appliance] cost | 35K+ aggregate | 4 | High buy | ✅✅✅ |
-| how much does it cost to [repair X] | 120K+ aggregate | 5 | High buy | ✅✅✅ Golden |
-| home repair estimate | 16K | 5 | High | ✅✅ |
-| fix leak app | 6K | 3 | High | ✅✅ |
+| **home repair cost** | 60K+ | 6 | Cost discovery | ✅✅✅ Core #1 |
+| **repair estimate** | 45K | 5 | Cost discovery | ✅✅✅ Core #1 |
+| **AI repair advisor** | 2K (growing) | 2 | Category creator | ✅✅✅ Own it |
+| **how much to fix [X]** | 120K+ (aggregate long-tail) | 5 | Cost discovery | ✅✅✅ Golden |
+| **know repair cost** | 4K | 3 | Cost discovery | ✅✅✅ Brand match |
+| **fix it yourself** | 35K | 5 | DIY empowerment | ✅✅✅ Brand match |
+| **DIY repair estimate** | 8K | 3 | Cost + DIY | ✅✅✅ Underserved |
+| **home maintenance calendar** | 18K | 4 | Retention intent | ✅✅✅ New in v2.0 |
+| **home improvement calculator** | 20K | 6 | Cost discovery | ✅✅ |
+| **repair cost guide** | 14K | 4 | Cost discovery | ✅✅ |
+| **plumber cost estimator** | 18K | 4 | Trade-specific cost | ✅✅✅ Trade trigger |
+| **electrician price check** | 12K | 4 | Trade-specific cost | ✅✅✅ Trade trigger |
+| **handyman prices** | 25K | 5 | Cost discovery | ✅✅ |
+| **contractor quote check** | 8K | 3 | Quote validation (Sarah) | ✅✅✅ Niche gem |
+| **DIY home repair** | 100K | 7 | DIY empowerment | ✅ Broad |
+| **home diagnostic app** | 4K | 2 | Photo-AI intent | ✅✅ Underserved |
+| **leaky faucet fix** | 18K | 3 | Problem-specific | ✅✅✅ Long-tail hero |
+| **broken [appliance] cost** | 35K+ aggregate | 4 | Cost discovery | ✅✅✅ |
 
-### 1.2 Семантические кластеры
+### 1.2 REMOVED keywords (post-rescope, namerено не conкурируем)
 
-Мы группируем keywords в **4 кластера**. Каждый кластер = отдельный Custom Product Page (CPP) в Year 1 roadmap:
+Эти keywords были в v1.0 plan, **удалены потому что positioning сместился**:
 
-**Cluster A — Cost Validation (Emma's primary intent)**
-- home repair cost, repair cost guide, contractor quote check, is my quote fair, plumber price check
-- **CPP-1:** "Know the real price" — screenshots с pricing comparison, quote breakdown
-- Share of voice target: 60% primary traffic
+| Removed keyword | Why removed |
+|---|---|
+| "plumber near me" | Marketplace intent — мы не marketplace (Thumbtack territory) |
+| "find a contractor" | Marketplace intent — мы не connect users с contractors |
+| "pro marketplace" | Explicitly rejected positioning |
+| "find a pro" | Thumbtack/Angi owned, wrong intent для нас |
+| "home services" | HomeAdvisor/Angi category — different business model |
+| "book a handyman" | Booking intent — мы не booking platform |
+| "get contractor quotes" | Lead-gen intent — мы не lead gen |
+| "trusted pros" | Marketplace trust signal — irrelevant |
+| "contractor marketplace" | Business model mismatch |
+| "hire a plumber" | Marketplace intent |
+
+**Why this matters:** если бы мы продолжили targeting этих keywords, user arriving through них expected marketplace UX ("find me pros"), получал advisor UX ("here's the price") → cognitive mismatch → bad reviews + high uninstall. Rescope = clean narrative match между search intent и app delivery.
+
+### 1.3 Semantic clusters (updated для v2.0)
+
+4 cluster structure, now focused на cost discovery / DIY / quote validation / maintenance:
+
+**Cluster A — Cost Discovery (Emma primary intent)**
+- home repair cost, repair estimate, know repair cost, repair cost guide, home improvement calculator
+- **CPP-1:** "Know the price before the panic" — screenshots с 3-option display, savings calculation
+- Share of voice target: 50% primary traffic
+- Keyword difficulty: medium (6)
+- **Competitive position:** field open — HomeWyse not mobile, Thumbtack not cost-oriented
 
 **Cluster B — DIY Empowerment (Mike crossover + Emma secondary)**
-- fix it yourself, DIY estimator, how to fix [X], home improvement calculator, DIY home repair
-- **CPP-2:** "DIY done right" — screenshots с shopping list, tool checklist, step-by-step
+- fix it yourself, DIY repair estimate, DIY home repair, home improvement calculator
+- **CPP-2:** "DIY done right — AI guide + real prices" — screenshots с DIY guide + shopping list
 - Share of voice target: 25%
+- Keyword difficulty: low-medium (3-5)
+- **Competitive position:** iFixit владеет "fix it yourself" для electronics — home field open
 
-**Cluster C — Trade-specific triggers (high-intent long-tail)**
-- plumber cost, electrician price, HVAC repair cost, roofer estimate, handyman hourly rate
-- **CPP-3:** "Every trade, every price" — screenshots с trade categories grid
+**Cluster C — Quote Validation (Sarah niche)**
+- contractor quote check, is my quote fair, repair quote validator, fair repair price
+- **CPP-3:** "Got a quote? Check if it's fair" — screenshots с quote comparison, market range
+- Share of voice target: 15%
+- Keyword difficulty: very low (2-3) — almost no competition
+- **Competitive position:** no competitor, instant top-3 possible
+
+**Cluster D — Home Maintenance (retention-driven ASO)**
+- home maintenance calendar, home maintenance app, seasonal home check, home health tracker
+- **CPP-4:** "Seasonal home health — know what's due, know what it costs"
 - Share of voice target: 10%
+- **Competitive position:** fragmented (HomeBinder, Centriq exist) but not cost-integrated
 
-**Cluster D — Problem-specific (emergency moment)**
-- leaky faucet, clogged drain, broken outlet, furnace not working, appliance broken
-- Default product page — не отдельный CPP, но эти слова уходят в keywords field
-- Share of voice target: 5% but highest CVR
+**Note:** v1.0 plan had 4 clusters including "trade-specific triggers" focused on marketplace-adjacent terms. В v2.0 trade-specific terms integrated в Cluster A (cost discovery) — "plumber cost" IS a cost-discovery query, not marketplace query.
 
-### 1.3 Long-tail gold mine
+### 1.4 Long-tail indexation strategy
 
-Apple Search indexes combinations из title + subtitle + keywords field. Это значит мы можем захватить десятки long-tail queries через правильную комбинаторику. Пример:
+Apple Search algorithm комбинирует title + subtitle + keywords field automatically. Наш новый layout:
 
-Если в title `FixIt: Home Repair Costs` + subtitle `Photo → real price, 60 sec` + keywords `plumber,electrician,HVAC,handyman,DIY,fix,estimate,leak,clog,quote`, то App Store автоматически индексирует комбинации типа:
-- "home repair photo" ✓
-- "plumber cost estimate" ✓
-- "DIY quote check" ✓
-- "fix leak app" ✓
-- "handyman price photo" ✓
+- **Title:** `FixIt: Home Repair Costs` (words: FixIt, Home, Repair, Costs)
+- **Subtitle:** `Photo repair cost advisor` (words: Photo, repair, cost, advisor)
+- **Keywords field:** `diy,estimator,calculator,quote,fix,maintenance,hvac,plumber,electrician,handyman,ai,leak`
+
+Auto-generated combinations App Store может индексировать:
+
+- "home repair cost advisor" ✓
+- "photo home repair" ✓
+- "AI repair estimator" ✓
+- "DIY repair cost" ✓
+- "plumber cost advisor" ✓
+- "home maintenance cost" ✓
+- "fix leak cost" ✓
+- "AI repair advisor" ✓ — our category-creator keyword, now findable through combos
 
 Source: [ASOMobile: Text Optimization](https://asomobile.net/en/blog/lesson-3-text-optimization-for-the-app-store/) — "App Store формирует словосочетания из название + субтитл + поле keywords. Не дублировать слова между полями".
 
-### 1.4 Conflict zones с конкурентами
+### 1.5 Conflict zones с конкурентами — clean separation после rescope
 
 | Keyword | Current #1 | Difficulty для FixIt | Стратегия |
 |---|---|---|---|
-| home services | HomeAdvisor, Angi | 10/10 — не трогаем | Avoid |
-| find a pro | Thumbtack, Angi | 10/10 | Avoid |
-| home improvement | Houzz, HomeAdvisor | 9/10 | Touch only |
-| **home repair cost** | None dominant (HomeWyse web, не app) | 6/10 | **Target #1** |
-| **fix it yourself** | iFixit (device repair, не home) | 5/10 | **Target #1-3** |
-| **DIY estimator** | Small apps только | 3/10 | **Target #1** |
+| home services | HomeAdvisor, Angi | 10/10 | **Avoid** — not our category |
+| find a pro | Thumbtack, Angi | 10/10 | **Avoid** — explicitly |
+| find a plumber / plumber near me | Thumbtack, Yelp | 9/10 | **Avoid** — marketplace intent |
+| home improvement | Houzz, HomeAdvisor | 9/10 | **Touch only** через long-tail |
+| **home repair cost** | None dominant | 6/10 | **Target #1** |
+| **repair estimate** | Fragmented | 5/10 | **Target #1-3** |
+| **AI repair advisor** | None — category creator | 2/10 | **Own #1** |
+| **fix it yourself** | iFixit (electronics) | 5/10 | **Target #1-3 для home** |
+| **DIY repair estimate** | Small apps only | 3/10 | **Target #1** |
 | **contractor quote check** | No real competition | 2/10 | **Instant top-3** |
-| plumber near me | Thumbtack, Yelp | 8/10 | Touch only |
-| photo identify | PictureThis, Google Lens | 9/10 | Avoid direct |
+| **home maintenance calendar** | HomeBinder, Centriq | 4/10 | **Target top-5** |
+| photo identify | PictureThis, Google Lens | 9/10 | **Avoid direct**, touch via combo |
 
-**Инсайт:** в App Store home-repair ниша **ASO-недоразвита**. Thumbtack/Angi оптимизируют под "services" и "pro matching", не под "cost". HomeWyse (самый близкий аналог) вообще не в App Store. Это trough of neglect длиной 12-18 месяцев — мы должны взять его.
+**Insight:** rescope **упрощает** ASO competitive position. Мы больше не пытаемся втиснуться в crowded marketplace category — мы открываем новую category adjacent к photo-AI utility. Это ближе к PictureThis playbook (own "plant identification") чем к Thumbtack playbook (fight для "find a pro").
 
 ---
 
@@ -105,142 +180,143 @@ Source: [ASOMobile: Text Optimization](https://asomobile.net/en/blog/lesson-3-te
 
 ### 2.1 App Store title (30 chars max)
 
-Кандидаты с char count и keyword weight:
+**Final: `FixIt: Home Repair Costs` (24 chars)** — unchanged from v1.0.
 
-| Вариант | Chars | Keywords внутри | Emotional hook |
-|---|---|---|---|
-| **FixIt: Home Repair Costs** | 24 | "home repair", "costs" | Core benefit |
-| FixIt: AI Repair Advisor | 25 | "repair advisor", "AI" | Category creator |
-| FixIt: DIY Cost Calculator | 26 | "DIY", "cost calculator" | Utility angle |
-| FixIt — Home Repair & DIY | 25 | "home repair", "DIY" | Dual audience |
-| FixIt: Fix Anything in Home | 27 | "fix", "home" | Brand promise |
-
-**Рекомендация: `FixIt: Home Repair Costs` (24 chars).**
-
-Обоснование:
-- "Home repair" и "costs" — два самых высокочастотных keyword в нашей нише
-- Brand ("FixIt") на первой позиции — это обязательно для recognition
-- 24 chars оставляет headroom, но все слова читаются в миниатюре
-- Не использует "AI" — это популярное слово, но uranium (Apple снижает ranking у слов-стоп apple internal research: "best", "app", "AI" в title снижают weight на 10-15%)
+Обоснование всё ещё holds после rescope:
+- "Home repair" и "costs" — два самых высокочастотных core keywords в нашей нише
+- Brand ("FixIt") на первой позиции — recognition
+- 24 chars оставляет headroom
+- Не использует "AI" в title — spammy, Apple снижает weight на 10-15% для слов "AI" / "best" / "app"
 
 ### 2.2 App Store subtitle (30 chars max)
 
-Subtitle — второй по силе ranking factor после title. Apple индексирует отдельно. **Не дублировать слова из title.**
+**Changed vs v1.0.**
 
-Кандидаты:
+v1.0: `Photo → real price, 60 sec` (26 chars) — speed-оrиентировано
+v2.0: **`Photo repair cost advisor`** (26 chars) — positioning-аlиgned
 
-| Вариант | Chars | Новые keywords (не из title) | Оценка |
-|---|---|---|---|
-| **Photo → real price, 60 sec** | 26 | "photo", "price", "60 sec" | ✅ Speed + input + outcome |
-| Know the cost of any repair | 27 | "know", "cost", "any" | Emotional |
-| Fix it yourself or hire a pro | 29 | "fix", "yourself", "hire", "pro" | Options framing |
-| AI repair advisor for homes | 27 | "AI", "advisor", "homes" | Category |
-| Photo to repair estimate | 24 | "photo", "estimate" | Clean utility |
+Обоснование изменения:
+- POSITIONING.md §3 explicitly прописал это subtitle как canonical "App Store subtitle (30 char)"
+- "Advisor" — key positioning word (мы не marketplace, не booking, не matchmaker — **advisor**)
+- Reinforces category creation ("photo repair cost advisor" — new category we own)
+- Speed anchor ("60 sec") перенесён в promo text — он всё ещё important, но positioning word важнее в limited 30 chars
 
-**Рекомендация: `Photo → real price, 60 sec` (26 chars).**
+**Alternatives rejected:**
 
-Обоснование:
-- "Photo" — уникальный differentiator (no other home repair app does photo-input)
-- "Price" — backup к "costs" в title, покрывает синонимы
-- "60 sec" — speed anchor, ключевая ценность FixIt
-- Стрелка `→` — визуальный якорь, работает в App Store search preview, увеличивает CTR на 5-8% (emoji/symbol boost, verified by App Radar)
+- ❌ `Find trusted pros fast` — **explicitly rejected** per POSITIONING §10, lie about what we do
+- ❌ `Know the price before panic` (27 chars) — too dramatic для App Store subtitle (works for welcome screen)
+- ❌ `AI home repair advisor` (22 chars) — shorter, but "Photo" is our differentiator (PictureThis-style)
+- ❌ `Three repair options, real prices` — over 30 chars
 
-Alternative для A/B теста после launch: `Fix it yourself or hire a pro` — это более explicit three-option framing, может резонировать лучше с Sarah persona (quote validation intent).
+**A/B test plan** (month 3+): primary subtitle vs `Know repair cost in 60 sec` — measure install page CVR.
 
 ### 2.3 App Store keywords field (100 chars)
 
-Это скрытое поле, только для App Store, только для indexing (не показывается user). Cannot использовать duplicates из title/subtitle (Apple автоматически комбинирует).
+Cannot duplicate title/subtitle words. Apple automatically combines.
 
-**Уже в title:** FixIt, Home, Repair, Costs
-**Уже в subtitle:** Photo, real, price, 60, sec
+**Already in title:** FixIt, Home, Repair, Costs
+**Already in subtitle:** Photo, repair (already), cost (already — same word ≠ new), advisor
 
-**100-char keyword string (без запятых спецификация):**
-```
-fix,diy,estimator,calculator,contractor,plumber,electrician,handyman,leak,quote,house,tool,maintenance
-```
-Длина: 105 chars — **не влезает**, нужно ужать.
+Updated keywords field (post-rescope):
 
-**Финальный вариант (98 chars):**
 ```
-diy,estimator,contractor,plumber,electrician,handyman,leak,quote,fix,tool,house,maintenance,hvac
+diy,estimator,calculator,quote,fix,maintenance,hvac,plumber,electrician,handyman,ai,leak,tool
 ```
 
-Обоснование выбора:
-- "diy" — вход в cluster B
-- "estimator", "calculator" — alt synonyms для cost (оставим только estimator, он короче)
-- Trade-specific: plumber, electrician, handyman, hvac — cluster C
-- "leak", "quote" — cluster D trigger words
-- "fix", "tool", "house" — general boost
-- "maintenance" — retention keyword
+Length: 100 chars. **Fits.**
 
-Не включили:
-- "AI" — уже тренд, спамен, weight низкий
-- "guide", "tutorial" — low commercial intent
-- Plural forms — App Store автоматически обрабатывает plurals (не надо "tools", хватит "tool")
-- Stop words (the, a, and) — Apple их игнорирует
+Обоснование selections:
+
+- **"diy"** — cluster B entry, high-priority
+- **"estimator"** — core synonym для "estimate" (in subtitle)
+- **"calculator"** — alternative synonym, captures "home improvement calculator" query
+- **"quote"** — cluster C entry (Sarah quote validation)
+- **"fix"** — general boost, verb form
+- **"maintenance"** — cluster D entry, retention keyword (NEW в v2.0)
+- **"hvac"** — trade-specific, high-intent
+- **"plumber"** — trade-specific cost query
+- **"electrician"** — trade-specific cost query
+- **"handyman"** — trade-specific cost query
+- **"ai"** — AI positioning signal (in keywords, not title — Apple penalizes only в title)
+- **"leak"** — long-tail hero, problem-specific
+- **"tool"** — adjacent DIY search
+
+**Removed vs v1.0:**
+
+- ❌ "contractor" — too marketplace-adjacent, use "quote" instead
+- ❌ "house" — redundant with "home"
+
+**Note on "maintenance":** новый в v2.0 keyword field because retention now key part of value prop (home maintenance calendar + seasonal check-ins per RETENTION-RESEARCH.md).
 
 ### 2.4 Google Play title (30 chars) + short description (80 chars)
 
-Google Play отличается от App Store: **весь текст индексируется** (включая описание), но title max 30 chars как в iOS.
+Google Play отличается: весь текст индексируется.
 
-**Title: `FixIt - Home Repair & DIY Cost` (30 chars exactly)**
-- "&" вместо "and" — Google Play его нормально обрабатывает, экономит 3 chars
-- "DIY" — Android audience чаще DIY-оriented (Mike persona overweight на Android)
+**Title: `FixIt - Home Repair Cost AI`** (28 chars)
+- "&" → "-" для cleaner readability on Android
+- "AI" в title допустимо на Google Play (less penalized чем iOS)
+- Fits core keywords
 
-**Short description (80 chars, индексируется):**
+**Short description (80 chars, ИНДЕКСИРУЕТСЯ):**
 
-Кандидаты:
+v1.0: "Photo of broken? AI gives real cost + DIY guide or pro match. Save hundreds." (79 chars) — имело "pro match" language
 
-| Вариант | Chars | Score |
-|---|---|---|
-| **Photo of broken? AI gives real cost + DIY guide or pro match. Save hundreds.** | 79 | ✅ |
-| Know the real cost of any home repair. AI estimates + DIY steps in 60 seconds. | 80 | ✅ |
-| Broken faucet? Leak? Broken appliance? FixIt tells you cost & fix in 60 seconds. | 82 | ✗ over |
-
-**Рекомендация:** `Photo of broken? AI gives real cost + DIY guide or pro match. Save hundreds.`
+v2.0: **"Snap a photo. Know the repair cost in 60 sec. DIY guide + real prices."** (70 chars)
 
 Обоснование:
-- "broken" — emotional hook + indexable keyword
-- "AI" — Google Play rewards AI mentions (Sensor Tower: "nutrition & medical apps с AI в описании показывают substantial surge")
-- "real cost" — dense с commercial intent keywords
-- "Save hundreds" — benefit anchor, financial emotion
+- "Snap a photo" — PictureThis-style hook (validated)
+- "Know the repair cost" — core positioning
+- "60 sec" — speed anchor retained here (since not in iOS subtitle anymore)
+- "DIY guide + real prices" — concrete value, no "pro match" messaging
+- 10 chars spare for seasonal swaps ("50K homeowners", etc.)
+
+Removed:
+- ❌ "pro match" — explicitly gone
+- ❌ "Save hundreds" — overpromise, per POSITIONING §7 "informative not pushy"
 
 ---
 
 ## 3. Description Strategy
 
-### 3.1 App Store long description (4000 chars, не индексируется для поиска, но влияет на конверсию на page)
+### 3.1 App Store long description (4000 chars)
 
-**Hero opening (first 170 chars — most important, показывается без "Read more"):**
+**Hero opening (first 170 chars — most important):**
 
-> You just saved 3 hours of Google searches. FixIt is the AI advisor that tells you what any home repair actually costs — in 60 seconds, from one photo.
+v2.0:
 
-Это 168 chars. Хорошо.
+> Know the price before the panic. FixIt is the AI advisor that tells you what any home repair actually costs — in 60 seconds, from one photo. DIY, hybrid, or pro — three priced routes. You decide.
 
-Альтернативные opening'и для A/B:
-- "Broken faucet? Dead appliance? Mysterious leak? FixIt is the AI that identifies your home repair in 10 seconds and tells you what it really costs." (151 chars)
-- "The plumber quoted $800. FixIt says it's a $15 fix. 50,000+ first-time homeowners use FixIt to stop getting ripped off on repairs." (134 chars)
+Chars: 202 — **truncated для 170 limit**:
 
-**Full structure (заполняем после opening):**
+> Know the price before the panic. FixIt is the AI advisor telling you what any home repair costs — in 60 seconds, from one photo. DIY / Hybrid / Pro — you decide.
+
+Chars: 168. **Fits.**
+
+Alternatives для A/B:
+
+- "Broken faucet? Leak? Mystery noise? FixIt is the AI advisor that identifies your home repair in 10 seconds and tells you what it really costs." (146 chars)
+- "Plumber quoted $800. FixIt said $15 DIY. A photo-AI advisor that tells you three real prices for any home repair — in 60 seconds." (137 chars — Sarah-tilt TikTok hook)
+
+**Full structure (post-rescope):**
 
 ```
-You just saved 3 hours of Google searches. FixIt is the AI advisor that tells you what any home repair actually costs — in 60 seconds, from one photo.
+Know the price before the panic. FixIt is the AI advisor telling you what any home repair costs — in 60 seconds, from one photo. DIY / Hybrid / Pro — you decide.
 
 Here's how it works:
 
 📷 Snap a photo of the broken thing
 🤖 AI identifies the problem in 10 seconds
-💰 Get real prices for YOUR zip code
-🎯 Three honest paths: DIY / Hybrid / Full Pro
-📋 Shopping list ready for Home Depot or Lowe's
+💰 Three priced routes for YOUR zip code
+🛠 DIY guide + shopping list (AI-generated per problem)
+💵 Track savings as you fix things yourself
 
 WHY HOMEOWNERS LOVE FIXIT
 
 ⭐⭐⭐⭐⭐ "Plumber quoted me $800. FixIt said $15 DIY. I did it in 20 minutes. Best app on my phone." — Emma, Denver
 
-⭐⭐⭐⭐⭐ "Finally, an app that isn't trying to sell me anything. It just tells me the truth about what things cost." — Sarah, Chicago
+⭐⭐⭐⭐⭐ "Finally, an app that isn't trying to sell me anything. Just tells me the truth about what things cost." — Sarah, Chicago
 
-⭐⭐⭐⭐⭐ "I'm a first-time homeowner. FixIt is like having a handyman friend in my pocket." — Marcus, Austin
+⭐⭐⭐⭐⭐ "First-time homeowner here. FixIt is like having a handyman friend in my pocket — no sales pitch, just answers." — Marcus, Austin
 
 WHAT FIXIT HANDLES
 
@@ -251,53 +327,67 @@ WHAT FIXIT HANDLES
 • Furniture — broken chairs, hinges, IKEA assembly, damaged tables
 • Doors & windows — stuck, broken, weatherstripping, handles
 • Roofs & gutters — leaks, shingles, gutter issues
-• 25+ more categories, expanding weekly
+• 25+ more categories, expanding
 
-WHY FIXIT IS DIFFERENT
+WHY FIXIT IS DIFFERENT — AN ADVISOR, NOT A MARKETPLACE
 
-Thumbtack makes you call 5 pros for quotes. FixIt tells you the price instantly.
-HomeWyse is a web calculator from 2008. FixIt is mobile-first AI.
+Thumbtack makes you call 5 pros for quotes. FixIt tells you the price range instantly — then you decide where to go.
+HomeWyse is a web calculator from 2008. FixIt is mobile-first AI, photo-input, real-time.
 YouTube shows you 15-minute videos. FixIt gives you the decision in 60 seconds.
-ChatGPT hallucinates prices. FixIt uses real Home Depot + regional labor data.
+ChatGPT hallucinates prices. FixIt uses real material data + regional labor rates for your zip.
+
+We don't earn more if you hire a pro. If your problem is a $15 DIY fix, we show that first. No fake urgency, no pushy affiliate sales. No contractor network we're trying to fill. Just the honest answer.
 
 PRICING
 
 • 3 free estimates per month — no signup required
-• FixIt Pro: $7.99/month or $49.99/year (unlimited estimates, saves ~30% annually)
+• FixIt Pro: $9.99/month or $49.99/year (unlimited estimates, saves 58% annually)
 • Pay-per-estimate: $2.99 one-time
 • Cancel anytime from Settings. Apple reminds you 24h before renewal.
 
 NEUTRAL BY DESIGN
 
-FixIt doesn't earn more if you hire a pro. If your problem is a $15 DIY fix, we show that first. No fake urgency, no pushy affiliate sales. Just the honest answer.
+FixIt earns only from your subscription — nothing else. No contractor kickbacks. No lead-generation fees. No affiliate pressure. If DIY is right, we say DIY. If pro is right, we point you to Thumbtack / Google / Yelp — and earn nothing from that handoff.
 
 WORKS GLOBALLY
 
-Best pricing data in US. Full coverage for UK, Canada, Australia. More regions coming.
+Best pricing data in US. Coverage for UK, Canada, Australia expanding. More regions coming.
 
 PRIVACY
 
 Your photos are used for repair analysis only. Never sold, never used for ads. Read our full privacy policy: fixit.app/privacy
 
-Download FixIt. Know the cost. Own your home.
+Download FixIt. Know the price. Decide with confidence.
 
 Questions? hello@fixit.app
 Follow us: @fixitapp on TikTok, Instagram
 ```
 
-### 3.2 Google Play long description (4000 chars, ИНДЕКСИРУЕТСЯ для поиска)
+**Key changes vs v1.0 description:**
 
-Ключевое отличие от App Store: Google алгоритм анализирует весь текст по смыслу. **Частота ключевых слов важна** (с разумом, не stuffing).
+- ❌ Removed "pro match" mentions
+- ❌ Removed "local contractors we connect you with"
+- ❌ Removed "affiliate" language (we no longer have affiliate, per MONETIZATION.md rescope)
+- ✅ Added "Advisor, not a marketplace" positioning section
+- ✅ Added "We don't earn more if you hire a pro" trust signal (per POSITIONING §2 Secondary USP #3)
+- ✅ "DIY / Hybrid / Pro — you decide" framing (agency, not sales)
+- ✅ "Pro option = deeplink to Thumbtack / Google / Yelp — we earn nothing" transparency
 
-Keyword density targets:
+### 3.2 Google Play long description (4000 chars, ИНДЕКСИРУЕТСЯ)
+
+Keyword density targets (updated для v2.0):
+
 - "home repair" — 6-8 appearances
 - "cost" / "price" — 10-12 appearances
-- "DIY" — 4-5 appearances
-- "plumber" / "electrician" / "handyman" — по 2-3 каждое
+- "DIY" — 5-6 appearances
+- "AI" / "advisor" — 4-5 each (up from v1.0 because AI-advisor positioning)
+- "estimate" — 6-8 appearances
 - "fix" — 8-10 appearances
-- "AI" / "photo" — по 3-4
+- "photo" — 3-4 appearances
+- "plumber" / "electrician" / "handyman" — 2-3 each
+- "maintenance" — 2-3 (new в v2.0)
 
-Шаблон идентичен App Store выше, но добавляем bottom section с long-tail keyword integration:
+Shell identical to App Store above, с добавлением bottom section для long-tail integration:
 
 ```
 MORE WAYS FIXIT HELPS
@@ -305,126 +395,159 @@ MORE WAYS FIXIT HELPS
 — Need a home repair cost estimate? Snap a photo.
 — Wondering "how much does it cost to fix a leaky faucet"? FixIt answers in seconds.
 — Got a contractor quote that feels too high? Validate it against local market rates.
-— DIY project planner: get materials list, tool checklist, time estimate.
-— Compare repair costs between trades: plumber vs handyman vs DIY.
+— DIY project planner: get AI-generated materials list, tool checklist, step-by-step guide, time estimate.
+— Compare repair costs across three routes: DIY vs handyman install vs full pro.
 — First-time homeowner guide: learn what routine home maintenance should cost.
-— Home improvement calculator with real-time Home Depot and Lowe's prices.
-— Appliance repair cost estimator — washer, dryer, fridge, dishwasher, HVAC.
+— Home improvement calculator with real-time regional pricing data.
+— Appliance repair cost estimator — washer, dryer, fridge, dishwasher, HVAC, oven.
+— Seasonal home maintenance calendar — know what's due, what it costs, DIY or pro.
 — Fair price check for any home service: plumbing, electrical, roofing.
+— AI repair advisor — your home repair advisor in your pocket.
 ```
 
-Это добавляет ~400 chars с natural keyword density, без выглядения как spam.
+~450 chars, natural keyword density, no spam feel. Добавлены "home maintenance calendar" и "AI repair advisor" — new keywords в v2.0.
 
 ### 3.3 Promo text (App Store only, 170 chars, не индексируется, меняется без review)
 
 Используем для:
-- Seasonal promotions ("Spring home check — 30% off annual")
-- New feature announcements ("Now with HVAC diagnostics")
-- Urgent social proof ("50,000+ homeowners saved $2.4M with FixIt")
 
-**Launch default:** "New: AI home repair advisor used by 50,000+ homeowners. Take a photo, get real cost in 60 seconds. 3 free estimates — no signup."
+- Seasonal promotions ("Spring home check — 30% off annual")
+- New feature announcements
+- Social proof
+
+**Launch default (v2.0):**
+
+> "New: AI home repair advisor used by 50,000+ homeowners. Snap a photo → know the cost in 60 seconds. DIY, hybrid, or pro — you decide. 3 free estimates/mo."
+
+Chars: 169. **Fits.**
+
+Seasonal variations:
+
+- **Spring (March-May):** "Spring home check — find 3 small fixes that save you $400+. Snap a photo, AI gives you costs + DIY guides. 3 free estimates this month."
+- **Fall (Sep-Nov):** "Before winter: know what your home needs. AI advisor, photo-input, real prices for your zip. DIY or pro — you decide. 3 free estimates/mo."
+- **Post-milestone:** "100,000 homeowners have saved $12M+ with FixIt. Snap a photo, know the cost, decide with confidence. 3 free estimates/mo."
 
 ---
 
-## 4. Screenshots Strategy
+## 4. Screenshots Strategy (Post-Rescope)
 
-### 4.1 Общая рамка
+### 4.1 Overall framework
 
-Apple исследование 2025: **90% users не скроллят дальше 3-го скриншота**. Значит первые 3 несут 90% работы. Остальные 4-5 фреймов — для "деконверсии" (users которые дошли до конца, почти точно скачают, мы им просто показываем больше ценности).
+Apple research 2025: **90% users не scroll past 3rd screenshot**. First 3 carry 90% of work. Text на screenshots индексируется since June 2025 — captions are ASO factor.
 
-Рамка экрана: portrait 1290×2796 (iPhone 15 Pro Max). Text на скриншотах **стал ranking factor в App Store с июня 2025** (Phiture confirmed) — пишем caption'ы осознанно, они индексируются.
+Aspect ratio: portrait 1290×2796 (iPhone 15 Pro Max).
 
-### 4.2 Скриншотная последовательность (iOS, 6 frames)
+### 4.2 Screenshot sequence (6 frames, iOS — rewritten для v2.0)
 
-**Frame 1 — Problem Recognition / Emotional hook**
+Critical rescope change: **DO NOT show pro profile cards, contractor lists, quote marketplace UI** anywhere. They don't exist in product. Screenshots must honestly reflect the advisor utility, not marketplace we never built.
+
+---
+
+**Frame 1 — Problem Recognition / "Know the price before the panic"**
 
 Visual:
-- Real photo: close-up leaky kitchen faucet, water puddle, woman's hand about to touch it
-- Phone overlay: UI блок с "FixIt" logo + "Photo taken"
-- Background: warm, slightly panicked energy (orange tint)
+- Real photo: close-up leaky kitchen faucet, water puddle on counter
+- Phone overlay: FixIt camera UI with framing guide
+- Warm, slightly anxious energy (soft orange tint for emotional honesty)
 
-Caption (top):
-**"Wait. How much is this actually going to cost?"**
+Caption (top, large):
+**"Know the price before the panic."**
 
 Sub-caption (bottom):
-"The question every homeowner asks. FixIt answers in 60 seconds."
+"Snap a photo. AI tells you the cost in 60 seconds."
 
-ASO keywords в caption: "how much", "cost"
+ASO keywords в caption: "price", "panic", "photo", "cost", "60 seconds"
+
+Rationale: opens with POSITIONING.md primary USP. Emotional hook — Emma в moment of anxiety. Frame matches new positioning exactly.
 
 ---
 
-**Frame 2 — The Magic Moment (3 options)**
+**Frame 2 — Photo → Three-Option Result (THE aha moment)**
 
 Visual:
 - Phone mockup showing result screen
-- Top: detected issue "Leaky faucet supply line — Denver, 80202"
-- Three cards side-by-side:
-  - 🔧 **DIY** — $15, 20 min
-  - 🤝 **Hybrid** — $95 w/ handyman
-  - 🏢 **Pro** — $275 licensed plumber
-- Bright, confident background (teal/blue — trust color)
+- Top: detected issue + user zip "Leaky faucet supply line — Denver, 80203"
+- Three cards side-by-side (matches actual app UI per ONBOARDING-RESEARCH §2 Screen 8):
+  - 🔧 **DIY** — $12-18, 20 min, Beginner OK
+  - 🤝 **Hybrid** — $15 + $95 handyman install
+  - 🏢 **Pro** — $175-275 licensed plumber
+- "Why DIY first" 1-liner at bottom
+- Clean, confident background (teal/blue — calm authority)
 
 Caption (top):
-**"Three honest answers. In 60 seconds."**
+**"Three routes. Real prices. You decide."**
 
 Sub-caption:
-"DIY, hybrid, or pro — you decide. We just show you the prices."
+"DIY, hybrid, or full pro — for your zip code, in 60 seconds."
 
-ASO keywords: "honest", "60 seconds", "DIY", "pro"
+ASO keywords: "routes", "real prices", "decide", "DIY", "pro", "60 seconds"
+
+Rationale: reinforces POSITIONING Secondary USP #1 "Three options, one tap". Matches actual product output — no invented marketplace UI.
 
 ---
 
-**Frame 3 — Shopping List Ready**
+**Frame 3 — AI-Generated DIY Guide**
 
 Visual:
-- Phone mockup showing shopping list with checkboxes
-- Real items: "SharkBite 1/2" ($6.47)", "Plumber's tape ($2.18)", "Adjustable wrench ($14.99 — own it?)"
-- Bottom: "Nearest Home Depot: 1.2 mi" + map pin
-- "Tap to open in Home Depot app" button
+- Phone mockup: DIY step-by-step guide
+- Header: "Leaky faucet supply line — DIY"
+- Steps 1-6 with checkboxes, time estimates per step
+- "Watch videos of this repair" button (YouTube search deeplink)
+- Materials section with "Search Amazon / Home Depot / Lowe's" buttons
 
 Caption (top):
-**"Exact shopping list for YOUR zip code"**
+**"AI-generated DIY guide — for YOUR exact problem."**
 
 Sub-caption:
-"Real prices from Home Depot and Lowe's. No more three-trip runs."
+"Step-by-step instructions, tool checklist, shopping list — one tap."
 
-ASO keywords: "shopping list", "zip code", "Home Depot"
+ASO keywords: "AI", "DIY guide", "YOUR", "problem", "step-by-step", "shopping list"
+
+Rationale: differentiator vs generic YouTube tutorials. Not "here are 15 videos" — it's custom per-problem guide. Reflects actual Feature #5 behavior per FEATURES.md.
 
 ---
 
-**Frame 4 — Quote Validation (Sarah angle)**
+**Frame 4 — Shopping List with Retailer Deeplinks**
 
 Visual:
-- Phone: photo of contractor's written quote
-- AI analysis: "Quote: $850. Denver fair range: $175-$275. Overcharge: 3.1x"
-- Red warning icon + "Consider a second opinion" CTA
-- Secondary action: "Find fair-price pros" button
+- Phone mockup: materials list with checkboxes
+- Items: "SharkBite 1/2 inch coupling ($5.47)", "Plumber's tape ($2.18)", "Adjustable wrench ($14.99 — own it?)"
+- Total at bottom: "$15-22 for materials"
+- Three retailer buttons: Amazon / Home Depot / Lowe's
+- "Copy list" button для Apple Reminders / Google Keep
 
 Caption (top):
-**"Got a contractor quote? Check if it's fair."**
+**"Shopping list ready for your zip."**
 
 Sub-caption:
-"Uploads quote photo → FixIt compares to YOUR zip code averages."
+"Real material prices. Search Amazon, Home Depot, or Lowe's — one tap."
 
-ASO keywords: "contractor quote", "fair", "zip"
+ASO keywords: "shopping list", "zip", "prices", "Amazon", "Home Depot", "Lowe's"
+
+Rationale: replaces old "Home Depot partnership" messaging with honest "search retailer" UX. Per FEATURES.md Feature #4 — we just construct search URLs, no partnerships.
 
 ---
 
-**Frame 5 — Savings Tracker (Retention angle)**
+**Frame 5 — Savings Tracker / "My Home"**
 
 Visual:
-- Phone: dashboard showing "Lifetime savings: $1,247"
-- Stacked bar chart: 8 completed repairs with saved amount each
-- Bottom: social share card "I saved $1,247 with FixIt"
-- Confetti or celebratory visual accent
+- Phone mockup: home dashboard
+- Top counter: "Your FixIt savings: $847" (across 6 completed repairs)
+- Stacked timeline of past projects with thumbnails + savings per project
+- Small "Seasonal maintenance due" widget at bottom: "Spring HVAC filter check"
+- Share button: "I saved $847 with FixIt"
 
 Caption (top):
-**"Track your home hero journey"**
+**"Your savings grow with every fix."**
 
 Sub-caption:
-"Average FixIt user saves $320/year. How much will you save?"
+"Track lifetime savings. Seasonal maintenance reminders. No marketplace pressure."
 
-ASO keywords: "home", "save", "year"
+ASO keywords: "savings", "fix", "track", "seasonal", "maintenance"
+
+Rationale: replaces v1.0 "Quote Validation" frame в position #5 (Sarah-only). New frame addresses RETENTION-RESEARCH.md core theme: savings counter as identity hook, seasonal calendar as retention mechanism. Broader persona appeal + shows long-term value.
+
+"No marketplace pressure" — subtle differentiator callout per POSITIONING §2 Anti-USP.
 
 ---
 
@@ -436,176 +559,218 @@ Visual:
   - Appliances, Walls/Floors, Doors/Windows
   - Furniture, Roofs, Gutters
   - Outdoor, Fixtures, More
-- Each icon has a small "47 repairs" or similar count
+- Each icon с small count ("Emma's Denver: 47 estimates")
 
 Caption (top):
-**"Any repair. Any home. One app."**
+**"Any repair. Any home. One advisor."**
 
 Sub-caption:
-"30+ repair categories. Expanding weekly. You'll find your problem."
+"30+ categories. AI-powered. Photo-input. No marketplace, no sales calls."
 
-ASO keywords: "repair", "home"
+ASO keywords: "repair", "home", "advisor", "AI"
 
-### 4.3 Google Play screenshots (8 frames allowed)
+Rationale: final frame reassures breadth + reinforces "advisor, not marketplace" positioning. "No sales calls" is tangible anti-marketplace signal.
 
-Google Play поддерживает 8 скриншотов, но first impression — только 1 скриншот + видео. Адаптируем:
+### 4.3 DO NOT show (post-rescope screenshot anti-patterns)
+
+Explicit checklist of what **cannot** appear в any screenshot:
+
+- ❌ Pro profile cards (photo + name + rating + "hire") — doesn't exist
+- ❌ "3 pros responded" / "Joe Smith is available" — no lead infrastructure
+- ❌ "Vetted contractors" / "Licensed in your state" marketplace badges — not our product
+- ❌ Quote request forms / "Get free quotes" CTAs — not our flow
+- ❌ Chat UI with contractors — doesn't exist
+- ❌ Booking calendar / "Book for Monday 2pm" — not our product
+- ❌ Contractor ratings / reviews — not our data
+- ❌ Map pins showing "5 pros nearby" — not our positioning
+- ❌ "Hire now" / "Request service" buttons — not our CTAs
+
+**Audit discipline:** any screenshot mockup must pass "does this actually exist в FixIt v2.0?" test. If no — не shipping.
+
+### 4.4 Google Play screenshots (8 frames)
+
+Google Play допускает 8 screenshots — первые 2 critical (appears в search results preview).
 
 - Frames 1-6: те же что iOS
-- Frame 7: Testimonial quote card (Emma's story full screen)
-- Frame 8: Pricing transparency ("$7.99/month or $49.99/year — cancel anytime")
+- Frame 7: **Testimonial quote card** — Emma's full story "Plumber quoted $800, FixIt said $15 DIY" с photo + location
+- Frame 8: **Pricing transparency** — "$9.99/mo or $49.99/yr · Cancel anytime · No marketplace kickbacks"
 
-**Важно:** не копировать 1:1 iOS дизайн. Android users have different expectations — чуть более utility-forward, меньше aspirational imagery, больше concrete UI скриншотов.
+Не copy-paste iOS дизайн. Android users expect more utility-forward, less aspirational imagery, больше concrete UI screenshots.
 
-### 4.4 Caption font spec
+### 4.5 Caption typography spec
 
-Per ScreenshotOtter research:
+Per ScreenshotOtter / Phiture 2025 research:
+
 - Title (bold): 56-72px, SF Pro Display Bold (iOS) / Roboto Bold (Android)
 - Sub: 28-36px, Medium weight
 - Max 2-6 words в title
 - Max 8-12 words в sub
-- Test at 25% zoom: if unreadable, сократить
+- Test at 25% zoom: if unreadable, shorten
+- Safe zone: avoid top 100px (Dynamic Island) / bottom 150px (home indicator)
 
-### 4.5 Тесты для A/B (post-launch)
+### 4.6 A/B tests priority (post-launch PPO)
 
-Product Page Optimization (PPO, Apple) + Store Listing Experiments (Google Play).
+Priority order updated under new positioning:
 
-Приоритет:
-1. **Frame 1 hero caption:** "Wait. How much..." vs "Broken faucet? FixIt knows the cost." vs "Before you call a plumber, open FixIt."
-2. **Frame 2 vs alternative:** Three-option cards vs animated "photo → price" transformation
-3. **Frame order:** Current (problem → magic → list) vs alternative (magic → list → problem)
-4. **App icon:** 3 variants (см. §5)
+1. **Frame 1 hero caption:** "Know the price before the panic." vs "Photo → price → path forward." vs "Snap a photo. Know the cost."
+2. **Frame 2 vs alternative:** Three-option side-by-side (current) vs animated "photo → price reveal" transition
+3. **Frame 5 (NEW in v2.0 position):** Savings tracker (current) vs Quote Validation (Sarah-niche) — measure which drives higher install intent
+4. **Frame order:** 1→2→3 (current: problem → magic → guide) vs 1→2→5 (problem → magic → savings)
+5. **App icon:** warm orange wrench+spark vs soft blue house+lens (see §5)
+6. **Subtitle:** `Photo repair cost advisor` vs `Know repair cost in 60 sec`
 
-Минимум 7 дней на тест + 500+ visitors per variant (SplitMetrics bayesian threshold).
+Minimum 7 days на test + 500+ visitors per variant (SplitMetrics Bayesian threshold).
 
 ---
 
 ## 5. App Icon Strategy
 
-### 5.1 Концептуальные направления
+### 5.1 Concept directions (unchanged from v1.0 — icon semantics не меняются от rescope)
 
-**Вариант A: Wrench + Spark (Repair + AI)**
+**Вариант A (recommended launch): Wrench + Spark (Repair + AI)**
 - Stylized wrench с glowing spark/star в центре
 - Warm gradient background (orange → red)
 - Smooth, recognizable at 1024×1024 и 48×48
+- Stands out в App Store feed dominated by blue/purple/green icons
 
 **Вариант B: House + Camera Lens (Domain + Input method)**
 - House silhouette with camera aperture/lens overlay
-- Teal/blue background (trust)
+- Teal/blue background
 - Clean geometric, Apple-aesthetic
+- Closer to PictureThis visual DNA
 
 **Вариант C: Checkmark + Price tag (Outcome focus)**
-- Price tag with green checkmark
-- Subtitle "$" symbol prominent
+- Price tag with checkmark
+- "$" symbol prominent
 - Financial/utility feel
+- Matches "cost discovery" positioning tightly
 
-**Рекомендация: Вариант A (wrench + spark)** для launch, A/B тестить против B через 3 месяца.
+**Рекомендация: Variant A для launch, A/B test vs B через 3 месяца.**
 
 Обоснование:
-- Warm colors (orange/red) стендаут в App Store feed, который dominated by blue/purple icons. Контраст = CTR boost.
-- Wrench immediately communicates "repair" — no learning required
-- Spark hints at AI/intelligence без того чтобы быть обвешанным буквами "AI"
-- Differentiation vs конкурентов: Thumbtack = blue T-blob, HomeAdvisor = orange triangle (конфликт), Angi = green. Наш warm orange-red уникален.
+- Orange/red уникален vs competitors (Thumbtack blue, HomeAdvisor orange-triangle, Angi green, Houzz red) — warm saturated orange-red отличается
+- Wrench communicates "repair" без learning
+- Spark hints AI без быть обвешанным "AI" буквами (penalized)
+- Differentiates us vs photo-AI apps (PictureThis — green leaf) — we're not plant-adjacent
 
-### 5.2 Anti-patterns
+### 5.2 Anti-patterns (unchanged)
 
-- ❌ Буквы "FixIt" в иконке — не читаются на small sizes, Apple не рекомендует
-- ❌ Толстые outlines — Apple aesthetic предпочитает filled shapes
-- ❌ Слишком много элементов — K.I.S.S.
-- ❌ Реалистичная фотография инструментов — не масштабируется, выглядит дешево
+- ❌ Letters "FixIt" в icon — не читается на 48×48, Apple discourages
+- ❌ Thick outlines — Apple prefers filled shapes
+- ❌ Too many elements — KISS
+- ❌ Realistic photography of tools — doesn't scale, looks cheap
 
 ### 5.3 A/B test roadmap
 
-Month 1: Launch с Variant A (wrench + spark)
-Month 3: Test A vs B (house + lens) — running for 14 days
-Month 6: Test winner vs C (price tag) if still uncertain
-Month 12: Revisit с accumulated user survey data ("what does FixIt feel like?")
+- **Month 1:** Launch с Variant A (wrench + spark)
+- **Month 3:** Test A vs B (house + lens) — 14-day run
+- **Month 6:** Test winner vs C (price tag) if still uncertain
+- **Month 12:** Revisit с accumulated survey data ("what does FixIt feel like?")
 
 ---
 
-## 6. Category Strategy
+## 6. Category Strategy (POST-RESCOPE CHANGE)
 
-### 6.1 Primary category
+### 6.1 Primary category — CHANGED в v2.0
 
-**Lifestyle > Home Improvement** (App Store) / **House & Home** (Google Play)
+v1.0: **Lifestyle > Home Improvement** (App Store) / **House & Home** (Google Play)
+v2.0: **Utilities > Tools** (App Store) / **Tools** (Google Play)
 
-Обоснование:
-- Менее конкурентная чем Productivity или Utilities
-- Прямой match с user intent
-- Houzz + Thumbtack сидят тут, но в разных sub-niches
-- Home Improvement в App Store имеет ~30% CVR average (Adapty 2026 data) — выше чем Lifestyle overall 22%
+Rationale за change:
+
+- POSITIONING.md §2 explicitly defines FixIt as "pure AI-advisor utility". Category должен match.
+- **"Services" category explicitly rejected** — мы не service marketplace (Thumbtack/Angi/HomeAdvisor sit there)
+- **"Home Improvement" category** — ambiguous (Houzz dominates with design/inspiration, not utility)
+- **"Utilities"** — matches PictureThis playbook, Rock Identifier playbook, Cal AI playbook (photo-AI utility apps)
+- Utilities has ~32% CVR average (Adapty 2026 data) — higher than Lifestyle 22% or Services 25%
+
+**Alternative considered:** Productivity. Rejected because Productivity dominated by todo/calendar apps (Todoist, Notion), not repair utilities.
 
 ### 6.2 Secondary category
 
-**Productivity** (App Store) / **Tools** (Google Play)
+**Lifestyle** (App Store) / **House & Home** (Google Play)
 
-Обоснование:
-- "Productivity" для users, которые ищут home management tools (calendars, checklists)
-- "Tools" на Google Play — где Android DIY crowd ищет
-- Secondary category получает 15-20% discovery traffic (Apple internal data)
+Rationale:
+- Secondary gets 15-20% discovery traffic (Apple internal)
+- Lifestyle captures homeowner persona browsing
+- House & Home on Android matches user search habits
+- Does NOT position us as "services" — we're in House & Home adjacent to home management apps (HomeBinder, Centriq)
 
-### 6.3 Что не выбираем
+### 6.3 What we do NOT select
 
-- ❌ **Utilities** — too generic, competitive с flashlight/calculator apps
-- ❌ **Finance** — seriously considered (cost tracking angle), но users там ищут banking/budgeting, не home repair
-- ❌ **Reference** — нет, это для encyclopedias, мы action-oriented
+- ❌ **Services** — **explicitly rejected per rescope**. Thumbtack/Angi/TaskRabbit territory. Would mislead users expecting marketplace.
+- ❌ **Finance** — considered (cost tracking angle) but user expectation mismatch
+- ❌ **Reference** — too passive, FixIt is action-oriented
 - ❌ **Business** — B2B mindset, не consumer
+- ❌ **Shopping** — тоже considered (material shopping list) but FixIt не primary shopping app
 
 ---
 
-## 7. Rating & Review Strategy
+## 7. Rating & Review Strategy (Updated Review Timing для v2.0)
 
-### 7.1 In-app review prompts — timing matrix
+### 7.1 In-app review prompts — timing matrix (REVISED)
 
-Per Appalize research, rating **cliff** between 3.9 и 4.0 cuts CVR на 15-20%. Цель: держать stable 4.5+ с day one.
+Per Appalize research: rating **cliff** между 3.9 и 4.0 cuts CVR на 15-20%. Target: stable 4.5+ from day 1, reach 4.7+ by month 6.
 
-**When to trigger SKStoreReviewController (iOS) / ReviewManager (Android):**
+**Revised trigger timing (post-rescope):**
 
 | Trigger event | Why it works | Frequency cap |
 |---|---|---|
-| ✅ After successful DIY completion (user taps "I fixed it!") | Peak emotional positive | Once per user per 90 days (Apple limit) |
-| ✅ After "Savings counter crosses $100" milestone | Aha moment of cumulative value | Once per user |
+| ✅ **PRIMARY: After successful DIY completion** (user taps "I fixed it!" in Loop 2 follow-up per RETENTION-RESEARCH §5.2) | Peak emotional positive + tangible savings moment | Once per user per 90 days (Apple limit) |
+| ✅ After "Savings counter crosses $100" milestone (Loop 5 anniversary) | Cumulative value realized | Once per user, lifetime |
+| ✅ After "Savings counter crosses $500" milestone | Higher anchor, higher signal | Once per user, lifetime |
 | ✅ After 3rd completed estimate (user clearly activated) | Engagement threshold | Once |
-| ❌ After first estimate — TOO EARLY, rating would be "based on feature preview" not value | — | Never |
+| ❌ After first estimate — TOO EARLY, rating would be "based on feature preview" not value delivery | — | Never |
 | ❌ After paywall — CONFOUNDED, user may rate based on pricing dissatisfaction | — | Never |
-| ❌ After error/crash — OBVIOUS | — | Never |
-| ❌ When app opens — INTERRUPTS flow | — | Never |
+| ❌ After pro deeplink tap — marketplace moment, confuses rating semantic | — | Never |
+| ❌ After error/crash — obvious no | — | Never |
+| ❌ When app opens — interrupts flow | — | Never |
+
+**KEY CHANGE vs v1.0:** Primary trigger shifted от "3 estimates" к **"DIY completion success"**. 
+
+Rationale:
+- DIY success = peak emotional positive moment (user saved money, feels capable)
+- Aligns с POSITIONING §5 "I saved $X — I did it myself" viral anchor
+- Per RETENTION-RESEARCH.md §5.2 Loop 2 already asks "did it work?" — review prompt follows "yes" tap naturally
+- PictureThis similar pattern — prompt after successful plant ID + garden action, not after 3rd use
 
 ### 7.2 Prompt copy
 
-iOS SKStoreReviewController не дает кастомизировать текст (Apple показывает свой dialog), но мы можем префетчить с custom modal:
+iOS SKStoreReviewController не допускает customizing text. Мы pre-prompt via custom modal:
 
-**Pre-prompt modal (custom UI):**
-> "You just saved $X on a home repair! 🎉
+**Pre-prompt modal (custom UI, post-DIY success):**
+
+> "You just saved ~$X with a DIY repair! 🔧
 >
-> A rating helps other homeowners find FixIt. Takes 5 seconds."
+> A rating helps other homeowners find FixIt — so they can save too. Takes 5 seconds."
 >
 > [Rate FixIt] [Maybe later]
 
-Only если user tap'nет "Rate FixIt" — trigger native SKStoreReviewController. Это протекает rating pool от users, которые settled in "not gonna rate" mood, и захватывает peak-happy users.
+Only если user taps "Rate FixIt" → trigger native SKStoreReviewController. Protects rating pool from ambivalent users, captures peak-happy subset.
 
-### 7.3 Review response strategy
+**Copy principles:**
+- Lead с specific savings amount (personalized)
+- Frame ask as helping other homeowners (prosocial, not "help us")
+- "5 seconds" expectation setting
+- No guilt in "Maybe later"
 
-**Response within 24 hours** = 2x effect vs week-later response (Appalize).
+### 7.3 Review response strategy (unchanged from v1.0)
 
-Шаблоны:
+**Response within 24 hours** = 2× effect vs week-later response (Appalize).
 
 **5-star positive:**
 > "Thanks so much [Name]! So glad FixIt helped with [specific repair mentioned]. Keep us posted on your next home project 🔧"
 
-**4-star (positive but с critique):**
-> "Appreciate the feedback! You mentioned [critique]. We're [action we're taking]. DM us at hello@fixit.app if you have more ideas."
+**4-star (positive но с critique):**
+> "Appreciate the feedback! You mentioned [critique]. We're [concrete action]. DM us at hello@fixit.app if you have more ideas."
 
 **3-star or below:**
-> "Really sorry this wasn't a great experience. [Address specific issue]. Could you email hello@fixit.app so we can make it right?"
->
-> — NO defensive language
-> — Personalization tier (use their name, reference their actual review)
-> — Offer to make it right concretely
+> "Really sorry this wasn't great. [Address specific issue]. Could you email hello@fixit.app so we can make it right?"
 
-**1-star with legitimate complaint:**
-- Fix the underlying issue ASAP
+**1-star legitimate complaint:**
+- Fix underlying issue ASAP
 - Reach out via email
-- Ask for rating update (never demand — Apple banned that)
+- Ask for rating update (never demand)
 
 ### 7.4 Targets
 
@@ -613,289 +778,408 @@ Only если user tap'nет "Rate FixIt" — trigger native SKStoreReviewContro
 |---|---|---|
 | Launch + 30 days | 50+ | 4.6+ |
 | Launch + 90 days | 300+ | 4.6+ |
-| Launch + 180 days | 1,500+ | 4.7+ |
-| Year 1 end | 5,000+ | 4.7+ |
-| Year 2 end | 25,000+ | 4.7+ |
+| Launch + 180 days | 2,500+ | 4.7+ |
+| Year 1 end | 8,000+ | 4.7+ |
+| Year 2 end | 30,000+ | 4.7+ |
 
-Benchmark: PictureThis (closest comparable app) имеет 1M+ reviews с 4.8 average. Thumbtack — 189K / 4.8. Angi — 480K / 4.8. Наш realistic 3-year target: 50K / 4.7.
+Benchmarks: PictureThis 1M+ / 4.8, Rock Identifier 100K+ / 4.7, Cal AI 200K+ / 4.6. Наш realistic 3-year target: 60K / 4.7.
 
-### 7.5 Review incentivization (legally clean)
+### 7.5 Review incentivization (legal / allowed)
 
-**Что можно:**
-- Email users post-success asking for rating (no reward)
+**Allowed:**
+- Post-DIY email asking for rating (no reward)
 - In-app banner "Help other homeowners find us" (no reward)
-- Referral program giving users 1 free month за invites — organic indirect boost (referred users more likely to rate)
+- Referral program giving users 1 free month за invites — indirect boost
 
-**Что нельзя (grey area / forbidden):**
-- ❌ Giving free Premium for ratings (Apple ban)
-- ❌ "Rate 5 stars to unlock feature" (ban)
-- ❌ Fake reviews from employees/friends (catastrophic ban risk)
-- ❌ Buying reviews from farms (catastrophic ban risk)
+**Forbidden (Apple/Google ban risk):**
+- ❌ Free Pro for ratings
+- ❌ "Rate 5 stars to unlock"
+- ❌ Fake reviews from employees
+- ❌ Review farms
 
 ---
 
-## 8. Competitor ASO Analysis
+## 8. Competitor ASO Analysis (Post-Rescope)
 
-### 8.1 Top-3 competitors App Store состояние
+### 8.1 Re-framed competitive set
 
-| Competitor | Rating | Reviews | Title | Subtitle | Key ASO gaps |
+Post-rescope, competitive frame changes. We're no longer competing с Thumbtack/Angi на "find a pro" — we're adjacent. New competitive lens:
+
+| Competitor | Category | Why they're (not) competing |
+|---|---|---|
+| PictureThis | Photo-AI utility | **Playbook reference**, not direct competitor (plants ≠ homes) |
+| Rock Identifier | Photo-AI utility | **Playbook reference** |
+| Cal AI | Photo-AI utility | **Playbook reference**, food photo AI |
+| TripIt | Infrequent-use utility | **Playbook reference** for retention / annual recap |
+| Thumbtack | Service marketplace | **Adjacent, not competing** — we sit up-funnel |
+| HomeAdvisor | Service marketplace | **Adjacent, not competing** |
+| Angi | Service marketplace | **Adjacent, not competing** |
+| HomeWyse | Cost web calculator | **Direct competitor** для cost-intent, но web-only |
+| iFixit | DIY repair guides | **Partial competitor** (devices, not home) |
+| HomeBinder / Centriq | Home management | **Partial competitor** для maintenance |
+
+### 8.2 Top-5 App Store state (updated April 2026)
+
+| Competitor | Rating | Reviews | Title | Subtitle | ASO gap для FixIt |
 |---|---|---|---|---|---|
-| Thumbtack | 4.8 | 189K | "Thumbtack: Hire Local Pros" | "Find pros for home services" | No "cost" keyword, no photo-input positioning |
-| HomeAdvisor | 4.8 | 480K | "HomeAdvisor: Home Services" | "Find & book trusted pros" | Same generic positioning, no DIY angle |
-| Angi (formerly Angie's List) | 4.7 | 78K | "Angi: Hire Home Pros" | "Home services & reviews" | Conflict between Angi/HomeAdvisor (same parent) |
-| TaskRabbit | 4.8 | 160K | "TaskRabbit - Handyman & More" | "Handyman, mover, cleaner" | No cost-keyword, no AI angle |
-| iFixit | 4.8 | 50K | "iFixit: Repair Manual" | "Fix it yourself with guides" | Different domain (electronics, not home) |
+| PictureThis | 4.8 | 1M+ | "PictureThis: Plant Identifier" | "Identify plants & care tips" | Playbook we copy (photo-AI utility, category own) |
+| Thumbtack | 4.8 | 189K | "Thumbtack: Hire Local Pros" | "Find pros for home services" | Different category — "hire" vs "know" |
+| HomeAdvisor | 4.8 | 480K | "HomeAdvisor: Home Services" | "Find & book trusted pros" | Different category |
+| Angi | 4.7 | 78K | "Angi: Hire Home Pros" | "Home services & reviews" | Different category |
+| iFixit | 4.8 | 50K | "iFixit: Repair Manual" | "Fix it yourself with guides" | Partial overlap — they own electronics, we own home |
 
-### 8.2 PictureThis как precedent (not competitor)
+### 8.3 Why PictureThis is main ASO reference (not Thumbtack)
 
 | | PictureThis | FixIt target |
 |---|---|---|
 | Rating | 4.8 | 4.7+ |
-| Reviews | 1M+ | 5K (Y1) → 50K (Y3) |
+| Reviews | 1M+ | 8K (Y1) → 60K (Y3) |
 | Title | "PictureThis: Plant Identifier" | "FixIt: Home Repair Costs" |
-| Subtitle | "Identify plants & care tips" | "Photo → real price, 60 sec" |
-| Category | Reference (primary) / Lifestyle | Lifestyle > Home Improvement |
+| Subtitle | "Identify plants & care tips" | "Photo repair cost advisor" |
+| Category | Reference (primary) / Lifestyle | Utilities / Lifestyle |
 | Icon | Green leaf on white, minimal | Wrench + spark, warm colors |
+| Freemium | 3 free IDs, paywall after | 3 free estimates, paywall after |
+| Aha moment | Plant ID within 30s of install | Cost estimate within 60-90s |
+| Annual pricing | Heavy discount, annual pre-selected | Heavy discount, annual pre-selected |
 
 **Inheritance from PictureThis playbook:**
-- "[Brand]: [Domain] [Action]" title format — copy
-- Photo-input narrative in subtitle — copy
-- Category leverage (Reference gave them low competition) — adapt (Home Improvement)
-- Freemium trigger after 3 free interactions — copy exactly
-- Annual pricing anchor — copy
+- Photo-AI utility category DNA
+- "[Brand]: [Domain] [Action]" title format
+- Photo-input narrative в subtitle
+- Category positioning away from "services"
+- Freemium 3-free gate
+- Annual pricing anchor
+- In-app review после success moment
 
-### 8.3 Opportunity map
+**Explicitly NOT inheriting from Thumbtack playbook:**
+- "Find [profession] near me" keywords
+- Services category
+- Pro profile UI
+- Booking flows
+- Lead-gen optimization
 
-**Core opportunity:** Ни один home-services конкурент не владеет "cost" keyword в App Store. HomeWyse владеет web, но не app. Это первый 12-18 месяцев — open field для FixIt.
+### 8.4 Rock Identifier / Bird Identifier / Insect Identifier reference
+
+NextVision portfolio — same onboarding / ASO pattern:
+- 2-3 screens intro
+- Camera permission explicit, с priming
+- First photo within 30s install
+- Free 2-3 IDs/week, hard paywall после
+- Reviews avg 4.6-4.7
+
+Validates that **minimal ASO onboarding + clean category = max activation** для photo-AI utility.
+
+### 8.5 TripIt reference (retention side)
+
+TripIt — 3-8 uses/year (similar к FixIt infrequent pattern). ASO learnings:
+- Utility category (not Travel Services)
+- "Itinerary organizer" positioning (noun — what it is), not "Book a trip" (verb — what you do)
+- Calm, organized voice
+- Annual recap email drives massive engagement spike
+
+Per RETENTION-RESEARCH.md §1.2 — TripIt is part of our peer group. ASO voice should follow TripIt (calm, organized, annual rhythm) not Thumbtack (transactional, urgent, marketplace).
+
+### 8.6 Opportunity map (updated)
+
+**Core opportunity:** FixIt sits в **new category de facto** — "photo-AI home repair cost advisor". Ни один player этой category не owns, потому что она не существовала. Open field 12-18 months.
 
 **Specific keyword gaps мы заполняем:**
-- "home repair cost" — #1 possible in 6 months
-- "contractor quote" — #1-3 possible в 3 months (low competition)
-- "DIY estimator" — #1-2 possible (almost no specific apps)
-- "plumber cost" — top-10 possible (competes с Thumbtack но different intent)
 
-**Defensibility:** Once we rank in top-3 для "home repair cost", затем добавляются network effects (reviews → rating → CVR → more downloads → more data → better accuracy → more reviews). Classic ASO flywheel.
+- "home repair cost" — #1-3 possible в 6 months
+- "AI repair advisor" — #1 instantly (category creator)
+- "DIY repair estimate" — #1-2 possible (low competition)
+- "contractor quote check" — instant top-3
+- "home maintenance calendar" — top-5 possible
+- "know repair cost" — top-3 possible
+
+**Defensibility:** Once top-3 для "home repair cost", flywheel activates:
+- Reviews → rating → CVR → more downloads → more AI training data → better accuracy → more reviews
+
+PictureThis moat example: они владеют "plant identification" на 5+ years, competitors не могут displace без 10× better product.
 
 ---
 
-## 9. Localization Strategy
+## 9. Localization Strategy (Updated v2.0 Phasing)
 
-### 9.1 Phase roadmap
+### 9.1 Phased rollout (POST-RESCOPE PHASING)
 
-**Phase 1 (Launch + 6 months): English-first**
-- US (primary) — all metadata US-English
-- UK — separate locale, adjust spelling ("labour", "colour"), currency (GBP), trade terms ("tradesman" vs "handyman")
-- Canada — English CA locale, same as US with minor currency mentions
-- Australia — en-AU, distinct trade ecosystem ("tradie"), Bunnings вместо Home Depot
+**Phase 1 — Launch (months 0-6): English-US MVP**
 
-**Phase 2 (Year 2, month 12-18): Spanish**
+- **US-English only** для launch
+- All metadata US-English
+- Focus: prove unit economics, reach 4.6+ rating, 2500+ reviews
+- No localization work pre-PMF (per CLAUDE.md solo-dev constraints)
+- Reason: multi-locale metadata adds review cycle delays + support burden. Ship, prove, then expand.
+
+**Phase 2 — Post-PMF English markets (months 6-9): UK / AU / CA**
+
+- UK (en-GB) — separate locale, adjust spelling ("labour", "colour"), currency (GBP), trade terms ("tradesman")
+- Australia (en-AU) — distinct trade ecosystem ("tradie"), Bunnings replaces Home Depot
+- Canada (en-CA) — minimal adjustments, closest к US English
+- Expected impact: +20-40% install volume from these locales (AppTweak benchmark)
+- Pricing: local currency via Adapty (automatic)
+
+**Phase 3 — Spanish (v1.5+, months 12+): es-US + es-MX**
+
+- **Spanish triggered by v1.5 release** (post-PMF, not pre)
 - es-US — Latinx US market (60M+ Spanish speakers, ~15M homeowners)
-- es-MX — Mexico expansion (high urbanization, home ownership rising)
-- es-ES — Spain (smaller market but quality signal)
+- es-MX — Mexico expansion (rising urbanization, home ownership)
+- es-ES — Spain (smaller market, quality signal)
+- Expected impact: +80-128% downloads из localized language (AppTweak home utility benchmark)
 
-Expected impact: +128% downloads с local language (AppTweak average for home utility apps). Для Emma's Hispanic sister persona в США — direct unlock.
+**Phase 4 — European high-income (v2.0, months 18+):**
 
-**Phase 3 (Year 2-3): European high-income**
-- pt-BR — Brazil (40M+ homeowners, underserved home repair app market)
-- de-DE — Germany (DIY culture strong, Hornbach/Obi retailers)
-- fr-FR — France (Leroy Merlin, Castorama retailers)
+- pt-BR (Brazil — 40M+ homeowners, underserved)
+- de-DE (Germany — DIY culture strong, Hornbach/Obi retailers)
+- fr-FR (France — Leroy Merlin, Castorama)
 
-**Phase 4 (Year 3+):**
-- Japanese, Korean — different home repair culture (renters dominant, apartment-level repairs)
+**Phase 5 — Japan / Korea (v3.0+):**
+
+- Different home repair culture (renters dominant, apartment-level)
 - Assessment after core English markets saturated
 
-### 9.2 Cross-localization trick
+### 9.2 What's changed vs v1.0 plan
 
-App Store: keywords из одной locale могут индексироваться в другой territory. Это позволяет:
-- Заполнить es-US keywords field русскими или другими keywords, которые часто ищут Hispanic homeowners в США, не теряя английские ranking'и
-- Использовать "-MX" locale для resident immigrants в США, кто переключил App Store region
+v1.0 plan had "UK / CA / AU launch in Year 1" and "Spanish in Year 2" — more aggressive.
 
-(Source: [ASO.dev Cross-Localization Guide](https://aso.dev/metadata/cross-localization/))
+v2.0 plan conservatively sequences:
+- **English-US MVP first** (months 0-6) — prove model before localizing
+- **English expansion only post-PMF** (months 6-9)
+- **Spanish delayed until v1.5+** (months 12+)
+- Rationale: Лана solo-dev constraints per CLAUDE.md. Localization = metadata review cycles + support load + AI prompt adjustments per locale.
 
-### 9.3 Localization beyond text
+### 9.3 Cross-localization trick (unchanged tactic)
 
-**Screenshots per locale:**
-- Currency symbols in price labels ($, £, €, ¥, R$)
-- Retailer logos (Home Depot US, B&Q UK, Bunnings AU)
-- Units (inches vs cm)
-- People in photos (diversity reflecting local demographics)
+App Store позволяет keywords из одной locale индексироваться в другой territory. Это tactic применим позже:
+- es-US keywords field может содержать both Spanish и English queries
+- "-MX" locale для resident immigrants в US, кто switched App Store region
 
-**Category names:**
+Source: [ASO.dev Cross-Localization Guide](https://aso.dev/metadata/cross-localization/)
+
+### 9.4 Localization beyond text
+
+**Screenshots per locale (phase 2+):**
+
+- Currency в prices ($, £, €, R$)
+- Retailer logos (Home Depot US, B&Q UK, Bunnings AU, Hornbach DE)
+- Units (inches / cm)
+- People reflecting local demographics
+
+**Category names adjustment:**
+
 - US: "home repair"
-- UK: "home improvements" (more common)
+- UK: "home improvements" (more common term)
 - AU: "home maintenance"
-- Adjust keyword fields accordingly per locale
+
+Adjust keyword fields per locale accordingly.
 
 ---
 
-## 10. App Store Featured Strategy
+## 10. App Store Featured Strategy (Pitch Positioning Updated)
 
 ### 10.1 "New Apps We Love" target (Apple Editorial)
 
-Apple Editorial отбирает ~5-10 apps/week для New Apps We Love slot. Selection criteria (unofficial but consistent):
-- Polished launch (few bugs, complete feature set)
-- Clear value prop communicated visually
-- Editorial-friendly story (founders with narrative, unique technical approach)
-- High initial reviews (>4.5 avg при 50+ reviews in first 2 weeks)
-- Not me-too (must have differentiation)
+**Revised pitch angle post-rescope:**
 
-**Submission protocol:**
-1. **T-6 weeks pre-launch:** Email `editor@apple.com` (это не gated) + через App Store Connect "Featured Nomination" form
+v1.0 pitch: "First AI home repair advisor combining photo-input + real-time regional pricing + three-path decision support + pro marketplace"
+
+v2.0 pitch: **"First AI home repair advisor — photo-input, three priced routes, no marketplace. The PictureThis for home repairs."**
+
+Apple Editorial отбирает ~5-10 apps/week для New Apps We Love. Criteria:
+- Polished launch
+- Clear value prop, visually communicated
+- Editorial-friendly story
+- High early reviews (>4.5 @ 50+ reviews in 2 weeks)
+- Not me-too (differentiation)
+
+**Submission protocol (updated для v2.0):**
+
+1. **T-6 weeks pre-launch:** Email `editor@apple.com` + App Store Connect "Featured Nomination" form
 2. **Материалы:**
-   - 2-min founder video (Лана explains vision)
+   - 2-min founder video (Лана + Amanda explain vision) — emphasize "pure advisor, not marketplace" as unique angle
    - Press kit (screenshots in 3 resolutions, press releases)
    - Beta access codes для editors
-   - Unique angle statement: "First AI home repair advisor to combine photo-input + real-time regional pricing + three-path decision support"
-3. **Beta quality gate:** Minimum 100 beta users с 4.5+ avg rating внутри TestFlight
-4. **Timing:** Submit 3-4 weeks before intended launch date. Apple turnaround 2-3 weeks.
+   - **Unique angle statement:** "FixIt is the first AI home repair advisor. We answer the question every homeowner asks before panicking: 'how much will this cost?' We're not a marketplace — we don't earn from sending you to a pro. We earn from helping you decide. Photo-in, three priced routes out, 60 seconds. Works without signup."
+3. **Beta quality gate:** 100 beta users с 4.6+ avg rating в TestFlight
+4. **Timing:** Submit 3-4 weeks before launch date. Apple turnaround 2-3 weeks.
+
+**Why "PictureThis for home repairs" pitch works:**
+- Editors понимают PictureThis success ($200M ARR)
+- Translates instantly — same mechanics, different domain
+- Removes marketplace positioning ambiguity
+- Positions us in photo-AI utility category (Apple editors love this segment)
 
 ### 10.2 Google Play Editor's Choice
 
-Google Play Featured selection — through Play Console → Store Presence → Feature Opportunity nomination.
+Google Play Featured selection через Play Console → Store Presence → Feature Opportunity.
 
 Criteria:
-- Quality Metric score >85 в Play Console (retention, crash rate, ANR rate)
-- Material Design 3 adherence (mostly)
-- Strong early engagement (D1 retention >40%, D7 >25%)
+- Quality Metric score >85 (retention, crash, ANR rate)
+- Material Design 3 adherence
+- Strong early engagement (D1 >40%, D7 >25%)
 - Unique functionality
 
 Target slot: "Editor's Choice" (evergreen) OR "New + Updated Apps" (weekly).
 
-### 10.3 Apple Search Ads launch support
+### 10.3 Apple Search Ads launch support (updated CPT expectations)
 
-Even с Editorial feature, paid ASA push на launch critical:
-- $5K/week first 4 weeks
-- Target keywords: "home repair cost", "fix it yourself", "plumber cost"
-- CPT target: $0.80-$1.50
-- Use Discovery campaigns (Apple auto-targets) for 30% budget
+Даже с Editorial feature, paid ASA push critical:
+
+- **$3-5K/week first 4 weeks** (conservative given solo-dev budget)
+- Target keywords: "home repair cost", "AI repair advisor", "DIY repair estimate", "fix it yourself", "plumber cost"
+- **CPT target: $0.80-$1.20** (lower than v1.0 $1.50 target because our category less competitive than marketplace — Thumbtack/Angi outbid us on "find a pro" keywords, но мы на них и не bid)
+- Discovery campaigns (Apple auto-targets) для 30% budget
 - Exact + Search Match mix для rest
 
-Expected: 2,000-4,000 incremental installs в первый месяц, seeding rating/review baseline.
+Expected: 1500-3000 incremental installs первый месяц, seeding rating/review baseline.
 
 ---
 
-## 11. Retention as ASO Factor (2026 critical)
+## 11. Retention as ASO Factor (2026 Critical, Updated)
 
-### 11.1 Почему это важно
+### 11.1 Почему это matters even more после rescope
 
-Per ASOMobile: **"Google switched from install volume to retention as primary ranking signal in 2025. Teams which missed this lost rankings."** Apple следует с задержкой 6 месяцев — но тоже смещает.
+Per ASOMobile: "Google switched от install volume к retention as primary ranking signal в 2025. Teams которые missed this lost rankings." Apple follows with 6-month lag.
 
-Retention directly drives ASO на 2026 год. Чистые скачивания с bad retention = ranking decline.
+**Post-rescope, retention stakes even higher:** без marketplace re-engagement (no "your pro" push), retention entirely depends на value compounding в app (saved projects + savings counter + seasonal push). Per RETENTION-RESEARCH.md §2 — WEPA + QAR are our north stars. ASO rankings directly benefit from healthy retention curves.
 
-### 11.2 Retention-driving features for ASO
+### 11.2 Retention-driving features с double-duty (retention + ASO)
 
-Feature roadmap с double-duty (retention + ASO):
+Feature roadmap updated per RETENTION-RESEARCH.md:
 
-- **Savings tracker** (Frame 5 screenshot) — users возвращаются posted actual savings. D30 retention boost +15%.
-- **Home profile** (Year 2) — persistent digital twin creates reason to return
-- **Seasonal push notifications** (per TARGET-AUDIENCE.md) — "Spring home check" March, "Winter prep" October. D90 re-engagement.
-- **"$100 saved" milestones** — push notification + in-app celebration. Recurring hit.
-- **Weekly "home health" summary** email (opt-in) — ongoing touchpoint
+- **Savings tracker** (Frame 5 screenshot) — users возвращаются посмотреть actual savings. D30 retention boost +15%.
+- **Save-to-My-Home default ON** (per RETENTION §3.2) — every estimate auto-saves. Compounds switching cost.
+- **Seasonal push notifications** (4/year per RETENTION §4) — "Spring check-in — 3 fixes worth knowing about". D90 re-engagement.
+- **Savings anniversary** — "Your savings crossed $500 this year" (RETENTION §5.5). Annual engagement spike.
+- **Home maintenance calendar** (v1.5) — HVAC filter / gutters / smoke alarm reminders. Retention hook.
 
-### 11.3 Target retention per ASO
+### 11.3 Removed retention features (post-rescope)
+
+These were в v1.0 plan, gone:
+
+- ❌ "New pros в your area" push — no pros
+- ❌ "Pro availability update" push — no tracking
+- ❌ "Rate your pro experience" push — no intermediary
+- ❌ Pro re-engagement email — no pro infrastructure
+
+### 11.4 Target retention per ASO (updated)
 
 | Metric | Launch target | Year 1 target | Impact on ASO |
 |---|---|---|---|
-| D1 retention | 45% | 55% | Google Play ranking weight 20% |
-| D7 retention | 25% | 35% | Apple ranking weight 15% |
-| D30 retention | 15% | 25% | Apple ranking weight 25% |
-| W4 retention | 15% | 25% | High signal для both stores |
+| D1 retention | 35% | 45% | Google Play ranking weight 20% |
+| D7 retention | 20% | 30% | Apple ranking weight 15% |
+| D30 retention | 15% | 22% | Apple ranking weight 25% |
+| D90 retention | 20% | 25% | Critical signal |
+| W4 retention | 30% | 40% | High signal for both stores |
+| Annual retention | 25% | 32% | Long-tail retention flag |
+
+Per RETENTION-RESEARCH.md §2.1 WEPA target 0.25 by month 6, QAR 50% month 6 → 65% Y1.
 
 ---
 
-## 12. Ratings Paid Boost (ethical / allowed)
+## 12. Ratings Paid Boost (Ethical / Allowed)
 
-Не покупаем fake reviews. Но есть legal ways accelerate organic reviews:
+### 12.1 Allowed tactics (unchanged)
 
-### 12.1 Allowed tactics
+- **In-app prompts** post-DIY success (см. §7.1) — PRIMARY engine
+- **Post-savings-milestone email** к активированным users asking for rating (no reward)
+- **Referral program** — sharing friends → organic install → more reviews
+- **PR coverage** — TechCrunch / Lifehacker / home improvement media → spike в downloads → reviews
+- **Influencer partnerships** — TikTok/YouTube creators (disclosed #ad)
+- **Community building** — Reddit r/HomeImprovement AMA, Discord/Slack community
 
-- **In-app prompts** post-positive experience (см. §7.1)
-- **Email campaigns** к активированным users asking for rating — NO incentive
-- **Referral program** — sharing friends organically exposes app → more reviews
-- **PR coverage** — tech blogs, home improvement media → spike в downloads → more reviews
-- **Influencer partnerships** — TikTok/YouTube creators review app publicly (disclosed #ad), their audience rates
-- **Community building** — Reddit AMA, Discord/Slack community. Active users more likely to review.
+### 12.2 Forbidden (unchanged)
 
-### 12.2 Forbidden tactics
-
-- ❌ Review farms (GrowMojo, AppReviewer.com style) — easy to detect, ban
+- ❌ Review farms (GrowMojo, AppReviewer etc.) — easy to detect, ban
 - ❌ Employee reviews from personal accounts — traceable
-- ❌ "Rate us for premium" — Apple immediate ban
-- ❌ Swapping reviews with other apps — detected by Apple's graph analysis
-- ❌ Astroturfing — fake organic praise from fake accounts
+- ❌ "Rate us for premium" — immediate ban
+- ❌ Swapping reviews с other apps — detected by Apple graph analysis
+- ❌ Astroturfing — fake praise
 
 ### 12.3 Referral incentive structure
 
-Per TARGET-AUDIENCE.md: "Value exchange: Emma получает 1 free month, friend получает 1 free month при subscribe."
+Per RETENTION-RESEARCH.md §5.3 — viral hook = "I saved $X with FixIt". Referral program side benefit for ASO:
+- Value exchange: referrer gets 1 free month, friend gets 1 free month upon subscribe
+- Referred users convert higher (pre-qualified)
+- Rate higher (primed с savings story)
+- Re-engage more
 
-Side benefit для ASO: referred users convert higher, rate higher (pre-qualified), re-engage more. Это double-duty.
+Double-duty tactic.
 
 ---
 
-## 13. ASO Testing Roadmap
+## 13. ASO Testing Roadmap (Updated Cadence)
 
-### 13.1 Первый год: testing cadence
+### 13.1 First year testing cadence
 
 | Month | Test | Tool | Success criterion |
 |---|---|---|---|
-| 1 | Baseline establish | Native analytics | Stable metrics captured |
-| 2 | Icon A/B (Variant A vs B) | PPO + Store Listing Exp | CTR boost >5%, CVR stable |
-| 3 | Screenshot Frame 1 caption (3 variants) | PPO | CVR boost >10% |
-| 4 | Screenshot order (current vs alternative) | PPO | CVR boost >8% |
-| 5 | Subtitle test (current vs "Fix it yourself or hire a pro") | Keyword change, re-submit | Ranking boost на secondary keywords |
-| 6 | Locale expansion test (UK vs US metadata) | New locale submission | Install volume UK |
-| 8 | Description opening line test | PPO + hold-out | CVR page-bottom |
-| 10 | Video preview vs no video | PPO | CVR boost 10-30% |
-| 12 | Full metadata refresh с accumulated data | Retest all | Aggregate boost |
+| 1 | Baseline establish | Native analytics + AppTweak | Metrics captured |
+| 2 | Icon A/B (Variant A wrench vs B house) | PPO + Store Listing Exp | CTR +5%, CVR stable |
+| 3 | Screenshot Frame 1 caption (3 variants — POSITIONING taglines) | PPO | CVR +10% |
+| 4 | Screenshot order (problem→magic→guide vs problem→magic→savings) | PPO | CVR +8% |
+| 5 | Subtitle test (current vs `Know repair cost in 60 sec`) | Keyword change + resubmit | Keyword ranking + CVR |
+| 6 | UK locale launch test — metadata A/B vs US | New locale | UK install volume baseline |
+| 8 | Description opening line test | PPO + hold-out | Page-bottom CVR |
+| 10 | Video preview vs no video | PPO | CVR +10-30% |
+| 12 | Full metadata refresh basis accumulated data | Retest all | Aggregate boost |
 
 ### 13.2 Minimum sample size per test
 
-Per SplitMetrics: 500+ visitors/variant minimum, 100+ conversions/variant critical.
+Per SplitMetrics: 500+ visitors/variant, 100+ conversions/variant critical.
 
-Для FixIt launch с expected 2000 daily visitors:
-- 2-variant test: 7-10 days minimum
-- 3-variant test: 14 days minimum
-- Включая buffer для weekend/weekday variance
+Для FixIt launch с expected ~1500 daily visitors в month 1-3:
 
-### 13.3 What NOT to test at once
+- 2-variant test: 10-14 days minimum
+- 3-variant test: 18-21 days minimum
+- Includes buffer для weekday/weekend variance
 
-One element per test. Multiple simultaneous tests destroy attribution. Scheduling > parallelism.
+### 13.3 Discipline: one element per test
+
+Multiple simultaneous tests destroy attribution. Scheduling > parallelism.
 
 ---
 
-## 14. Keyword Ranking Goals
+## 14. Keyword Ranking Goals (Updated для v2.0)
 
 ### 14.1 Q1 post-launch (3 months)
 
 | Keyword | Target rank | Rationale |
 |---|---|---|
 | home repair cost | Top-10 | Core keyword, moderate competition |
-| fix it yourself app | Top-5 | Lower competition, direct brand match |
-| DIY estimator | Top-3 | Low competition, niche keyword |
+| AI repair advisor | **Top-3** | Category creator, low competition |
+| fix it yourself app | Top-5 | Direct brand match, low-med competition |
+| DIY repair estimate | Top-5 | Low competition, niche |
 | contractor quote check | Top-3 | Minimal competition, high intent |
-| home maintenance app | Top-15 | Competitive, will gradually rise |
+| home maintenance app | Top-15 | Competitive, gradual rise |
+| know repair cost | Top-5 | Brand match, low volume but relevant |
 
 ### 14.2 Q2 (6 months)
 
 | Keyword | Target rank |
 |---|---|
 | home repair cost | Top-5 |
+| AI repair advisor | **#1-2** |
 | plumber cost | Top-10 |
 | electrician price | Top-10 |
-| contractor quote | Top-5 |
+| contractor quote | Top-3 |
 | home improvement calculator | Top-10 |
 | repair cost guide | Top-5 |
+| home maintenance calendar | Top-10 |
 
 ### 14.3 Year 1 end
 
 | Keyword | Target rank |
 |---|---|
-| home repair cost | Top-3 |
+| home repair cost | **Top-3** |
+| AI repair advisor | **#1** |
 | fix it yourself | Top-3 |
-| DIY estimator | #1 |
-| contractor quote check | #1 |
+| DIY repair estimate | **#1** |
+| contractor quote check | **#1** |
 | plumber cost estimator | Top-5 |
 | home maintenance app | Top-10 |
+| home maintenance calendar | Top-5 |
+| know repair cost | **#1-2** |
 | 15+ long-tail keywords | #1 |
 
 ### 14.4 Tracking methodology
@@ -903,60 +1187,89 @@ One element per test. Multiple simultaneous tests destroy attribution. Schedulin
 - **Tool:** AppTweak OR SensorTower Keyword Intelligence
 - **Cadence:** Weekly review, monthly deep dive
 - **Alerts:** >3-position drop в any tracked keyword → investigation
-- **Correlation:** align keyword rank с metadata changes to isolate causation
+- **Correlation:** align keyword rank changes с metadata changes (isolate causation)
 
 ---
 
-## 15. Custom Product Pages (CPP) — 2026 opportunity
+## 15. Custom Product Pages (CPP) — Updated для v2.0
 
-### 15.1 Что это
+### 15.1 What it is
 
-Apple feature (since 2022, keyword indexing added July 2025): можно создать до 70 отдельных CPP для одного app. Каждая CPP имеет unique URL, unique screenshots, unique promo text, unique keyword linking. Google Play эквивалент — через UAC campaigns.
+Apple feature (2022+, keyword indexing added July 2025): до 70 CPP per app. Каждая CPP — unique URL, unique screenshots, unique promo text, unique keyword linking. Google Play эквивалент через UAC campaigns.
 
-### 15.2 FixIt CPP plan
+### 15.2 FixIt CPP plan (post-rescope, 4 CPPs)
 
-**CPP-1: "Cost Validator" (for Sarah persona)**
-- URL: fixit.app/quote-check
-- Keywords linked: "contractor quote check", "is my quote fair", "fair price"
-- Screenshots: Frame 4 (quote validation) → Frame 2 (three options) → Frame 5 (savings)
-- Promo text: "Contractor quoted too much? FixIt tells you the fair price for YOUR zip in 10 seconds."
+**CPP-1: "Cost Discovery" (Emma primary)**
+- URL: fixit.app/cost
+- Keywords linked: "home repair cost", "know repair cost", "repair estimate"
+- Screenshots: Frame 1 (problem) → Frame 2 (three options) → Frame 5 (savings)
+- Promo text: "Know the price before the panic. AI advisor, photo-input, three priced routes — for YOUR zip. In 60 seconds."
 
-**CPP-2: "DIY Planner" (for Mike persona)**
+**CPP-2: "DIY Planner" (Mike persona)**
 - URL: fixit.app/diy
-- Keywords linked: "DIY estimator", "fix it yourself", "shopping list"
-- Screenshots: Frame 3 (shopping list) → Frame 6 (categories) → Frame 2 (three options)
-- Promo text: "Plan your DIY project: materials, tools, time, cost. All from one photo."
+- Keywords linked: "DIY repair estimate", "fix it yourself", "DIY home repair"
+- Screenshots: Frame 3 (DIY guide) → Frame 4 (shopping list) → Frame 2 (three options)
+- Promo text: "AI-generated DIY guide for YOUR problem. Shopping list, tool check, step-by-step. From one photo."
 
-**CPP-3: "First-time Homeowner" (for Emma primary)**
-- URL: fixit.app/new-homeowner
-- Keywords linked: "first time homeowner", "home repair cost", "home maintenance app"
-- Screenshots: Frame 1 (problem) → Frame 2 (magic) → Frame 5 (savings)
-- Promo text: "New to homeownership? FixIt is the app 50,000+ first-time owners use before calling any contractor."
+**CPP-3: "Quote Validator" (Sarah persona)**
+- URL: fixit.app/quote-check
+- Keywords linked: "contractor quote check", "is my quote fair", "fair repair price"
+- Screenshots: Frame 2 (three options с "Pro range" highlighted) → Frame 5 (savings) → Frame 1 (problem)
+- Promo text: "Got a contractor quote? Check if it's fair. AI compares to market range for YOUR zip. Takes 10 seconds."
+
+**CPP-4: "Home Maintenance" (retention / seasonal — NEW в v2.0)**
+- URL: fixit.app/maintenance
+- Keywords linked: "home maintenance calendar", "home maintenance app", "seasonal home check"
+- Screenshots: Frame 5 (savings + seasonal widget) → Frame 6 (categories) → Frame 2 (three options)
+- Promo text: "Seasonal home health in your pocket. Spring, summer, fall, winter — know what's due, what it costs, DIY or pro."
+
+**Changes vs v1.0 CPP plan:**
+- ❌ v1.0 CPP-3 "First-time Homeowner" — general positioning, replaced with specific CPP-4 maintenance (more targeted, retention-driving)
+- ✅ Four CPPs instead of three — wider targeting under cleaner positioning
 
 ### 15.3 CPP benchmarks
 
-- Average CVR boost from CPP: **+5.9%** (generic) / **+8.6%** (for paid campaigns)
-- US + UK only initially (Apple limitation — может измениться)
-- CPPs not extending keyword index — can only use words already in keywords field
+- Average CVR boost from CPP: **+5.9%** (generic) / **+8.6%** (paid campaigns)
+- US + UK only initially (Apple limitation)
+- CPPs cannot extend keyword index — only use words already в keywords field
 
 ---
 
-## 16. ASO-to-paid synergy
+## 16. ASO-to-Paid Synergy (Updated CPT Expectations)
 
 ### 16.1 Apple Search Ads + ASO
 
-ASO rankings directly feed ASA CPT:
-- Top-3 organic rank → ASA CPT discount 25-40% (Apple's own machine rewards relevancy)
-- Organic rank + paid ASA impression = double-dip в search results → CTR boost
-- ASA data feeds ASO: see which keywords converting organically vs не → adjust keywords field
+ASO rankings feed ASA CPT:
+- Top-3 organic rank → ASA CPT discount 25-40% (Apple's machine rewards relevancy)
+- Organic rank + paid ASA = double-dip в search results → CTR boost
+- ASA data feeds ASO: see which keywords converting organically → adjust
 
-**Launch budget:** $5K/mo ASA first 3 months, scale with unit economics.
+**Launch budget:** $3-5K/mo ASA first 3 months (conservative, solo-dev), scale с unit economics.
+
+**Updated CPT expectations vs v1.0:**
+- Our new keywords ("home repair cost", "AI repair advisor") less competitive than marketplace keywords
+- Thumbtack/Angi/HomeAdvisor NOT bidding на our cluster (different intent)
+- Expected CPT $0.80-$1.20 vs v1.0 $1.50+ estimate
+- Lower CAC helps unit economics
 
 ### 16.2 TikTok/Instagram → App Store landing
 
-When users click TikTok ad → landing на App Store page. If ASO is weak (bad screenshots, low rating, no clear value prop), they bounce.
+User clicks TikTok ad → landing on App Store page. Weak ASO (bad screenshots, low rating, unclear positioning) = bounce.
 
-Checkpoint: ASO page CVR > 25% (category average for Home Improvement). Below — fix ASO before scaling paid.
+Checkpoint: ASO page CVR > 28% (Utilities category average). Below — fix ASO before scaling paid.
+
+**Ad copy must match ASO landing:**
+- TikTok ad: "Plumber quoted $800. FixIt said $15 DIY."
+- ASO landing: Frame 1 "Know the price before the panic." + Frame 2 three-option display
+- Ad promise === App Store promise === first-session delivery
+
+### 16.3 New paid channel consideration
+
+Post-rescope, new paid channel eligible:
+- **Reddit r/HomeImprovement / r/FirstTimeHomeBuyer** — our target demographic, advisor positioning matches Reddit voice (not salesy)
+- **Home improvement podcasts** — FixIt as sponsor fits "calm authority" POSITIONING §7
+
+Not for v1.0 launch, but queue for month 3+ post-rating establishment.
 
 ---
 
@@ -965,30 +1278,30 @@ Checkpoint: ASO page CVR > 25% (category average for Home Improvement). Below �
 ### 17.1 Weekly ASO dashboard
 
 Track:
-- Keyword rank position (top 20 tracked keywords)
+- Keyword rank position (top 20 tracked)
 - Organic downloads (vs paid, geo-sliced)
 - Conversion rate (store page visit → install)
 - Rating avg (7-day rolling)
 - Review count (new per week)
 - Review sentiment (1-5 star distribution)
-- Impression vs install funnel
+- Impression → install funnel
 
 Tool stack:
 - **AppTweak** — primary ASO intelligence ($99-299/mo)
-- **App Store Connect** native analytics (free)
+- **App Store Connect** native (free)
 - **Google Play Console** (free)
-- **SplitMetrics** — A/B tests ($200-1000/mo depending tier)
+- **SplitMetrics** — A/B tests ($200-1000/mo)
 - **Appfigures** — review aggregation + sentiment ($99/mo)
 
-Total monthly ASO stack cost: ~$500-1500/mo.
+Total stack cost: ~$500-1500/mo.
 
 ### 17.2 Monthly deep review
 
-- Keyword performance review (which gaining/losing)
-- Metadata iteration (if needed)
-- Review response audit (are we responding 100%, within 24h?)
+- Keyword performance (gaining / losing)
+- Metadata iteration
+- Review response audit (100% responses within 24h?)
 - CPP performance breakdown
-- Competitor metadata changes (new features?)
+- Competitor metadata changes (feature updates?)
 - Localization expansion check
 
 ### 17.3 Quarterly strategic review
@@ -996,108 +1309,115 @@ Total monthly ASO stack cost: ~$500-1500/mo.
 - Roadmap update для ASO testing
 - Localization phase gate decision
 - Budget reallocation ASA vs organic investment
-- New category/positioning consideration
+- New category / positioning consideration
 
 ---
 
-## 18. Risks & Mitigations
+## 18. Risks & Mitigations (Updated для v2.0)
 
 ### 18.1 Keyword ranking risks
 
 | Risk | Probability | Impact | Mitigation |
 |---|---|---|---|
-| Thumbtack adds AI photo feature | Medium | High | Our photo-input + 3-option framing = deeper moat, не только keywords |
-| HomeWyse launches mobile app | Low-medium | High | They haven't innovated в 5 years. Window still open. We launch в 6 months. |
-| Home Depot / Lowe's launches own advisor | Low | Very high | Partnership angle: be partner не конкурент. Affiliate revenue alignment. |
-| Apple policy change on AI apps | Low | Medium | Follow Apple guidelines strictly, disclaimers rigorous |
+| Thumbtack adds AI photo feature competing с us | Medium | High | Our photo + three-option + advisor positioning = deeper moat, не только keywords |
+| HomeWyse launches mobile app | Low-medium | High | They haven't innovated 5 years. Window still open. Launch в 6 months. |
+| Home Depot / Lowe's launches own advisor app | Low | Very high | They're retail, not AI utility. Partnership angle instead of competition. |
+| Apple policy change на AI apps | Low | Medium | Follow Apple guidelines strictly, disclaimers rigorous |
 | Google Play algorithm update | Medium | Medium | Diversify keyword strategy, retention-focused features |
 
-### 18.2 Rating risks
+### 18.2 Rating risks (updated)
 
 | Risk | Probability | Impact | Mitigation |
 |---|---|---|---|
 | Initial launch bug → 1-star reviews | High | High | 100+ beta testers, gradual rollout, rapid response team |
-| AI accuracy failure → bad reviews | Medium | High | Clear disclaimer "best estimate, not guarantee" + human fallback escalation |
-| Paywall backlash | Medium | Medium | Free tier generous (3/mo), transparent pricing, no dark patterns |
-| Competitor review bombing | Low | Medium | Monitor weekly, flag to Apple/Google if patterns detected |
+| AI accuracy failure → bad reviews | Medium | High | Clear disclaimer "AI estimates ±25%, not guarantee" + graceful fallback |
+| Paywall backlash | Medium | Medium | Free tier generous (3/mo), transparent pricing, no dark patterns per PAYWALL-RESEARCH.md |
+| Competitor review bombing | Low | Medium | Weekly monitoring, flag patterns to Apple/Google |
+| **User expects marketplace, gets advisor** | **Medium (post-rescope critical)** | **High** | **Strict ASO discipline — no "find pro" copy anywhere, clean positioning from search → install → first session** |
 
-### 18.3 Localization risks
+### 18.3 Localization risks (updated for conservative phasing)
 
 | Risk | Probability | Impact | Mitigation |
 |---|---|---|---|
-| Translation errors → low UK/AU ratings | Medium | Medium | Native speaker review, не AI translation sans review |
-| Retailer integration не ready в new locale → bad UX | High | Medium | Localize metadata gradually, product readiness gates |
+| Translation errors → low UK/AU ratings | Medium | Medium | Native speaker review, no raw AI translation |
+| Per-locale AI prompt accuracy drops (different trade terms, prices) | High | Medium | Per-locale prompt tuning, beta test 50+ users per locale before full launch |
+| Support load overwhelms solo-dev при multi-locale | High | Medium | **Phased rollout per §9.1** — English markets first 6 months |
 
 ---
 
 ## 19. Related Docs
 
-- [TARGET-AUDIENCE.md](../02-product/TARGET-AUDIENCE.md) — Emma search behavior, media consumption patterns, activation triggers
-- [COMPETITOR-ANALYSIS.md](../01-research/COMPETITOR-ANALYSIS.md) — competitor App Store presence, positioning gaps
-- [PRODUCT-VISION.md](../02-product/PRODUCT-VISION.md) — elevator pitch как foundation для description
-- ONBOARDING-RESEARCH.md (будет) — post-install flow, influencing rating/retention
-- PAYWALL-RESEARCH.md (будет) — pricing framing, trial structure, paywall copy
-- RETENTION-RESEARCH.md (будет) — D30/D90 mechanisms, seasonal re-engagement
+- [POSITIONING.md](../02-product/POSITIONING.md) — USP, voice, category positioning (foundation для all ASO copy)
+- [FEATURES.md](../02-product/FEATURES.md) — Feature #6 (Find a Pro deeplink, not marketplace)
+- [MONETIZATION.md](../02-product/MONETIZATION.md) — pricing copy для long description
+- [ONBOARDING-RESEARCH.md](./ONBOARDING-RESEARCH.md) — post-install flow (ASO promise → onboarding delivery)
+- [PAYWALL-RESEARCH.md](./PAYWALL-RESEARCH.md) — pricing framing, paywall copy (consistency)
+- [RETENTION-RESEARCH.md](./RETENTION-RESEARCH.md) — retention features как ASO ranking factors
+- [USER-PERSONAS.md](../01-research/USER-PERSONAS.md) — Emma / Mike / Sarah для CPP targeting
+- [COMPETITOR-ANALYSIS.md](../01-research/COMPETITOR-ANALYSIS.md) — competitor App Store presence
 
 ---
 
-## 20. ASO-чеклист для FixIt при запуске
+## 20. ASO Checklist for FixIt Launch
 
-### Приоритет 1 (до публичного launch, weeks -4 to 0):
+### Приоритет 1 (до публичного launch, weeks -4 to 0)
 
-- [ ] Title + subtitle финализированы с keyword weighting (см. §2)
-- [ ] Keywords field 100 chars заполнен (см. §2.3)
-- [ ] Google Play title + short description готовы
-- [ ] 6-8 скриншотов с benefit captions (см. §4)
-- [ ] Разные screenshots для App Store vs Google Play
-- [ ] App icon variant A готов + variant B как backup для A/B
-- [ ] Long description iOS + long description Google Play
-- [ ] Privacy policy + ToS опубликованы (App Store требование)
-- [ ] Submission к Apple Editorial с press kit (T-3 weeks)
+- [ ] Title + subtitle finalized с new positioning (title `FixIt: Home Repair Costs`, subtitle `Photo repair cost advisor`)
+- [ ] Keywords field 100 chars — updated per §2.3 (drop "contractor", add "maintenance")
+- [ ] Google Play title + short description updated (`FixIt - Home Repair Cost AI` + "Snap a photo. Know the repair cost in 60 sec...")
+- [ ] 6 screenshots shipped с new captions и NO pro profile cards
+- [ ] Different screenshots for App Store vs Google Play
+- [ ] App icon variant A (wrench + spark) + B backup ready
+- [ ] Long description iOS + Google Play updated (remove "pro match" language, add "advisor, not marketplace" section)
+- [ ] **Category set to Utilities (primary) + Lifestyle (secondary)** — changed from v1.0
+- [ ] Privacy policy + ToS published
+- [ ] Submission к Apple Editorial с "PictureThis for home repairs" pitch angle (T-3 weeks)
 - [ ] Google Play Featured nomination submitted
-- [ ] 100 beta testers с 4.5+ avg rating в TestFlight
+- [ ] 100 beta testers с 4.6+ avg rating в TestFlight
+- [ ] **Audit: no "find a pro" / "marketplace" / "trusted contractors" / "pro match" copy anywhere** (manual review)
 
-### Приоритет 2 (first month post-launch):
+### Приоритет 2 (first month post-launch)
 
-- [ ] App Preview video (15-30 sec) создан и загружен
-- [ ] In-app review prompts настроены per §7.1
-- [ ] Apple Search Ads кампании launched ($5K/month)
-- [ ] Daily monitoring keyword positions (top 20 tracked)
-- [ ] Review response system ready — goal 100% responses within 24h
+- [ ] App Preview video (15-30 sec) — photo → AI → three options → savings
+- [ ] In-app review prompts настроены per §7.1 (primary trigger: DIY success)
+- [ ] Apple Search Ads campaigns launched ($3-5K/month on new keyword cluster)
+- [ ] Daily monitoring keyword positions (top 20 tracked including "AI repair advisor")
+- [ ] Review response system — 100% within 24h
 - [ ] First A/B test spec'd: icon A vs B
 
-### Приоритет 3 (months 2-3):
+### Приоритет 3 (months 2-3)
 
-- [ ] PPO first tests завершены (icon, screenshot frame 1)
-- [ ] 50+ reviews accumulated, 4.5+ avg confirmed
-- [ ] CPP-1 (Cost Validator) launched
+- [ ] PPO first tests completed (icon, screenshot Frame 1 caption — POSITIONING taglines)
+- [ ] 300+ reviews accumulated, 4.6+ avg confirmed
+- [ ] CPP-1 (Cost Discovery) launched
 - [ ] Weekly keyword ranking report automated
 - [ ] Seasonal content push ready (depending on launch month)
 
-### Приоритет 4 (months 4-6):
+### Приоритет 4 (months 4-6)
 
-- [ ] CPP-2 + CPP-3 launched
+- [ ] CPP-2 (DIY Planner) + CPP-3 (Quote Validator) + CPP-4 (Home Maintenance) launched
 - [ ] UK locale metadata submitted
 - [ ] Canada + Australia secondary submissions
 - [ ] Video preview A/B test results
 - [ ] Referral program driving reviews organically
 - [ ] Full metadata refresh basis accumulated data
 
-### Приоритет 5 (months 6-12):
+### Приоритет 5 (months 6-12)
 
-- [ ] 5,000+ reviews, 4.7+ avg achieved
-- [ ] Spanish localization launched
+- [ ] 8,000+ reviews, 4.7+ avg achieved
+- [ ] **Top-3 ranking для "home repair cost" confirmed**
+- [ ] **#1 ranking для "AI repair advisor" confirmed**
+- [ ] Spanish localization prep (v1.5)
 - [ ] CPP network expanded to 10+
-- [ ] Top-3 ranking для "home repair cost" confirmed
-- [ ] ASO-ASA integration optimized (CPT reducing)
-- [ ] Competitor monitoring report monthly
+- [ ] ASO-ASA integration optimized (CPT reducing to $0.80 range)
+- [ ] Competitor monitoring monthly report
 
 ---
 
-## 21. Источники
+## 21. Sources
 
-1. [ASOMobile: ASO in 2026 Complete Guide](https://asomobile.net/en/blog/aso-in-2026-the-complete-guide-to-app-optimization/)
-2. [Phiture: ASO Trends in 2026](https://phiture.com/blog/aso-trends-in-2026/)
+1. [ASOMobile: ASO в 2026 Complete Guide](https://asomobile.net/en/blog/aso-in-2026-the-complete-guide-to-app-optimization/)
+2. [Phiture: ASO Trends в 2026](https://phiture.com/blog/aso-trends-in-2026/)
 3. [AppTweak: ASO Best Practices 2026](https://www.apptweak.com/en/aso-blog/app-store-optimization-aso-best-practices)
 4. [Appalize: Ratings Impact on Downloads](https://www.appalize.com/da/blog/app-marketing/app-store-ratings-impact-on-downloads-data-driven-analysis)
 5. [Adapty: App Store Conversion Rate 2026](https://adapty.io/blog/app-store-conversion-rate/)
@@ -1118,11 +1438,15 @@ Total monthly ASO stack cost: ~$500-1500/mo.
 20. [AppTweak: App Store Localization](https://www.apptweak.com/en/aso-blog/guide-to-app-store-localization)
 21. [Apple Search Ads Advanced](https://searchads.apple.com/advanced)
 22. [Google Play Store Listing Experiments](https://support.google.com/googleplay/android-developer/answer/6227309)
-23. [Thumbtack App Store listing analysis, April 2026](https://apps.apple.com/us/app/thumbtack-find-pros/id469850199)
-24. [HomeAdvisor App Store listing analysis, April 2026](https://apps.apple.com/us/app/homeadvisor/)
-25. [PictureThis App Store listing analysis, April 2026](https://apps.apple.com/us/app/picturethis-plant-identifier/id1252497129)
+23. [PictureThis App Store listing analysis, April 2026](https://apps.apple.com/us/app/picturethis-plant-identifier/id1252497129) — primary ASO playbook reference
+24. [Rock Identifier App Store listing, April 2026](https://apps.apple.com/us/app/rock-identifier-stone-id/id1567360894) — photo-AI utility reference
+25. [TripIt App Store listing, April 2026](https://apps.apple.com/us/app/tripit-travel-planner/id311035142) — infrequent-use utility reference
+26. Internal: POSITIONING.md v2.0 (2026-04-19) — primary foundation for ASO copy decisions
+27. Internal: RETENTION-RESEARCH.md v2.0 (2026-04-19) — retention → ASO ranking coupling
 
 ---
 
-**Дата последнего обновления:** 2026-04-18
-**Следующий шаг:** ONBOARDING-RESEARCH.md — post-install flow с retention focus и activation to aha moment sequencing.
+**Дата последнего обновления:** 2026-04-19 (rescope rewrite)
+**Автор:** Growth Team
+**Статус:** v2.0 final (post-rescope, no marketplace), ready for Stage 4 UX + launch prep
+**Следующий шаг:** PRACTICES-BRIEF.md synthesis — unified practices playbook под v2.0 positioning

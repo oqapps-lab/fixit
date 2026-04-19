@@ -1,36 +1,43 @@
-# FixIt — Stitch prompts для Welcome screen (style direction exploration)
+# FixIt — Stitch prompts (screen-by-screen)
 
-**Дата:** 2026-04-18
-**Экран:** Onboarding Welcome (1.1) — первый экран что видит Emma
-**Цель:** выбрать стилистическое направление для всего приложения через hero welcome screen с heavy illustrated graphics
+**Дата:** 2026-04-19
+**Стиль:** The Exhale — light modern editorial, screen-wide vertical gradient, frosted glass + gradient orbs, ghosted hero numbers, single glossy coral anchor per screen
+**Образец формулы:** [`sugar-quit/docs/06-design/style-exploration/FORMULA.md`](../../../../sugar-quit/docs/06-design/style-exploration/FORMULA.md) + [`v10-editorial-narrative.md`](../../../../sugar-quit/docs/06-design/style-exploration/v10-editorial-narrative.md)
 
-Один и тот же экран — Welcome с hero illustration + CTA "Take a photo of your problem" — в 5 разных стилистиках. Каждый промпт содержит directives для:
-- **Large hero illustration** (центральная scene)
-- **Custom patterned background** (linen / graph paper / gradient sky / etc — стиль-specific)
-- **Decorative marginalia / ornaments** (flourishes, icons, small illustrated elements)
-- **Animated-feeling static elements** (water drops, particles, glows, drifting clouds)
-- **Scene-style hero area** (не icon, а small illustrated world)
-- **Illustrated secondary elements** (sample problem thumbnails, decorative stripes)
+Все промпты — в одном консистентном языке The Exhale, но каждый экран закрывает свою UX-задачу. Запускай в Stitch Pro **без картинок на вход**, один за другим. Stitch видит, что экраны — из одного продукта.
 
-## Варианты
+## Экраны
 
-| # | Стиль | Философия | Hero illustration |
+| # | Файл | Экран из SCREEN-MAP | Назначение |
 |---|---|---|---|
-| v1 | [Craftsman Editorial](./v1-craftsman-editorial.md) | Warm workshop honesty. Lamp-light over workbench. | Aged-oak workbench + amber lamp + linen-wrapped problem + pencil sketches |
-| v2 | [Calm Clarity](./v2-calm-clarity.md) | Architectural precision. Technical schematic made friendly. | House cross-section line-drawing + teal pinpoints where problems live |
-| v3 | [Forecast Panel](./v3-forecast-panel.md) | Weather atmospheric — house under moving sky. | Aerial house scene + weather zones + golden-hour sky |
-| v4 | [Field Notes](./v4-field-notes.md) | Workshop journal + cutaway drawing. | Hand-drawn house cross-section + margin annotations + paper-clipped Polaroids |
-| v5 | [Price Weather](./v5-price-weather.md) | Three climate zones for one house. | House triptych: same house in three weather moods |
+| 1.1 | [`screen-welcome.md`](./screen-welcome.md) | Welcome | Первое впечатление, atmosphere setter |
+| 1.4 | [`screen-camera.md`](./screen-camera.md) | Camera View | Sovereign full-bleed, warm guidance overlays |
+| 1.6 | [`screen-processing.md`](./screen-processing.md) | AI Processing | Labor illusion 5-8 сек, 5 стадий |
+| 1.7 | [`screen-estimate-result.md`](./screen-estimate-result.md) | First Estimate Result | **Aha moment** — главный экран продукта |
+| 3.1 | [`screen-home.md`](./screen-home.md) | Home Tab | Post-onboarding, 5 widgets, home health |
+| 5.1 | [`screen-paywall-soft.md`](./screen-paywall-soft.md) | Soft Paywall | После 3-го estimate, annual + monthly + pay-per |
 
-## Как выбирать
+## Что объединяет все 6 промптов
 
-1. Запусти все 5 промптов в Stitch Pro **без картинок на вход** (no reference images, no add-ons)
-2. Смотри на hero illustration quality + decorative density + background pattern coherence
-3. Ключевой тест: **exit test** — через 3 секунды после первого взгляда, хочется ли тапнуть "Take a photo"? Если да — style работает для anxious Emma.
+- **Screen-wide vertical gradient** (cream → peach → coral → mint → lavender)
+- **4 gradient orbs** плавающих за всем содержанием
+- **Frosted glass** surfaces с backdrop blur + warm shadow
+- **Ghosted hero numbers** (translucent massive sans-serif watermarks — $2,340, $485, $165, 30m, 45m, 2h, 365 days)
+- **Italic serif hero headline** per screen (editorial magazine feel)
+- **UPPERCASE TRACKED whisper labels** вместо prose
+- **Tiny flat-painted illustrations** (faucet, wrench, piggy-house, cherry blossoms, receipts, etc.)
+- **Single glossy coral-to-amber anchor** — highlight streak, warm halo (CTA pill on action screens, "+" orb on home, capture button on camera)
+- **Motion-directive** в каждом промпте — suggested breath/drift/pulse
 
-## После выбора
+## Что разделяет экраны
 
-1. Победитель → `06-design/STITCH-STYLE-DIRECTION.md` как canonical
-2. Пишу ещё 3-4 промпта в том же стиле (Camera / First Estimate / Home / Soft Paywall)
-3. Проверяем consistency серии
-4. Design system на основе direction
+- **Welcome** — hero italic serif "Know the price / before it breaks you" + 3 painted category vignettes
+- **Camera** — live viewfinder + frosted overlays + "LEAKY CARTRIDGE SPOTTED" confidence pill
+- **Processing** — photo-circle centerpiece + rotating halo + 5 stage rows
+- **Estimate Result** — 3 option glass cards (DIY mint / Hybrid peach / Pro coral) + ghosted time per card
+- **Home** — 5 distinct widget forms (radial ring / flowing curve / scene card / chunky donut / vertical bars)
+- **Paywall** — 2 pricing cards + painted receipts-on-corkboard + pay-per fallback
+
+## Архив
+
+Старые style-exploration варианты (v1-v5) в [`_archive/`](./_archive/) — первая итерация, слишком тёмные/скучные, перед тем как я вернулась к твоей The Exhale формуле.

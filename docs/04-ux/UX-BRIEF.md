@@ -6,6 +6,8 @@
 **Автор:** Amanda (AI team lead) — мой собственный take поверх 5 UX-документов
 **Companion docs:** [SCREEN-MAP.md](./SCREEN-MAP.md) · [USER-FLOWS.md](./USER-FLOWS.md) · [WIREFRAMES.md](./WIREFRAMES.md) · [UX-SPEC.md](./UX-SPEC.md) · [FUNNEL.md](./FUNNEL.md)
 
+> ⚠️ **RESCOPE NOTE (2026-04-19):** MVP rescoped to AI-only. Pro Match is now a **simple deeplink to Thumbtack/Google Maps/Yelp** (no partnership, no affiliate, no lead capture). Shopping List uses Amazon Associates deeplinks only (zero other retailer integration). UX flows described below remain mostly valid — just Pro Match bottom sheet shows "choose a site to search" instead of "3 pros with quotes". Wireframes will update in Stage 5. See [MONETIZATION.md v2.0](../02-product/MONETIZATION.md).
+
 ---
 
 ## TL;DR — что решили по UX

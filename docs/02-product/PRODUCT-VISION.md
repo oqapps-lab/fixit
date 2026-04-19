@@ -9,6 +9,10 @@
 
 ---
 
+> ⚠️ **RESCOPE NOTE (2026-04-19):** MVP rescoped to AI-only (Variant C). Affiliate partnerships (Thumbtack / Angi / HomeAdvisor / Home Depot API) removed from v1.0 — returning as possible v1.5+ post-PMF feature if partner approval granted after we have traction. Long-term vision (Year 3-5 scenarios below) remains aspirational with partnership layer. For **tactical MVP truth**, see [FEATURES.md](./FEATURES.md), [MONETIZATION.md](./MONETIZATION.md), and [CLAUDE.md](../../CLAUDE.md). Content below describes longer-term possibility, not MVP.
+
+---
+
 ## Elevator Pitch
 
 **FixIt — это PictureThis для ремонта дома.** Сфотографировал протечку, трещину в стене или умершую стиральную машину — через 10 секунд получаешь честный ответ: что сломано, сколько стоят материалы в твоём zip-коде, и три пути починки — сделать самому, нанять handyman на установку или вызвать licensed pro с реальными quotes. Мы отвечаем на вопрос, который каждый homeowner задаёт десятки раз в год: **"Сколько это стоит — и могу ли я сделать сам?"**

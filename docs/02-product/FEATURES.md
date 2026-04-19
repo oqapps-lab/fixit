@@ -16,7 +16,9 @@ Stage: Product Definition (Stage 2)
 
 FixIt — это фотокамера ремонта. Пользователь (Emma, first-time homeowner) фотографирует протечку / трещину / сломанную мебель → AI за 10 секунд определяет проблему → выдаёт **три варианта** (DIY / Hybrid / Full Pro) с реальными ценами материалов из retailer API и labor rates для её zip-кода.
 
-**MVP (v1.0)** — 10 фич, 4–6 месяцев с командой 2 человека + Claude Code. Фокус 100% на Emma. Top-30 категорий repair (не "infinite encyclopedia"). Freemium + affiliate revenue with pro-matching.
+**MVP (v1.0)** — 10 фич, 4–6 месяцев с командой 2 человека + Claude Code. Фокус 100% на Emma. Top-30 категорий repair (не "infinite encyclopedia"). **Subscription-only monetization** (sub + pay-per fallback + Amazon Associates bonus). **NO partnerships, NO SKU curation, NO web scraping, NO affiliate marketplace in MVP.** Claude API делает всю heavy lifting: photo ID, cost estimation, DIY guides, material recommendations.
+
+**Rescope decision (2026-04-19):** изначальный план включал Thumbtack/Angi/HomeAdvisor affiliate partnerships + Home Depot API + SKU curation + RSMeans subscription. Для Лана-solo-dev это блокеры. Variant C rescope (AI does everything) ships faster (4 vs 6-8 months), zero partnership risk, zero content curation workload. Trade-off: lose ~$8-15/user/yr affiliate revenue, gain 2+ months and 100% operational simplicity. Partnerships return как v1.5+ post-PMF feature. See MONETIZATION.md §7 for full change log.
 
 **Post-MVP (v1.5–v3.0)** — expansion personas (Mike / Sarah / Tyler / Ronald), AR-интеграция, voice input, B2B tier, международное расширение.
 
@@ -128,29 +130,29 @@ FixIt — это фотокамера ремонта. Пользователь (
 - Fair-price calibration box: "If a pro quoted you more than $X, that's above market." (Critical for Sarah persona — validation against rip-off)
 - "When in doubt call a pro" safety rail для gas/electrical/structural/load-bearing (red flag categories per DOMAIN-DEEP-DIVE §6)
 
-**Technical approach:**
-- **Data layer hybrid strategy** (per DOMAIN-DEEP-DIVE §5.2):
-  - Materials: Home Depot Product Advertising API (free tier) + Amazon PA-API (fallback) + curated SKU-to-category mapping
-  - Labor: BLS OEWS data (free, state-level) + Thumbtack/Angi averages (partner API target) + RSMeans subscription ($1500/yr) for MVP accuracy anchor
-  - Aggregation: HomeAdvisor Cost Guide + Homewyse scraped ranges (legal, public) quarterly-refreshed
-- Estimate computed server-side (Supabase Edge Function) — не expose pricing logic client-side
-- Regional multipliers table (zip → cost index) applied at computation time
-- Caching layer — same category × same zip served from cache 24hr (reduces API load)
+**Technical approach (AI-only, no partnerships):**
+- **Claude API generates entire estimate** in one structured prompt — no external APIs, no SKU database, no scraping, no manual curation.
+- **Prompt structure:** photo + identified problem + user context (zip, quality tier, DIY level) → Claude returns JSON с three modes (DIY/Hybrid/Pro) each with cost range, time estimate, confidence, rationale.
+- **Pricing source = Claude's training knowledge** + optional tool use (Claude can perform web search for current Home Depot/Lowe's material prices if needed, but not required — training knowledge is accurate to ±25% for common repairs).
+- **Labor rates source = BLS OEWS public CSV** (free, refreshed annually) + Claude's knowledge of regional variation. No Thumbtack/Angi integration.
+- **Regional accuracy:** Claude is given zip code в prompt, uses its training + BLS data for regional cost adjustment. SF plumber ≠ Memphis plumber, Claude knows this pattern.
+- Estimate computed server-side (Supabase Edge Function calls Claude API) — client gets ready JSON, no pricing logic exposed.
+- **Caching:** same category × same zip cached 24hr (reduces Claude API load + faster UX).
 
 **RICE:**
 - **Reach:** 100% users (every photo → estimate)
 - **Impact:** 3 (THE value prop — this is what users pay for; competitor gap #1 per COMPETITOR-ANALYSIS)
-- **Confidence:** 75% (data aggregation strategy unproven at scale; API terms-of-service risk; regional accuracy ±20% realistic)
-- **Effort:** 4 weeks (Large — data pipeline setup, retailer API integration, labor rate sourcing, edge function logic, testing)
-- **Score: 100 × 3 × 0.75 / 4 = ~56**
+- **Confidence:** 85% (Claude's training accurate to ±25% for common repairs; no partnership dependencies to break; fallback to web search for edge cases)
+- **Effort:** 2 weeks (Medium — prompt engineering + JSON schema + caching + edge function logic + testing; much smaller than original 4 weeks because no API integration)
+- **Score: 100 × 3 × 0.85 / 2 = ~128**
 
 **Edge cases:**
-- Zero matching materials in Home Depot API (rare SKU) → fallback к Amazon + disclaimer "estimate based on similar products"
-- No local pros available in zip (rural) → expand radius + notice "nearest pro 45mi away"
-- Estimate range too wide (>3× spread) → show median with "high variance — factors: X, Y" explanation
-- Category requires licensed pro only (gas line, panel upgrade) → DIY mode disabled with clear "licensed work — permit required" messaging
-- Material prices spike (supply chain) → show "prices updated DATE" timestamp for trust
-- User in Canada/UK (post-MVP) → "US pricing shown — adjust by ~1.15× for Canada"
+- Rare / unusual repair not in Claude's training → Claude returns "Confidence low — this is my best estimate but recommend quote from pro" flag
+- No clear DIY path (pro-only work like gas line, panel upgrade) → DIY mode grayed out, "Licensed work — permit required" messaging
+- Claude hallucinates / returns inconsistent values → JSON schema validation + sanity bounds (min/max cost) + regenerate on fail
+- Material prices shift over time → Claude given "as of DATE" timestamp in prompt, output includes "prices approximate, check current"
+- User in non-US region → Claude given country code, adjusts for UK/Canada/Australia pricing patterns (still ±25% accuracy)
+- Emergency category (burst pipe, smoking outlet) → Claude prompt flags "URGENT — call pro now, DIY not recommended"
 
 **Success criteria:**
 - Estimate within ±25% of actual paid cost (crowd-sourced validation post-completion)
@@ -158,149 +160,148 @@ FixIt — это фотокамера ремонта. Пользователь (
 - Mode-selection distribution: 40% DIY / 25% Hybrid / 35% Pro (healthy spread indicates people use all options)
 - Estimate-to-action conversion: 50%+ users do something within 24hr (buy materials / call pro / share)
 
-**Dependencies:** Features #1, #2; Home Depot API partnership, Thumbtack partnership (or web-scraping fallback), BLS data pipeline, Supabase Edge Functions
+**Dependencies:** Features #1, #2; Claude API (primary) + BLS OEWS CSV (one-time download, free), Supabase Edge Functions, JSON schema validator
 
 ---
 
-### Feature #4: Material Shopping List with Retailer Integration
+### Feature #4: Material Shopping List (AI-generated + Amazon deeplinks)
 
 **User story:**
-> Как Emma в DIY-mode, я хочу одним тапом увидеть shopping list с конкретными SKU, ценами и ближайшим Home Depot, чтобы не делать 3 поездки за материалами.
+> Как Emma в DIY-mode, я хочу одним тапом увидеть shopping list с названиями материалов, approximate ценами, и кнопкой "искать на Amazon / Home Depot / Lowe's", чтобы купить нужное без 3 поездок.
 
 **What it does:**
-- Side-panel или нижний sheet на estimate screen — "Shopping list ready"
-- Each item: product name + photo + price + quantity + "which retailer" badge (Home Depot / Lowe's / Amazon)
-- "Nearest store" — auto-detects closest Home Depot to user's zip with distance + open hours
-- Deep-link к retailer app ("Open in Home Depot app" → direct to product page)
-- "Add to Apple Reminders" / "Save to Google Keep" — checklist export
-- Alternative: "Order on Amazon (2-day delivery)" for users who don't want store trip
-- "What you already own" — checkbox items (plumber's tape, pliers, etc.) чтобы не переплачивать за tools у Mike
+- After DIY-mode estimate, a "Shopping list" sheet opens с 3-8 recommended items
+- Each item: **generic product name** + quantity + approximate price range + suggested retailer search
+- **Three retailer action buttons per item:** "Search Amazon" (Amazon Associates deeplink — our only affiliate) + "Search Home Depot" (simple web search link) + "Search Lowe's" (simple web search link)
+- Copy-to-clipboard full list для Apple Reminders / Google Keep export
+- "What you already own" — checkbox items (plumber's tape, pliers, basic tools) чтобы Mike not re-buy existing tools
+- Approximate total cost summary at bottom
 
-**Technical approach:**
-- Home Depot Product Advertising API — primary source for SKU + price + store locator
-- Amazon PA-API — fallback + links (affiliate revenue через Amazon Associates 1-3%)
-- Lowe's — partnership targeted post-MVP (apim.lowes.com requires existing vendor relationship)
-- Category → SKU lookup table (curated для top-30 categories) — AI suggests, humans validate for MVP
-- Store locator: Home Depot has public store API, Lowe's via web lookup
-- Deep-linking: `homedepot://product/[sku]` scheme
+**Technical approach (AI-only):**
+- **Claude API generates list** as part of estimate response — given the identified problem + DIY path, Claude returns structured items array with name, quantity, price_range, category
+- **No SKU table, no product API, no curation.** Claude knows что O-ring kit для kitchen faucet стоит $5-10, что plumber's tape ~$3, etc. from training.
+- **Retailer search links are pure URL construction:** `amazon.com/s?k=kitchen+faucet+cartridge+kit&tag=OUR_AFFILIATE_TAG` (Amazon Associates — our only partnership), `homedepot.com/s/kitchen+faucet+cartridge+kit` (plain search, no affiliate, no partnership needed), `lowes.com/search?searchTerm=kitchen+faucet+cartridge+kit` (plain search)
+- **No store locator API** — users comfortable searching own address on retailer sites
+- Amazon Associates = simple account signup (free, 1 day), automatic affiliate tag appending в URL
+- Zero ongoing curation work
 
 **RICE:**
-- **Reach:** ~40% users (only DIY and Hybrid mode selectors — 40-60% of estimates based on persona mix)
-- **Impact:** 2.5 (huge value multiplier — saves 30-60min of shopping research per repair)
-- **Confidence:** 80% (Home Depot API works; SKU-mapping is manual but tractable for 30 categories)
-- **Effort:** 2 weeks (Medium — API integration + SKU curation + UI sheet)
-- **Score: 40 × 2.5 × 0.8 / 2 = 40**
+- **Reach:** ~40% users (DIY and Hybrid mode selectors)
+- **Impact:** 2 (helpful — saves 30-60min research — но less "wow" than original spec because no prices on items themselves, just ranges)
+- **Confidence:** 90% (pure URL construction + Claude generation, zero integration risk)
+- **Effort:** 0.5 weeks (Small — just UI + Amazon Associates signup + Claude prompt addition; massive reduction from original 2 weeks due to no API integration)
+- **Score: 40 × 2 × 0.9 / 0.5 = 144**
 
 **Edge cases:**
-- Product out of stock at nearest store → show next-nearest or "order online"
-- Price changed since estimate → reconcile on shopping list load, show updated total
-- User's zip doesn't have Home Depot within 30 miles (rural) → Amazon primary
-- API rate-limited → served from 24hr cache with "prices as of DATE" disclaimer
-- Multi-retailer cart (some items at Home Depot, some Amazon) → group by retailer with separate totals
-- Affiliate link attribution lost → fallback к non-affiliate URL (better to lose $0.50 commission than user's trust)
+- User in non-US region → retailer links adapt (amazon.ca, amazon.co.uk, etc.), some retailers unavailable
+- Amazon Associates tag not yet approved → fallback to plain amazon.com link (no commission, no broken link)
+- Material has very wide price range (e.g. faucet $30-300) → show range "budget $30 / mid $80 / premium $200"
+- Rare material — Claude suggests generic equivalent ("look for any 1/2-inch brass ball valve")
+- Category where materials not needed (e.g. "tighten this screw") → no shopping list, show "You already have what you need"
 
 **Success criteria:**
 - 60%+ DIY-mode users open shopping list
-- 30%+ click at least one "buy at retailer" link (measurable через affiliate attribution)
-- Affiliate revenue $0.50-$1.50 per active DIY user/month
-- Shopping list accuracy — post-repair survey "did you need to make extra trips?" <20% yes
+- 20%+ click at least one "Search retailer" link
+- Amazon Associates revenue $100-2000/year total (small but bonus)
+- Shopping list perceived usefulness >70% (post-repair survey)
 
-**Dependencies:** Feature #3 (estimate computed first), Home Depot API, Amazon Associates signup, SKU curation
+**Dependencies:** Feature #3 (estimate generates list), Amazon Associates signup (1 day, free), URL construction helper
 
 ---
 
-### Feature #5: Step-by-Step DIY Guide
+### Feature #5: Step-by-Step DIY Guide (AI-generated per problem)
 
 **User story:**
-> Как Emma, выбрав DIY mode, я хочу пошаговый guide (картинки + 2-минутное видео + текст), адаптированный к моему конкретному случаю, чтобы уверенно починить не переключаясь между 5 YouTube tabs.
+> Как Emma, выбрав DIY mode, я хочу пошаговый guide адаптированный к моей конкретной проблеме, чтобы уверенно починить. И чтобы была кнопка "YouTube video" если я визуал.
 
 **What it does:**
-- 5–10 numbered steps с визуалами (illustration + photo examples)
-- Each step: action + warning ("don't over-tighten — plastic threads") + estimated time + tool check
-- Embedded YouTube video (curated top tutorial for this category) — NOT custom video production (scope discipline per RESEARCH-BRIEF §9.4)
-- "I'm stuck" escape hatch on every step → connects к Feature #6 (Pro Match) with context preserved
-- Safety check at start: "This repair requires shutting off water/power. Follow step 0 first."
+- 5–10 numbered steps, generated by Claude specifically for THIS problem (not a static guide template)
+- Each step: action + warning (e.g. "don't over-tighten plastic threads") + estimated time + tool check
+- **YouTube search button at top:** "Watch videos of this repair" — opens YouTube with pre-filled search query (Claude generates the query). User picks own video. We don't curate or embed.
+- "I'm stuck" escape hatch on any step → surfaces "Find a pro" deeplink (Feature #6)
+- Safety check at start if applicable: "This repair requires shutting off water. Here's how."
 - Progress tracker ("Step 3 of 7")
-- Completion check: "Did it work?" → logs to Saved Projects (Feature #7) + triggers feedback loop
+- Completion check at end: "Did it work?" → logs outcome to Saved Projects (Feature #7)
 
-**Technical approach:**
-- Static guide templates per category (30 categories × 1 primary guide = 30 guides; ~6-10 steps each)
-- Content creation: AI-assisted drafting (Claude) + human editor review for accuracy
-- Photos sourced from: stock photography (Pexels/Unsplash) + commissioned illustrations for common scenarios
-- YouTube embeds via official embed API (not own-hosted video — saves infra)
-- Step-level AI personalization: Claude rewrites first paragraph based on user's quality tier + DIY level (same base content, tailored tone)
+**Technical approach (AI-only, no content production):**
+- **Claude API generates guide on-demand** as part of DIY-mode estimate response
+- **No 30 static guide templates.** No human content editor. No illustration commissioning. No legal review on per-guide basis.
+- **Safety guardrails in Claude prompt:** "If repair involves gas, structural work, panel electrical, or asbestos — output 'STOP. Licensed professional required' instead of DIY steps"
+- **Generic disclaimer** at top of each guide: "These are AI-generated suggestions. Use at your own risk. When in doubt, call a licensed professional." — one-time legal review, applies everywhere.
+- **YouTube search query** generated by Claude в prompt response (e.g. "how to replace kitchen faucet cartridge DIY"), button deeplinks to `youtube.com/results?search_query=...`
+- **Step-level personalization** (free for Claude): Claude adjusts tone based on user's DIY level (Beginner → more reassurance, Confident → faster pace, same technical content)
 
 **RICE:**
-- **Reach:** ~25% users (DIY-mode selectors only — ~40% of users × 60% actually execute DIY)
-- **Impact:** 3 (без guide, DIY claim is empty — this is what converts DIY-claim into DIY-success)
-- **Confidence:** 70% (content production bottleneck; quality varies; liability risk if guide wrong)
-- **Effort:** 4 weeks (Large — 30 guides × content editor × legal review × visual assets)
-- **Score: 25 × 3 × 0.7 / 4 = ~13**
+- **Reach:** ~25% users (DIY-mode selectors, ~40% × 60% execute)
+- **Impact:** 3 (converts DIY claim into DIY success)
+- **Confidence:** 80% (Claude generates reasonable repair guides for common categories; safety guardrails prevent dangerous advice)
+- **Effort:** 1 week (Small — prompt engineering + UI + guardrails + YouTube search URL construction; massive reduction from 4 weeks because no static content production)
+- **Score: 25 × 3 × 0.8 / 1 = 60**
 
 **Edge cases:**
-- User starts guide, realizes beyond their skill → "Bail out to Pro Match" button preserves context
-- Mid-step photo required (e.g. "show me your existing valve") → photo check-in loop for validation
-- Step fails / damage worse → clear "stop, call pro" flow without shaming
-- Guide says "shut off water" — user asks how → linked micro-guide для shut-off valve location
-- Material shortage (user got home, wrong SKU) → quick troubleshoot with AI chat
-- User completes DIY → celebratory UI + "share your before/after" (viral loop)
+- User starts guide, realizes beyond skill → "Find a pro" deeplink preserves context (category + zip)
+- Safety-critical step (e.g. gas) → Claude blocks DIY, shows "Licensed work required" + pro deeplink
+- Claude hallucinates wrong step → user feedback loop ("this step didn't work") triggers retry with updated prompt
+- User wants video not text → prominent YouTube search button at top of guide
+- Rare repair → Claude says "I don't have confident steps for this — here's a YouTube search + 'find a pro' option"
+- User completes DIY → celebratory UI + "share your savings" (viral loop in Feature #8 area)
 
 **Success criteria:**
-- 80%+ guide starters reach final step
-- 70%+ self-reported DIY success rate (accounting для stuff people couldn't finish)
-- Guide rating 4.5/5 stars minimum (user feedback per guide)
-- <5% of DIY starters call pro same-day (high bail-out indicates bad persona selection, not guide failure)
+- 70%+ guide starters reach final step
+- 60%+ self-reported DIY success rate
+- <5% safety incidents (tracked via user feedback)
+- YouTube search button click-through >30% (indicates Claude's search query is good)
 
-**Dependencies:** Features #3, #4; content editor hired, YouTube embed approval, legal disclaimers
+**Dependencies:** Features #3, #4; Claude API (same endpoint as estimate), one-time legal disclaimer review
 
 ---
 
-### Feature #6: Pro Match via Thumbtack/Angi Affiliate
+### Feature #6: Find a Pro (simple deeplink, no affiliate, no partnership)
 
 **User story:**
-> Как Emma, если DIY кажется страшным или проблема сложная, я хочу одним тапом увидеть 3 local pros с honest quotes, reviews, и их availability — чтобы не делать 10 звонков самой.
+> Как Emma, если DIY страшно или проблема сложная, я хочу одним тапом попасть на Thumbtack / Google Maps / Yelp с предзаполненным поиском "plumber near 80203", чтобы сразу начать искать мастера без того чтобы самой копировать-вставлять.
 
 **What it does:**
-- "Find a pro" button в Full Pro mode card (Feature #3)
-- Returns 3 pros для user's zip с:
-  - Profile photo + name + years experience + license status + BBB badge
-  - Reviews (3.5+ stars, min 10 reviews threshold)
-  - Estimated cost for THIS specific job (from Thumbtack's pricing API)
-  - "Request quote" button → in-app flow sends context (photo + intake answers) к pro
-  - Availability: "Can come Wednesday between 2-4pm"
-- Affiliate attribution — FixIt earns $15–40 per qualified lead (per DOMAIN-DEEP-DIVE §5.2)
-- User doesn't leave FixIt until chose pro — we broker the match
+- "Find a pro" button в Full Pro mode card (Feature #3) + в estimate detail screen
+- On tap, shows a bottom sheet with **three deeplink options:**
+  - 🔵 **Thumbtack** — opens Thumbtack search (web or app) pre-filled с category + user's zip
+  - 🔴 **Google Maps** — opens Google Maps search for "[category] near me"
+  - 🟢 **Yelp** — opens Yelp search for pros in category + zip
+- User chooses, leaves FixIt, continues на their terms
+- **No affiliate tracking** — we don't earn from the click. We help Emma quickly, she trusts us.
+- Optional post-visit follow-up ping (72h later): "Did you find a pro? Want to log the job in My Home?" — soft re-engagement, not annoying
 
-**Technical approach:**
-- **Primary:** Thumbtack Pro API (developers.thumbtack.com) — partner access targeted via outreach in Month 1
-- **Secondary:** Angi Leads API (email `crmintegrations@homeadvisor.com`) — backup lead source
-- **Tertiary:** Manual directory of top-pros в top-20 US metros (fallback if APIs unavailable at launch)
-- Lead metadata package (photo + diagnosis + zip + quality tier) sent to pro via API — reduces pro's time-to-quote
-- Attribution tracking — webhook on lead conversion, revenue recorded in Supabase
-- "White label" UX — pro profiles shown inside FixIt, user stays in our funnel
+**Technical approach (zero integration, zero partnership):**
+- Pure URL construction:
+  - Thumbtack: `thumbtack.com/search?category=plumber&zip_code=80203` (opens their app if installed, otherwise web)
+  - Google Maps: `google.com/maps/search/plumber+near+80203`
+  - Yelp: `yelp.com/search?find_desc=plumber&find_loc=80203`
+- No API integration, no partner application, no lead attribution, no FTC affiliate disclosures needed
+- Category mapped from Claude's identified problem type (plumbing → "plumber", electrical → "electrician", etc.) — simple dictionary
+- **v1.5+ upgrade path:** если мы получим Thumbtack partnership approval позже, можем добавить affiliate tag к URL (same UX, just earns us $15-40/lead). Зero re-engineering needed.
 
 **RICE:**
-- **Reach:** ~30% users (Pro mode selectors — some from each persona)
-- **Impact:** 3 (primary revenue driver at launch — $15-40 × 30% of users >> subscription revenue early-stage)
-- **Confidence:** 65% (depends on API partnership approval; high variance — worst case 3 months delay if Thumbtack refuses)
-- **Effort:** 3 weeks (Medium — API integration + match UI + attribution pipeline + partnerships workstream parallel)
-- **Score: 30 × 3 × 0.65 / 3 = ~20**
+- **Reach:** ~30% users (Pro mode selectors)
+- **Impact:** 1.5 (helpful but not magical — user still shops pros themselves; main value is zero-friction handoff vs user typing "plumber denver 80203" in google themselves)
+- **Confidence:** 100% (pure URL construction, nothing can break)
+- **Effort:** 0.5 weeks (Small — bottom sheet UI + URL mapper + category dictionary)
+- **Score: 30 × 1.5 × 1.0 / 0.5 = 90**
 
 **Edge cases:**
-- No pros available in zip → expand radius to 30mi + "nearest pros farther away"
-- Pro unavailable for weeks → show availability upfront, offer "notify when next slot opens"
-- Lead attribution dispute (pro claims FixIt didn't send them) → webhook + timestamp + user-ID audit trail
-- Emergency category (burst pipe) → flag as "urgent" in lead, pros get priority notification
-- User requests quote but pro ghosts → 48hr follow-up "did Joe reach out?" + alternate pro re-match
-- International user tries pro match → "Pros currently US-only, международное расширение v2.0"
+- User's device has no Thumbtack/Yelp app → deeplink fallback to web version (standard iOS behavior)
+- Non-US user → Google Maps works globally, Thumbtack/Yelp US-only (we show only Google option internationally)
+- Emergency category → priority sort: Thumbtack/Google first (faster response), Yelp last
+- User comes back and says "the pro Thumbtack suggested was bad" → not our problem, but we could collect feedback for future (post-MVP quality signal)
 
 **Success criteria:**
-- 30% of "Find a pro" openers submit quote request
-- 50% quote-requesters hire within 14 days (Thumbtack benchmark)
-- $0.75-$1.50 affiliate revenue per active user/month
-- Pro NPS >40 (pros rate FixIt lead quality)
+- 40%+ of Full Pro mode viewers click "Find a pro" button (high because of low friction)
+- 60%+ of clickers actually complete a deeplink (vs close sheet)
+- Follow-up 72h check-in click-through 15%+ (retention signal)
+- User trust — no complaints about us "pushing them to Thumbtack for money" because we literally don't earn from it
 
-**Dependencies:** Thumbtack partnership OR Angi OR manual directory, Feature #3 pipeline, attribution webhook
+**Dependencies:** Feature #3 (Pro mode exists), simple URL library, category → search-term dictionary
+
+**Revenue note:** this feature generates $0 direct revenue in MVP. All monetization через subscription/pay-per. Affiliate revenue возможна как v1.5+ post-PMF feature if Thumbtack/Angi approve us as partners after we have traction — trivial add (just append affiliate tag to URL), no UX change.
 
 ---
 
@@ -500,22 +501,24 @@ FixIt — это фотокамера ремонта. Пользователь (
 
 ---
 
-## MVP Features List (Top 10, ordered by RICE priority)
+## MVP Features List (Top 10, ordered by RICE priority — updated for AI-only scope)
 
 | # | Feature | RICE Score | Effort | Critical Path? |
 |---|---------|-----------|--------|----------------|
 | 1 | **Photo Intake + AI Identification** | 90 | 3w | YES — core entry |
 | 2 | **Contextual Intake Questions** (region, quality, DIY) | 238 | 1w | YES — estimate dependency |
-| 3 | **Cost Estimate Engine** — 3-mode output | 56 | 4w | YES — core value prop |
-| 4 | **Material Shopping List** (retailer integration) | 40 | 2w | Partial — DIY path |
-| 5 | **Step-by-step DIY Guide** | 13 | 4w | Partial — DIY path |
-| 6 | **Pro Match** (Thumbtack/Angi affiliate) | 20 | 3w | YES — revenue |
+| 3 | **Cost Estimate Engine** — 3-mode output (**AI-only**) | **128** | **2w** | YES — core value prop |
+| 4 | **Material Shopping List** (**AI-generated + Amazon deeplinks**) | **144** | **0.5w** | Partial — DIY path |
+| 5 | **Step-by-step DIY Guide** (**AI-generated per problem**) | **60** | **1w** | Partial — DIY path |
+| 6 | **Find a Pro** (**simple deeplinks**, no affiliate) | **90** | **0.5w** | NO — handoff utility |
 | 7 | **Saved Projects History** ("My Home") | 42 | 2w | NO — retention |
-| 8 | **Pricing Tier** (freemium + subscription) | 120 | 2w | YES — monetization |
+| 8 | **Pricing Tier** (freemium + subscription, no affiliate revenue) | 120 | 2w | YES — monetization |
 | 9 | **Onboarding flow** (3 steps) | 170 | 1w | YES — activation |
 | 10 | **Push Notifications** (lifecycle + transactional) | 48 | 2w | NO — retention |
 
-**Total effort:** ~24 weeks serial → **~16 weeks с parallelization** (team of 2). Matches 4-6 month MVP target.
+**Total effort:** ~15 weeks serial → **~11-12 weeks с parallelization** (team of 2). **4 months MVP target achievable** (down from 6-month original plan) because removed API integrations (#3, #4, #6) and content curation (#5).
+
+**Massive RICE uplift on #3/#4/#5/#6** — their scores jumped because effort dropped while Impact/Reach stayed similar. This is the "AI does the heavy lifting" leverage in practice.
 
 ---
 
@@ -631,25 +634,25 @@ Explicit scope discipline (per RESEARCH-BRIEF §9.4):
 |---------|---------------|-------|
 | #1 Photo Intake | 3 | Лана |
 | #2 Intake Questions | 1 | Лана |
-| #3 Cost Engine | 4 | Лана + Amanda |
-| #4 Shopping List | 2 | Лана |
-| #5 DIY Guide | 4 | Лана + content editor (hire) |
-| #6 Pro Match | 3 | Лана (+ Amanda для API) |
+| #3 Cost Engine (AI-only) | **2** | Лана + Amanda |
+| #4 Shopping List (AI + Amazon deeplinks) | **0.5** | Лана |
+| #5 DIY Guide (AI-generated) | **1** | Лана |
+| #6 Find a Pro (deeplinks) | **0.5** | Лана |
 | #7 Saved Projects | 2 | Лана |
 | #8 Pricing Tier | 2 | Лана |
 | #9 Onboarding | 1 | Лана |
 | #10 Push Notifications | 2 | Лана |
-| **Total serial** | **24 weeks** | |
-| **Parallelized (realistic)** | **~16 weeks** | (4 months) |
+| **Total serial** | **15 weeks** | |
+| **Parallelized (realistic)** | **~11-12 weeks** | (~3 months) |
 
-**Buffer для unknown:** +50% → **6 months** realistic MVP timeline, matching RESEARCH-BRIEF projection.
+**Buffer для unknown:** +50% → **4 months** realistic MVP timeline.
 
-**Non-dev workstreams parallel:**
-- Legal review (liability, disclaimers) — 2 weeks, month 2
-- Content creation (30 DIY guides) — 6 weeks, months 2-3
-- Partnership outreach (Thumbtack, Home Depot, Angi) — ongoing, months 1-3
-- SKU curation (materials library) — 3 weeks, month 2
-- App Store submission — 2 weeks, month 5
+**Non-dev workstreams parallel (much shorter than v1 plan):**
+- Legal review (liability disclaimers, AI-generated content disclaimer, Amazon Associates disclosure) — 1 week, month 1 (much simpler than v1 plan because no partnership contracts)
+- Amazon Associates signup — 1 day, month 1
+- App Store submission — 2 weeks, month 3-4
+
+**NO partnership outreach** (removed from MVP — возможно v1.5+). **NO content creation** (Claude generates guides per request). **NO SKU curation** (Claude knows typical materials from training).
 
 ---
 

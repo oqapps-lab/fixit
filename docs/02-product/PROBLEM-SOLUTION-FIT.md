@@ -8,6 +8,10 @@
 
 ---
 
+> ⚠️ **RESCOPE NOTE (2026-04-19):** Hypothesis #5 (affiliate revenue exceeds subscription in Y1) is now explicitly **NOT tested in MVP** — affiliate revenue stream (Thumbtack/Angi partnership) removed from v1.0. Pro Match replaced with simple deeplink to external sites (no partnership, no affiliate tracking). See [MONETIZATION.md §7](./MONETIZATION.md) for full change log. Other hypotheses (Emma pain, photo-to-value loop, willingness-to-pay, DIY-Hybrid-Pro three-path resonance) remain unchanged and are core to MVP validation.
+
+---
+
 ## TL;DR — Problem-Solution Fit статус
 
 **FIT score: 8.5/10** — сильное соответствие проблемы и решения.

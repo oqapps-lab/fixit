@@ -9,6 +9,10 @@
 
 ---
 
+> ⚠️ **RESCOPE NOTE (2026-04-19):** Affiliate revenue stream **removed** from MVP funnel (Thumbtack/Angi partnership rolled back). See [MONETIZATION.md v2.0](../02-product/MONETIZATION.md) for new numbers. Funnel still accurate for subscription + pay-per + Amazon Associates bonus, but **all "Affiliate clicks / Qualified leads / Affiliate revenue" rows below should be interpreted as v1.5+ aspirational, not MVP targets**. Core conversion funnel (install → onboarding → first estimate → paid subscription) unchanged. Revenue projection Y1: $9-11K per 10K cohort (down from $14-16K in v1 plan).
+
+---
+
 ## TL;DR
 
 Полная воронка FixIt от install до long-term subscription с expected rates для 10K cohort, стадия-за-стадией метриками, red flag thresholds, cohort analysis framework и A/B testing roadmap. Воронка структурно отличается от high-frequency apps — **soft paywall после 3-го estimate**, не hard paywall; **freemium без forced trial**; **affiliate revenue как second stream** закрывающий 80% free users.

@@ -5,17 +5,17 @@
 - expo-router (file-based routing)
 - Supabase (auth, database, storage)
 - Adapty (subscriptions)
-- Claude API (photo analysis + repair reasoning)
-- Price aggregation APIs (Home Depot / Lowe's / Amazon Product / Thumbtack / HomeAdvisor — resolve at Research stage)
+- Claude API (photo analysis + repair reasoning + cost estimation + DIY guide generation)
+- **No partnerships, no SKU databases, no web scraping, no manual content curation.** Claude API does all the heavy lifting.
 
 ## About
-AI home repair cost advisor. User takes a photo of a problem (leaky pipe / broken chair / cracked floor / dead appliance) + answers a few questions (region, quality tier, DIY readiness). FixIt identifies the issue, analyzes scope, pulls real-time material prices from retailer APIs, calculates regional labor rates, and returns 3 options: **DIY** (materials list + tutorial + time estimate), **Hybrid** (you buy materials, hire installation), **Full Pro** (find a contractor with quotes). Includes lead-gen affiliate revenue from pro-referral partners.
+AI home repair cost advisor. User takes a photo of a problem (leaky pipe / broken chair / cracked floor / dead appliance) + answers 2-3 quick questions (zip, quality tier, DIY comfort). FixIt identifies the issue via Claude Vision, generates cost range estimates (materials + labor based on Claude's training + optional web search), returns 3 options: **DIY** (materials suggestions + AI-generated step-by-step guide), **Hybrid** (you buy parts, hire installation), **Full Pro** (deeplink to find a pro on Thumbtack / Google Maps / Yelp). No contractor onboarding, no partnership dependencies.
 
 ## Scope
 - Home repair: plumbing, electrical, walls, floors, doors, windows, roofs, HVAC
 - Furniture repair & assembly: broken chair, hinge, IKEA assembly, damaged table
 - Appliance repair: washing machine, fridge, dishwasher, oven, AC
-- Global — not US-only (but US gets richest data first)
+- Global — not US-only (Claude API works in any region; prices localized via region in prompt)
 
 ## Target Audience
 - Homeowners 28-55 — primary
@@ -24,13 +24,14 @@ AI home repair cost advisor. User takes a photo of a problem (leaky pipe / broke
 - Budget-conscious families
 
 ## Current Stage
-Research (Stage 1) — стартуем сейчас
+Product re-scope complete (AI-only, no partnerships). Moving to Stage 5 Design (Лана + Stitch).
 
-## Monetization (to finalize at Product stage)
-- Freemium: 3 estimates/мес free, then $9.99/мес unlimited
-- Affiliate: $15-40 per pro-referral lead (Thumbtack / HomeAdvisor)
-- Pay-per-estimate option for casual users ($2.99 one-off)
-- Premium tier with home history + warranty tracker
+## Monetization
+- **Freemium:** 3 estimates/month free, then paywall
+- **Subscription:** $9.99/month or $49.99/year (annual preselected, 58% discount)
+- **Pay-per-estimate:** $2.99 one-off (for casual users who don't want subscription)
+- **Amazon Associates (optional, simple):** 1-3% on materials deeplinks — bonus revenue, no partnership needed, just Amazon affiliate account signup
+- **NO Thumbtack/Angi/HomeAdvisor/Lowe's partnerships** — future v1.5+ if we get traction and partnerships approve us
 
 ## Rules
 - useWindowDimensions() for responsive
@@ -60,7 +61,10 @@ Each screen has three layers:
 - /docs/02-product/ — product vision, features, monetization (stage 2)
 - /docs/03-practices/ — onboarding/paywall/retention/ASO research (stage 3)
 - /docs/04-ux/ — wireframes, screen map, user flows (stage 4)
+- /docs/05-database/ — DB schema, migrations, RLS policies
 - /docs/06-design/ — Stitch outputs, design system (stage 5)
+- /docs/07-development/ — implementation notes
+- /docs/08-deployment/ — store listings, release notes
 
 ## References
 - `agents/reference-materials/niche-finding/niche-finder-system.md` — методология (GAP_SCORE)

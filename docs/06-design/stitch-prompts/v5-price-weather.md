@@ -1,45 +1,59 @@
-# FixIt v5 — Price Weather
+# FixIt v5 — Price Weather (Welcome screen)
 
-**Настроение:** playful but informative. Cost-as-weather-map. Каждая опция — своя climate zone.
-**Палитра через природу:** sunrise coral + midday gold + afternoon teal — mapped к cost tiers
-**X-instead-of-Y:** the weather IS the triage — each option is its own climate, with its own mood
+**Настроение:** playful but informative. One house, three weathers. Triptych moment.
+**Палитра через природу:** sunrise coral + noon gold + late-afternoon teal — mapped к fix difficulty
+**X-instead-of-Y:** the weather IS the preview — three climate panels tell you what the app does faster than words
 
 ---
 
 ## Промпт
 
 ```
-FixIt — AI home repair cost advisor. Photo of a home problem returns a weather-map of your three repair options — each route a climate zone with its own mood, temperature, and time-of-day. Fix-it-yourself is bright morning, hybrid is warm midday, full pro is the cool clear evening. Real prices, real labor rates, real decisions. For the moment you need to see the whole weather of the fix in one glance.
+FixIt — AI home repair cost advisor. Photo of a home problem returns a weather-map of your three repair options — each route a climate zone with its own mood, temperature, and time-of-day. Fix-it-yourself is bright morning, hybrid is warm midday, full pro is the cool clear evening. Real prices, real labor rates, real decisions. For the moment you need to see the whole weather of the fix in one glance. Think a seaside airport's weather-tile display meets a painted travel-poster triptych — atmospheric, layered, three little worlds.
 
-Mood & visual identity: imagine a glass-tiled weather display at a seaside airport — three adjacent zones showing three different climates on the same afternoon, each with its own atmosphere, its own light, its own slow-moving clouds. This app lives in that weather display — the moment three repair routes each become their own small world you can visit with your eyes. The palette is skies across a single day — sunrise coral softening into morning peach for the DIY zone, noon gold warming into amber for the Hybrid zone, late-afternoon teal cooling into sea-blue for the Pro zone. Each zone has its own weather. Color IS the climate. Light level IS the cost.
+Mood & visual identity: imagine a glass-tiled weather display at a seaside airport — three adjacent panels showing three different climates on the same afternoon, each with its own atmosphere, its own light, its own slow-moving clouds. This app lives in that weather display. The palette is skies across a single day — sunrise coral softening into morning peach for the left panel, noon gold warming into amber for the middle panel, late-afternoon teal cooling into sea-blue for the right panel. Each panel has its own weather. Color IS the climate. Light level IS the cost.
 
-Three zones sit side-by-side like three weather panels in a broadcast — equal width, full screen height, the divisions between them soft gradient fades not hard lines. Each zone breathes its own color from its centre outward. The recommended zone has a brighter weathervane icon and a slightly warmer glow at its centre, like the sun found it first.
+The screen is divided into three vertical panels side-by-side (narrow gaps between them, soft gradient-fade edges on each panel so the transitions feel painterly rather than hard). Each panel has its own full background gradient running top-to-bottom. Between the three panels, very thin vertical lines of light — like the glass seams in a display — hint at the separation without enforcing it.
 
-Functional aesthetic — each zone's saturation maps to cost (pale sunrise for cheapest DIY, more saturated amber for middle Hybrid, deepest teal for the Pro). Small animated clouds (static, but suggest slow movement) drift across each zone giving it life — wispy clouds over DIY (easy conditions), scattered clouds over Hybrid, dense but calm clouds over Pro. Time-of-day in each zone tells you the hours of labor — dawn for 30 min, midday for 45 min, late afternoon for two hours.
+CRITICAL RULES:
+1. If an element could appear in more than one panel, place it only in its true-climate panel — don't duplicate.
+2. All shapes are painterly — soft cloud silhouettes, small weather glyphs, organic house forms. Nothing is line-drawn-technical. The only hard-edged element on the entire screen is the single coral CTA pill.
+3. Three accent colors — sunrise coral, noon gold, afternoon teal — each appears ONLY in its own panel and nowhere else. The coral CTA pill sits in the left DIY panel because that's the easiest starting point.
+4. Typography is editorial atmospheric — a large italic serif for each climate's headline word (one word per panel), a clean thin sans for body copy and labels, a massive sans-serif for any numeric teasers. Numbers stay small on this welcome screen — they're a preview, not the show.
+5. The overall feeling is curious and wide — like looking at a weather forecast that's also a painting that's also three tiny adventure posters side-by-side.
 
-The anchor: a single bright-coral "I'll Try DIY" weathervane pill centred beneath the DIY zone — warm, inviting, definite. "Start here. The weather is easiest over here." The Hybrid and Pro zones have outlined pills, not filled.
+Large hero illustration spanning all three panels — three adjacent painted scenes of the same small stylized house in three different weather conditions, same house orientation but different sky, different light, different atmosphere:
 
-Typography is editorial atmospheric. Large serif italic for the big weather headlines ("Light", "Fair", "Involved" — one word per zone naming the climate), clean sans for body and labor times, massive sans-serif for the dollar amounts because numbers are what Emma reads first. Numbers are the heroes — "$15", "$45", "$180" — each price sits in the brightest part of its zone's sky, rendered in heavy sans, a little sun in each weather panel.
+[LEFT PANEL — sunrise coral warming into morning peach gradient background]
+A painted scene: the small house at dawn, facing a soft coral-pink sunrise sky. The sun is just cresting the horizon behind the house on the right side of the panel, rendered as a diffuse warm glow. The house is lit in soft peach on its right side with pale lavender shadows on the left. Wispy morning clouds drift high in the panel — two or three small ones, translucent cream. A single soft-coral weather-vane on the roof's peak pointing to one direction. Small motion particles in the sky suggest morning motes in the light. At the front of the house, a tiny painted mailbox and a single early-bird silhouette on a nearby fence. The ground beneath the house is soft peach-earth. Scattered across the ground at the bottom of the panel, small tufts of grass rendered as quick painted strokes.
 
-One screen. The weather display at the seaside airport.
+[MIDDLE PANEL — noon gold warming into amber gradient background]
+Same house shape, now under a high midday sky in saturated gold. The sun is overhead, rendered as a bright amber disc near the top of the panel with subtle rays radiating outward. The house is lit evenly in warm gold on all visible surfaces, with short midday shadows directly beneath it. Puffy cumulus clouds drift at mid-height in the panel — three or four of them, cream and peach, fuller than the morning clouds. A small weather-vane on the roof points to a different direction than in the left panel. The house's windows glow slightly warm, reflecting the overhead sun. Small particles of dust and pollen drift in the golden air. The ground is amber-earth with a single wildflower painted to the side.
 
-[top of screen] A small cloud-with-house glyph logo beside the app name "FixIt" in small clean sans on the left. Beside it, a soft pill "TODAY'S FORECAST" in tiny UPPERCASE TRACKED. On the right, a small circular user avatar.
+[RIGHT PANEL — late-afternoon teal cooling into sea-blue gradient background]
+Same house shape, now under the evening sky as day cools. The sky is deepening teal at the top, transitioning through soft mint to sea-blue at the bottom. The sun is setting behind the house and to the left, rendered as a cooler low glow, pale orange fading to deeper teal. The house is in partial silhouette, lit by the last warm light on one edge, cool-blue on the other. Dense but calm clouds drift at a lower height in the panel — painted in deeper slate and soft grey. The weather-vane is still, no wind. A warm amber glow emanates from one of the house's windows (someone is home, lamp is on). Tiny fireflies or evening particles sparkle near the house. The ground is cool sea-blue shadow with a single painted evergreen tree in silhouette to one side.
 
-[hero header] Below the top row, in medium sans: "The Weather of Your Fix". Below in soft body: "Leaky kitchen faucet cartridge. Three routes ahead."
+Across all three panels at the same horizontal level, a continuous horizon line connects them — so the three houses are understood to be the same house in three weathers, not three different houses.
 
-A small rounded-square thumbnail of the user's photo beside the hero header, rendered like a postcard with a thin paler border.
+Below the hero triptych, spanning all three panels horizontally:
 
-[three weather zones, side-by-side, each full screen height below the header] Soft gradient fades between them, no hard dividers.
+A thin horizontal band with a subtle gradient mirroring all three climates (coral → gold → teal). Inside the band at the center: a tiny cloud-with-house glyph logo beside the app name "FixIt" in small clean sans, with a tiny UPPERCASE TRACKED tagline beneath: "THREE ROUTES. REAL PRICES. REAL WEATHER."
 
-[DIY zone — sunrise coral warming into peach at centre] Top label: "DIY" in UPPERCASE TRACKED whisper. Below the label: a large italic serif word — "Light" (the weather headline). Below that, the centrepiece: "$15" as massive sans, sitting in the brightest part of the sky, glowing. Below the number: a small sun-at-dawn glyph. Below the glyph: "30 minutes · beginner · $7 kit from Home Depot" in soft body. Scattered wispy clouds drifting across the zone's upper third. At the bottom of the zone, a saturated coral pill button: "I'll Try DIY" in medium sans. A tiny green whisper below the button: "save $165".
+Below the band, a hero headline centered, in massive italic serif, two lines, each word in a color matching one of the panel climates (so the headline lives in all three worlds at once):
+"Every fix"
+"has three kinds of weather."
 
-[Hybrid zone — noon gold warming into amber at centre, more saturated than DIY] Top label: "HYBRID". Below: "Fair" in italic serif — the climate. Centrepiece: "$45" massive sans. Small midday-sun glyph. Body: "45-min visit · you buy the part · plumber installs." Scattered puffy clouds drifting mid-zone. Bottom: an amber outlined pill "See Hybrid Plan" — outlined not filled.
+A single line of body text in clean thin sans, centered: "Snap a photo of what's broken. We'll map the weather of your options — the quick morning fix, the warm split-work afternoon, the full-service evening pro."
 
-[Pro zone — late-afternoon teal cooling into sea-blue at centre, deepest saturation of the three] Top label: "FULL PRO". Below: "Involved" in italic serif. Centrepiece: "$180" massive sans. Small late-afternoon-sun glyph. Body: "2-hour visit · licensed plumber · 1-year warranty." Dense calm clouds across the zone's upper half. Bottom: a teal outlined pill "Find a Pro."
+Below the body, a single saturated coral pill button — the only hard-edged element on the screen — aligned slightly to the left so it visually lives in the DIY morning panel's territory: "BEGIN WITH A PHOTO" in clean medium sans, letter-spaced.
 
-[bottom rail, spanning all three zones] A thin horizontal band at the very base with a subtle gradient mirroring all three zone colors. In the band, a tiny horizontal compass-like scale showing "DIFFICULTY" with a small marker indicating where on the scale the current problem sits (this is a "Light" problem so the marker is near the DIY end).
+Below the button, a whisper-weight link in muted slate: "See a sample forecast →"
 
-[nav] At the very bottom edge, a minimal pill-shaped navigation bar with four small rounded icons (home, camera, history, profile). Whisper-thin, never the focus.
+Near the bottom of each panel, a tiny UPPERCASE TRACKED label identifying that panel's climate in its own accent color: LEFT panel says "DIY · MORNING" in coral, MIDDLE panel says "HYBRID · MIDDAY" in gold, RIGHT panel says "FULL PRO · EVENING" in teal. Beneath each label, a tiny price-preview in whisper weight: "from $15", "from $45", "from $180" — teasing the app's actual output without spoiling it.
+
+At the very base, three cloud-shaped progress dots, each colored to match its panel (coral / gold / teal), evenly spaced — the coral one softly glowing (you are here).
+
+Motion-directive: the clouds in each panel should feel like they WANT to drift at their own pace (slow-morning, brisker-midday, still-evening); the sun glows should feel like they WANT to pulse gently; the weather-vanes should feel like they WANT to turn; the fireflies in the evening panel should feel like they WANT to twinkle; the early-bird silhouette should feel like it WANTS to take flight. Each panel breathes its own atmosphere. Static image, but three distinct breathing climates.
 
 Primary Design Surface: App.
 ```
@@ -48,17 +62,22 @@ Primary Design Surface: App.
 
 ## Что должно выйти (ожидание)
 
-- Три side-by-side zones, каждая своя weather climate
-- Gradient transitions между zones (не hard divider lines)
-- Scattered clouds дрейфуют across каждой zone
-- Large italic serif "Light" / "Fair" / "Involved" — weather headlines
-- Massive $ amounts в brightest части каждой zone's sky
-- Coral filled pill on DIY (anchor), outlined pills on Hybrid/Pro
-- Bottom difficulty compass band spanning all zones
+- Three vertical painted panels side-by-side: sunrise / noon / evening
+- Same stylized house in each panel, different weather
+- Coral + gold + teal, each used only in its panel
+- Connected horizon line across all three (same house, not three houses)
+- Clouds differ per panel (wispy / puffy / dense-calm)
+- Weather-vanes pointing different directions per panel
+- Midday has sun-disc + rays, evening has glowing window + fireflies
+- Italic serif hero "Every fix / has three kinds of weather" with words in panel colors
+- Single coral CTA pill as only hard-edged element
+- Three price-teasers ("from $15", "from $45", "from $180") at bottom of each panel
+- Cloud-shaped progress dots coloured to match panels
 
 ## Против чего тестировать
 
-- Не должно выйти "weather.com UI" — должна остаться editorial magazine quality
-- Не должно выйти "playful kids app" — weather метафора serious & beautiful
-- Должно выйти "magazine weather feature meets repair app"
-- Риск: самый experimental, может не работать на маленьких экранах (зоны становятся cramped); если крутой — самый memorable
+- Не должно выйти "weather.com UI" — painted editorial triptych, не TV broadcast
+- Не должно выйти "playful kids app" — serious beautiful atmospheric
+- Должно выйти "magazine weather feature meets travel poster"
+- Самый experimental из всех — если сработает, будет самый unique и memorable look на рынке
+- Риск: три панели на маленьком экране могут стать cramped; но welcome screen имеет достаточно места для hero triptych

@@ -1,47 +1,50 @@
-# FixIt v2 — Calm Clarity
+# FixIt v2 — Calm Clarity (Welcome screen)
 
-**Настроение:** architectural, precise, quietly confident. Engineer who won't bullshit you.
-**Палитра через природу:** morning fog settling over slate roof + pale-bone paper + deep-ink marine + a single clean teal
-**X-instead-of-Y:** clarity IS the trust — negative space and alignment replace visual noise
+**Настроение:** architectural schematic made friendly. Engineer's drafting board at dawn. Trust through precision.
+**Палитра через природу:** morning fog settling over pale bone paper + deep-ink marine + single clean teal glow
+**X-instead-of-Y:** the schematic IS the welcome — a technical house drawing becomes an inviting map
 
 ---
 
 ## Промпт
 
 ```
-FixIt — AI home repair cost advisor. Photo of a broken thing returns three honest routes: fix it yourself, split the work, or hire a licensed pro. Real material prices from Home Depot and Lowe's, real labor rates for your ZIP. For the moment you know it's broken but don't yet know what broken costs.
+FixIt — AI home repair cost advisor. Photo of a broken thing returns three honest routes: fix it yourself, split the work, or hire a licensed pro. Real material prices from Home Depot and Lowe's, real labor rates for your ZIP. For the moment you know it's broken but don't yet know what broken costs. Think architect's drafting board meets a Japanese study print — precise, calm, nothing wasted.
 
-Mood & visual identity: imagine a municipal engineer's morning office — pale bone paper pinned to a drafting board, a slate-grey sky through a north-facing window, a single clean teal pen laid precisely parallel to a ruler, no clutter anywhere. This app lives in that clear cold morning light — the moment a calm professional reads the situation and gives you numbers you can trust. The palette is a winter morning — pale-bone backdrop settling into fog-grey, deep marine ink for hierarchy, a single saturated teal used sparingly like a signature on a document. Alignment IS the trust. Negative space IS the interface, creating hierarchy through precise spacing instead of borders.
+Mood & visual identity: imagine a working architect's morning office — pale bone paper pinned to a drafting board, a slate-grey sky through a north-facing window, a single clean teal pen laid precisely parallel to a ruler. This app lives in that clear cold morning light. The palette is a winter morning — pale-bone backdrop settling into fog-grey, deep marine ink for line-work, a single saturated teal used sparingly like a signature. Alignment IS the trust. Teal IS the heartbeat.
 
-Three routes sit on the page at exact equal distances, laid out like measurements on a blueprint — the cheapest on the left reads first, the middle in the center, the full-service on the right. Each is a quiet rectangular zone of pale-bone, separated from its neighbours by air alone, never by lines. The recommended route holds a single teal accent bar on its upper edge — a small underline saying "this one."
+The entire screen has a subtle drafting-paper texture as its background — a very pale dot-grid barely visible, like looking at engineering vellum up close, with faint horizontal construction lines running every few units. In the extreme corners of the screen, tiny decorative ornaments drawn in marine ink: a small compass-rose glyph in the upper-right with the N arrow pointing up, a small architect's scale-ruler glyph in the lower-left, a tiny coordinate-marker crosshair in the upper-left. These sit quietly as marginalia, never drawing focus.
 
-Functional aesthetic — the price range of each option is rendered as a thin horizontal bar beneath the headline, the bar widths in precise proportion to actual dollar amounts. The DIY bar is short. The Hybrid bar is medium. The Pro bar is long. You can read the spread at a glance without reading a number.
+CRITICAL RULES:
+1. If an element can be removed without breaking the composition's silence, remove it — silence is trust here.
+2. All shapes are precise geometric forms — circles, rectangles with generous corner radii, thin straight lines — nothing sketchy, nothing organic.
+3. One single accent color — a clean saturated teal — appears ONLY on the CTA pill, the construction-line glows on the schematic, and one faint underline beneath the hero headline. Everything else is bone, fog, and marine ink.
+4. Typography is architectural — a clean geometric sans throughout, thin for body, medium for headlines, bold only for the CTA text. Generous letter-spacing on UPPERCASE TRACKED labels. Text feels like it's been placed with tweezers.
+5. The overall feeling is exact — every spacing should feel measured, every alignment should feel intentional, nothing should feel casual.
 
-The anchor: the single teal accent bar above the recommended Pro option. Sharp, thin, definite. "This is where a licensed plumber earns their rate." Everything else reads in bone and fog and marine ink. The teal never appears elsewhere on the screen — it is reserved.
+Large hero illustration occupying the upper two-thirds of the screen: a precise architectural cross-section line-drawing of a two-story house rendered in thin deep-marine lines on the pale bone background — you can see the exterior walls as thin outlines, the roof line, the floor separating the two stories, stylized window openings and a doorway. Everything is line-only, no fills, like a technical blueprint. The proportions are slightly stylized-friendly (warmer than pure construction drawing, looser than technical) — rounded corners on windows, slightly curved roofline. Scattered through the house at three specific spots, small saturated teal glow-circles pulse softly — one at the kitchen sink area indicating a plumbing problem, one near the front door showing a hinge issue, one at a second-floor window showing a frame problem. Each glow-circle has a thin concentric teal ring around it suggesting soft pulsing radiation, and a hair-thin teal line extending from each glow to a tiny labelled dot near the house's edge. The dots have tiny UPPERCASE TRACKED labels in marine: "LEAK", "HINGE", "SEAL" — like a legend on an architectural drawing. Beside the house, a small delicate teal compass rose indicating orientation. A few tiny measurement-indicator marks (thin lines with arrow-ticks at both ends) drift around the drawing as decoration, showing the schematic-nature of the view. In the empty space above the house, small thin construction-lines extend out faintly as dimension-drawings, fading to nothing — suggesting this is part of a larger drawing we're seeing a portion of.
 
-Typography is architectural and exact. A clean geometric sans throughout — thin for body, medium for headlines, bold only for the prices and the labor hours. Numbers are the heroes — "$15", "$45", "$180", "30 min", "2h", "half-day" — set in heavy sans with generous letter-spacing, right-aligned against the price bars so the eye can scan down a column. Every number has air around it. Nothing is cramped.
+Below the hero illustration:
 
-One screen. The morning drafting board — precise, clear, patient.
+A single hair-thin marine horizontal rule, very wide, with a small teal diamond marker in its center.
 
-At the top, a small thumbnail of the user's photo rendered as a clean square with a thin marine outline — no Polaroid charm, just the photo on the desk. Beside it, a small UPPERCASE TRACKED label in fog-grey: "DIAGNOSIS". Below in deep marine sans: "Leaky Kitchen Faucet Cartridge" — medium-weight, sitting at the exact optical centre of the headline zone. A single body line beneath in fog-grey: "Worn O-ring in single-handle cartridge. 92% confidence."
+A UPPERCASE TRACKED label in fog-grey: "FIXIT · HOME REPAIR SCHEMATIC"
 
-A thin single-pixel marine horizontal rule well below the headline, no decoration.
+Below the label, a hero headline in medium geometric sans, two lines, with a barely-there thin teal underline beneath the second line:
+"Take a photo."
+"Get the real price."
 
-Below the rule, a small UPPERCASE TRACKED section label: "THREE ROUTES" — nothing louder.
+A single line of body text beneath in fog-grey: "Three routes, fair pricing, no surprises — mapped precisely for your home."
 
-Three equal-width zones in a horizontal row, separated by air only.
+Below the body, a single teal pill button — rectangular-ish with generous corner radii, saturated teal, crisp geometric edges, centered at optical balance: "SNAP A PHOTO TO BEGIN" in clean medium sans, letter-spaced. The button has a very faint teal glow around it suggesting activation.
 
-[DIY zone] Top-right of the zone: a small UPPERCASE TRACKED label "DIY" in fog-grey. Center: "$15" in heavy marine sans, the smallest of the three prices. Below the number: a short horizontal bar in marine proportional to the cost (narrowest of the three). Below the bar: "30 min · O-ring kit · Beginner-friendly" in fog-grey small sans, set in one line. Below that: "Save $165" in teal whisper — the only teal text on the DIY zone, tiny, a single pill shape outlined not filled.
+Below the button, a whisper-weight link in fog-grey: "Try a sample problem instead" with a tiny teal arrow glyph.
 
-[Hybrid zone] Top-right: "HYBRID". Center: "$45" in heavy marine. Below: a medium horizontal bar in marine. Below the bar: "45 min visit · You buy the part · Save on labor." in fog-grey.
+Near the bottom edge, a decorative thin row of four tiny geometric problem-glyphs in marine line-drawing, evenly spaced — a precise faucet cross-section, a door-hinge schematic, a tile-grid pattern, an appliance-outline — each with a tiny UPPERCASE TRACKED label beneath in fog-grey: "PLUMBING · HARDWARE · SURFACES · APPLIANCES". Between each glyph, a tiny vertical tick mark.
 
-[Pro zone — the anchor] A single thin saturated teal bar across the top edge of the zone, exactly the width of the zone, aligned precisely to zero margin. Top-right: "FULL PRO" in UPPERCASE TRACKED. Center: "$180" in heavy marine, the largest of the three. Below: a long horizontal bar in marine proportional to the cost (widest of the three). Below the bar: "2-hour visit · Licensed plumber · 1-year warranty" in fog-grey. Below that: a small teal-outlined pill button "SCHEDULE" — the only filled-feeling element on the screen besides the teal accent bar.
+At the very base, three precise marine dots in a horizontal row acting as an onboarding progress indicator — the first dot filled teal (you are here), the others hollow marine outlines.
 
-Below the three zones, more air — at least the height of a route zone.
-
-A quiet single-line prompt in deep marine sans: "Would you like to start with DIY?" set exactly centered. Below it, a teal-outlined pill button: "OPEN DIY GUIDE" — exactly the same weight as the SCHEDULE button, so hierarchy is horizontal not vertical.
-
-At the very bottom edge, a minimal pill-shaped navigation with four small geometric line-icons (home, history, saved, profile), fog-grey, never the focus.
+Motion-directive: the teal glow-circles on the schematic should feel like they WANT to pulse; the teal underline beneath the headline should feel like it WANTS to breathe; the compass rose should feel like the N-arrow is settling. Static image, but full of measured respiration.
 
 Primary Design Surface: App.
 ```
@@ -50,15 +53,18 @@ Primary Design Surface: App.
 
 ## Что должно выйти (ожидание)
 
-- Pale bone + fog grey + marine ink + single teal accent
-- Alignment как hero feature — всё на grid, всё дышит воздухом
-- Price bars как proportional to dollar amount (data viz)
-- Clean geometric sans, no serif anywhere
-- Teal используется ОДИН раз (на Pro card) — как signature
-- Горизонтальный rhythm: diagnosis → rule → three routes → prompt → button
+- Pale-bone background with faint dot-grid drafting-paper texture
+- Full house architectural line-drawing in marine ink (cross-section style)
+- Three pulsing teal glow-circles at problem spots, with concentric rings
+- Teal labelled leader-lines extending к legend dots ("LEAK", "HINGE", "SEAL")
+- Compass rose + measurement marks as decorative marginalia
+- Tiny corner ornaments (compass, scale-ruler, crosshair)
+- Teal CTA pill — единственный filled saturated element
+- Clean geometric sans everywhere, no serifs
+- Row of 4 line-drawn problem-category glyphs at bottom
 
 ## Против чего тестировать
 
-- Не должно выйти "SaaS enterprise dashboard" — слишком корпоративно
-- Не должно выйти "medical app cold" — должна остаться warmth через фото пользователя
-- Должно выйти "engineer wrote this for you" — precision как kindness
+- Не должно выйти "SaaS enterprise dashboard" — должна остаться warmth через аккуратность
+- Не должно выйти "medical diagnostic cold" — должна быть inviting, не clinical
+- Должно выйти "gentle architect showing you your home map"

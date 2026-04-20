@@ -38,8 +38,8 @@ export function NoirTabBar({ state, navigation }: any) {
             {
               backgroundColor:
                 Platform.OS === 'ios'
-                  ? 'rgba(255,255,255,0.06)'
-                  : 'rgba(22,23,25,0.92)',
+                  ? 'rgba(14,15,17,0.78)'
+                  : 'rgba(14,15,17,0.92)',
             },
           ]}
         />

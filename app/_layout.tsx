@@ -40,7 +40,7 @@ export default function RootLayout() {
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="your-house" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="fix-selection" options={{ animation: 'slide_from_right' }} />
-          <Stack.Screen name="repair" options={{ animation: 'slide_from_right' }} />
+          <Stack.Screen name="repair/[id]" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="repair-step" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="warranty" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="seasonal" options={{ animation: 'slide_from_right' }} />

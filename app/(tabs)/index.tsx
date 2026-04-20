@@ -10,16 +10,29 @@ import { Label } from '@/components/ui/Label';
 import { HeroNumber } from '@/components/ui/HeroNumber';
 import { RingChart } from '@/components/ui/RingChart';
 import { SeverityChip } from '@/components/ui/SeverityChip';
-import { ChevronRightGlyph, ArrowUpRightGlyph, RescanGlyph, PulseDot } from '@/components/ui/NoirGlyphs';
+import { ArrowUpRightGlyph, RescanGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
 
-const CATEGORIES = [
-  { label: 'ROOF',       color: '#E8752A', tone: 'amber' as const, angle: -90 },
-  { label: 'WALLS',      color: '#6E6E74', tone: 'neutral' as const, angle: -30 },
-  { label: 'PLUMBING',   color: '#6BDE9A', tone: 'mint' as const, angle: 30 },
-  { label: 'APPLIANCES', color: '#A8A8AD', tone: 'neutral' as const, angle: 90 },
-  { label: 'ELECTRICAL', color: '#A8A8AD', tone: 'neutral' as const, angle: 150 },
+type Status = 'calm' | 'watch' | 'fair' | 'urgent';
+type Category = {
+  label: string;
+  status: Status;
+};
+
+const CATEGORIES: Category[] = [
+  { label: 'ROOF',       status: 'urgent' },
+  { label: 'WALLS',      status: 'fair' },
+  { label: 'PLUMBING',   status: 'calm' },
+  { label: 'ELECTRICAL', status: 'calm' },
+  { label: 'APPLIANCES', status: 'watch' },
 ];
+
+const STATUS_TONE: Record<Status, { color: string; label: string }> = {
+  calm:   { color: colors.mint,   label: 'CALM' },
+  watch:  { color: colors.amber,  label: 'WATCH' },
+  fair:   { color: colors.cyan,   label: 'FAIR' },
+  urgent: { color: colors.danger, label: 'URGENT' },
+};
 
 export default function HomeTab() {
   const router = useRouter();
@@ -34,7 +47,7 @@ export default function HomeTab() {
           styles.scroll,
           {
             paddingTop: spacing.md,
-            paddingBottom: insets.bottom + 130,
+            paddingBottom: insets.bottom + 160,
           },
         ]}
         showsVerticalScrollIndicator={false}
@@ -45,32 +58,29 @@ export default function HomeTab() {
         </Text>
 
         {/* Health Ring card */}
-        <NoirCard variant="elevated" radius="lg" padding={24} style={styles.ringCard}>
+        <NoirCard variant="elevated" radius="lg" padding={26} style={styles.ringCard}>
           <View style={styles.ringWrap}>
-            <RingChart size={200} value={87} tone="cyan" segments={10} strokeWidth={3} />
-
-            {/* center overlay */}
+            <RingChart size={200} value={87} tone="cyan" segments={0} strokeWidth={3} />
             <View style={styles.ringCenter}>
               <HeroNumber value="87" size="xl" tone="white" align="center" />
+              <View style={{ height: 4 }} />
               <Label tone="tertiary" size="micro" align="center">Home Health · Fair</Label>
             </View>
+          </View>
 
-            {/* category dots around the ring */}
-            {CATEGORIES.map((cat) => {
-              const rad = (cat.angle * Math.PI) / 180;
-              const R = 115;
-              const cx = 100 + R * Math.cos(rad);
-              const cy = 100 + R * Math.sin(rad);
+          {/* Category legend — two-column grid, right below the ring */}
+          <View style={styles.legend}>
+            {CATEGORIES.map((c) => {
+              const t = STATUS_TONE[c.status];
               return (
-                <View
-                  key={cat.label}
-                  style={[
-                    styles.dotLabel,
-                    { left: cx - 50, top: cy - 10 },
-                  ]}
-                >
-                  <View style={[styles.littleDot, { backgroundColor: cat.color }]} />
-                  <Text allowFontScaling={false} style={styles.dotLabelText}>{cat.label}</Text>
+                <View key={c.label} style={styles.legendItem}>
+                  <View style={[styles.legendDot, { backgroundColor: t.color }]} />
+                  <Text allowFontScaling={false} style={styles.legendLabel}>
+                    {c.label}
+                  </Text>
+                  <Text allowFontScaling={false} style={[styles.legendStatus, { color: t.color }]}>
+                    {t.label}
+                  </Text>
                 </View>
               );
             })}
@@ -78,10 +88,12 @@ export default function HomeTab() {
 
           <View style={styles.scanRow}>
             <DocRef>Last Scan · 08:42 AM · Today</DocRef>
-            <View style={styles.scanRight}>
-              <RescanGlyph size={12} color={colors.cyan} />
-              <Text allowFontScaling={false} style={styles.rescanText}>RESCAN</Text>
-            </View>
+            <Pressable hitSlop={8} accessibilityRole="button" accessibilityLabel="Rescan home health">
+              <View style={styles.scanRight}>
+                <RescanGlyph size={12} color={colors.cyan} />
+                <Text allowFontScaling={false} style={styles.rescanText}>RESCAN</Text>
+              </View>
+            </Pressable>
           </View>
         </NoirCard>
 
@@ -90,6 +102,7 @@ export default function HomeTab() {
           onPress={() => router.push('/repair/rp-002')}
           accessibilityRole="button"
           accessibilityLabel="Roof inspection recommended"
+          style={{ marginTop: spacing.lg }}
         >
           <NoirCard variant="default" radius="md" padding={20} style={styles.alertCard}>
             <View style={styles.alertBar} />
@@ -115,11 +128,11 @@ export default function HomeTab() {
         <View style={styles.statsRow}>
           <NoirCard variant="default" radius="md" padding={18} style={styles.statCard}>
             <DocRef>HVAC Efficiency</DocRef>
-            <HeroNumber value="94" suffix="%" size="md" tone="white" style={{ marginTop: 6 }} />
+            <HeroNumber value="94" suffix="%" size="md" tone="white" style={{ marginTop: 8 }} />
           </NoirCard>
           <NoirCard variant="default" radius="md" padding={18} style={styles.statCard}>
             <DocRef>Water Pressure</DocRef>
-            <HeroNumber value="62" suffix="PSI" size="md" tone="white" style={{ marginTop: 6 }} />
+            <HeroNumber value="62" suffix="PSI" size="md" tone="white" style={{ marginTop: 8 }} />
           </NoirCard>
         </View>
       </ScrollView>
@@ -134,23 +147,22 @@ const styles = StyleSheet.create({
   displayTitle: {
     marginTop: spacing.sm,
     fontFamily: fonts.displayNarrowBold,
-    fontSize: 28,
+    fontSize: 32,
     color: colors.text,
-    letterSpacing: 0.4,
+    letterSpacing: 0.6,
     textTransform: 'uppercase',
-    lineHeight: 32,
+    lineHeight: 36,
   },
   ringCard: {
     marginTop: spacing.xl,
-    paddingVertical: 30,
   },
   ringWrap: {
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'relative',
     width: 200,
     height: 200,
     alignSelf: 'center',
+    position: 'relative',
   },
   ringCenter: {
     position: 'absolute',
@@ -161,38 +173,52 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  dotLabel: {
-    position: 'absolute',
-    width: 100,
+  legend: {
+    marginTop: spacing.xl,
+    paddingTop: spacing.lg,
+    borderTopWidth: 1,
+    borderTopColor: colors.hairline,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    rowGap: spacing.sm,
+  },
+  legendItem: {
+    width: '50%',
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
-    justifyContent: 'center',
+    paddingRight: spacing.sm,
   },
-  littleDot: {
+  legendDot: {
     width: 6,
     height: 6,
     borderRadius: 3,
+    marginRight: 8,
   },
-  dotLabelText: {
+  legendLabel: {
+    flex: 1,
     fontFamily: fonts.labelSemibold,
-    fontSize: 8,
-    color: colors.textSecondary,
+    fontSize: 10,
+    color: colors.text,
     letterSpacing: 1.2,
   },
+  legendStatus: {
+    fontFamily: fonts.mono,
+    fontSize: 9,
+    letterSpacing: tracking.docRef,
+  },
   scanRow: {
-    marginTop: spacing.xl,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    marginTop: spacing.lg,
     paddingTop: spacing.md,
     borderTopWidth: 1,
     borderTopColor: colors.hairline,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   scanRight: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    gap: 5,
   },
   rescanText: {
     fontFamily: fonts.labelSemibold,
@@ -201,7 +227,6 @@ const styles = StyleSheet.create({
     letterSpacing: tracking.labelWide,
   },
   alertCard: {
-    marginTop: spacing.lg,
     flexDirection: 'row',
     gap: spacing.md,
   },

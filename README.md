@@ -26,11 +26,47 @@ Expo SDK 55 · React Native · TypeScript strict · Supabase · Adapty · Claude
 
 ## Stage
 
-Research (Stage 1) — старт 17.04.2026
+Stage 5 Design — started 2026-04-20. Expo scaffolding + primitives + 8 key screens shipped.
+
+## Design system
+
+Design language is **"The Sunday Morning Sanctuary"** — distilled from Google Stitch via [DESIGN-GUIDE.md](docs/06-design/DESIGN-GUIDE.md). Warm cream canvas · vertical atmospheric gradient · frosted glass surfaces · glossy coral CTA · ghosted hero numbers · UPPERCASE TRACKED labels.
+
+Primitives (use these, don't reinvent):
+
+- `<AtmosphericGradient theme="sanctuary">` — full-screen vertical gradient (root of every screen)
+- `<OrbField>` — 4 soft-blurred radial orbs drifting behind content
+- `<GlassCard tint="sage" | "peach" | "coral" | "lavender">` — frosted pane with warm-tinted shadow
+- `<PillCTA tone="primary" size="lg">` — the single anchor — glossy coral gradient, haptics, a11y
+- `<GhostNumber value="$165" size="lg">` — massive translucent watermark number
+
+All tokens live in [constants/tokens.ts](constants/tokens.ts). No inline hex allowed outside.
+
+## Run
+
+```bash
+npm install
+npm run ios        # or: npm run android / npm run web
+```
+
+## Current screens (design review build)
+
+- `/(onboarding)/welcome` — hero editorial intro + 3 category vignettes + coral CTA
+- `/(onboarding)/location` — ZIP entry with location auto-detect
+- `/(onboarding)/camera-primer` — sample category tiles + permission priming
+- `/(onboarding)/processing` — 5-stage labor illusion with rotating halo
+- `/(onboarding)/result` — first estimate aha moment (3 route cards + savings pill)
+- `/(tabs)/` — Home / My Home / Estimates / Profile with floating coral FAB
+- `/paywall` — soft paywall after 3rd estimate
+- `/find-a-pro` — bottom sheet deeplink to Thumbtack / Google Maps / Yelp
 
 ## Docs
 
-Вся документация в `/docs/` — от research до deployment. См. `CLAUDE.md` для полной стека и правил.
+- [DESIGN-GUIDE.md](docs/06-design/DESIGN-GUIDE.md) — authoritative design system (Stitch → native translation)
+- [UX-SPEC.md](docs/04-ux/UX-SPEC.md) — interaction patterns, haptics, animations, copy voice
+- [SCREEN-MAP.md](docs/04-ux/SCREEN-MAP.md) — full screen inventory (42 unique MVP)
+- [USER-FLOWS.md](docs/04-ux/USER-FLOWS.md) — happy + edge flows
+- [POSITIONING.md](docs/02-product/POSITIONING.md) — brand voice (calm advisor, Know/Decide/Understand)
 
 ## Team
 

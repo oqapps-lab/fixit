@@ -1,0 +1,37 @@
+{
+  "expo": {
+    "name": "FixIt",
+    "slug": "fixit",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "fixit",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.oqapps.fixit",
+      "infoPlist": {
+        "NSCameraUsageDescription": "FixIt uses the camera to analyze repair problems from photos.",
+        "NSPhotoLibraryUsageDescription": "FixIt reads photos you pick from your library to analyze repair problems.",
+        "NSLocationWhenInUseUsageDescription": "FixIt uses your location to price repairs accurately for your region."
+      }
+    },
+    "android": {
+      "package": "com.oqapps.fixit",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.ACCESS_FINE_LOCATION",
+        "android.permission.ACCESS_COARSE_LOCATION"
+      ]
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-camera",
+      "expo-location"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

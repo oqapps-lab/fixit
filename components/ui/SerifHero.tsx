@@ -6,7 +6,7 @@ type Props = {
   children: string;
   size?: number;
   align?: 'left' | 'center';
-  tone?: 'white' | 'amber' | 'cyan';
+  tone?: 'white' | 'amber' | 'cyan' | 'mint' | 'secondary' | 'tertiary';
   style?: TextStyle;
 };
 
@@ -14,6 +14,9 @@ export function SerifHero({ children, size = 30, align = 'center', tone = 'white
   const color =
     tone === 'amber' ? colors.amber :
     tone === 'cyan' ? colors.cyan :
+    tone === 'mint' ? colors.mint :
+    tone === 'secondary' ? colors.textSecondary :
+    tone === 'tertiary' ? colors.textTertiary :
     colors.text;
 
   return (

@@ -37,7 +37,11 @@ export default function RootLayout() {
           }}
         >
           <Stack.Screen name="index" />
+          <Stack.Screen name="(onboarding)" />
+          <Stack.Screen name="(auth)" />
           <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="paywall" />
+          <Stack.Screen name="error" />
           <Stack.Screen name="your-house" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="fix-selection" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="repair/[id]" options={{ animation: 'slide_from_right' }} />
@@ -47,6 +51,10 @@ export default function RootLayout() {
           <Stack.Screen name="home-overview" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen
             name="find-a-pro"
+            options={{ presentation: 'transparentModal', animation: 'fade' }}
+          />
+          <Stack.Screen
+            name="(onboarding)/signup-ask"
             options={{ presentation: 'transparentModal', animation: 'fade' }}
           />
         </Stack>

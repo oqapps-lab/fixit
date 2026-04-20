@@ -2,8 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, TextStyle } from 'react-native';
 import { colors, fonts, tracking, typeScale } from '@/constants/tokens';
 
-type Tone = 'coral' | 'slate' | 'sage' | 'peach' | 'cream';
-type Size = 'micro' | 'small';
+type Tone = 'neutral' | 'amber' | 'cyan' | 'mint' | 'danger' | 'dim';
+type Size = 'xs' | 'sm';
 
 type Props = {
   children: string;
@@ -14,22 +14,16 @@ type Props = {
 };
 
 const TONE_COLOR: Record<Tone, string> = {
-  coral: colors.primary,
-  slate: colors.tertiary,
-  sage:  colors.sage,
-  peach: colors.primaryContainer,
-  cream: colors.onSurfaceVariant,
+  neutral: colors.textTertiary,
+  amber: colors.amber,
+  cyan: colors.cyan,
+  mint: colors.mint,
+  danger: colors.danger,
+  dim: colors.textDim,
 };
 
-export function Eyebrow({
-  children,
-  tone = 'slate',
-  size = 'small',
-  align = 'left',
-  style,
-}: Props) {
-  const fontSize = size === 'micro' ? typeScale.labelMicro : typeScale.labelSmall;
-  const letterSpacing = size === 'micro' ? tracking.labelMicro : tracking.labelWide;
+export function DocRef({ children, tone = 'neutral', size = 'xs', align, style }: Props) {
+  const fontSize = size === 'xs' ? typeScale.docRef : typeScale.labelSmall;
   return (
     <Text
       allowFontScaling={false}
@@ -38,7 +32,6 @@ export function Eyebrow({
         {
           color: TONE_COLOR[tone],
           fontSize,
-          letterSpacing,
           textAlign: align,
         },
         style,
@@ -51,6 +44,7 @@ export function Eyebrow({
 
 const styles = StyleSheet.create({
   base: {
-    fontFamily: fonts.labelSemibold,
+    fontFamily: fonts.mono,
+    letterSpacing: tracking.docRef,
   },
 });

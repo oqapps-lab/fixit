@@ -14,37 +14,37 @@ export default function RootLayout() {
   const fontsLoaded = useAppFonts();
 
   useEffect(() => {
-    if (fontsLoaded) {
-      SplashScreen.hideAsync().catch(() => {});
-    }
+    if (fontsLoaded) SplashScreen.hideAsync().catch(() => {});
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
     return (
       <View style={styles.splash}>
-        <ActivityIndicator color={colors.primary} />
+        <ActivityIndicator color={colors.amber} />
       </View>
     );
   }
 
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
+    <GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.bg }}>
       <SafeAreaProvider>
-        <StatusBar style="dark" translucent />
+        <StatusBar style="light" translucent />
         <Stack
           screenOptions={{
             headerShown: false,
-            contentStyle: { backgroundColor: colors.background },
+            contentStyle: { backgroundColor: colors.bg },
             animation: 'fade',
           }}
         >
           <Stack.Screen name="index" />
-          <Stack.Screen name="(onboarding)" />
           <Stack.Screen name="(tabs)" />
-          <Stack.Screen
-            name="paywall"
-            options={{ presentation: 'modal', animation: 'slide_from_bottom' }}
-          />
+          <Stack.Screen name="your-house" options={{ animation: 'slide_from_right' }} />
+          <Stack.Screen name="fix-selection" options={{ animation: 'slide_from_right' }} />
+          <Stack.Screen name="repair" options={{ animation: 'slide_from_right' }} />
+          <Stack.Screen name="repair-step" options={{ animation: 'slide_from_right' }} />
+          <Stack.Screen name="warranty" options={{ animation: 'slide_from_right' }} />
+          <Stack.Screen name="seasonal" options={{ animation: 'slide_from_right' }} />
+          <Stack.Screen name="home-overview" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen
             name="find-a-pro"
             options={{ presentation: 'transparentModal', animation: 'fade' }}
@@ -60,6 +60,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.background,
+    backgroundColor: colors.bg,
   },
 });

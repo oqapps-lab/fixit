@@ -2,33 +2,18 @@ import React from 'react';
 import { StyleSheet, Text, View, Pressable, Linking } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { BlurView } from 'expo-blur';
-import { Platform } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { GlassCard } from '@/components/ui/GlassCard';
-import { Eyebrow } from '@/components/ui/Eyebrow';
-import { PinGlyph, ArrowRightGlyph } from '@/components/ui/Glyphs';
+import { NoirCard } from '@/components/ui/NoirCard';
+import { DocRef } from '@/components/ui/DocRef';
+import { Label } from '@/components/ui/Label';
+import { SerifHero } from '@/components/ui/SerifHero';
+import { ChevronRightGlyph, PinGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, radii, spacing, tracking, typeScale } from '@/constants/tokens';
 
-const PLATFORMS: Array<{ name: string; tagline: string; color: string; url: string }> = [
-  {
-    name: 'Thumbtack',
-    tagline: 'Get 3-5 quotes · free',
-    color: '#1C6DFF',
-    url: 'https://www.thumbtack.com/',
-  },
-  {
-    name: 'Google Maps',
-    tagline: 'Plumbers near 80203',
-    color: '#34A853',
-    url: 'https://www.google.com/maps/search/plumbers+near+80203',
-  },
-  {
-    name: 'Yelp',
-    tagline: 'Read local reviews',
-    color: '#D32323',
-    url: 'https://www.yelp.com/search?find_desc=plumbers&find_loc=80203',
-  },
+const PLATFORMS = [
+  { name: 'Thumbtack',   meta: '3-5 quotes · free',        url: 'https://www.thumbtack.com/' },
+  { name: 'Google Maps', meta: 'Plumbers near 80203',       url: 'https://www.google.com/maps/search/plumbers+near+80203' },
+  { name: 'Yelp',        meta: 'Local reviews',             url: 'https://www.yelp.com/search?find_desc=plumbers&find_loc=80203' },
 ];
 
 export default function FindAPro() {
@@ -37,53 +22,45 @@ export default function FindAPro() {
 
   const open = async (url: string) => {
     Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => {});
-    try {
-      await Linking.openURL(url);
-    } catch {
-      // ignore
-    }
+    try { await Linking.openURL(url); } catch {}
+  };
+
+  const close = () => {
+    if (router.canGoBack()) router.back(); else router.replace('/(tabs)');
   };
 
   return (
-    <Pressable style={styles.backdrop} onPress={() => router.back()} accessibilityLabel="Close">
-      {Platform.OS === 'ios' ? (
-        <BlurView intensity={30} tint="dark" style={StyleSheet.absoluteFill} />
-      ) : (
-        <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(26,16,10,0.55)' }]} />
-      )}
-
+    <Pressable style={styles.backdrop} onPress={close} accessibilityLabel="Close">
+      <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.70)' }]} />
       <Pressable
+        onPress={(e) => e.stopPropagation()}
         style={[
           styles.sheet,
-          { paddingBottom: insets.bottom + spacing.xxl },
+          { paddingBottom: insets.bottom + spacing.xxl, paddingTop: spacing.lg },
         ]}
-        onPress={(e) => e.stopPropagation()}
       >
         <View style={styles.grabber} />
 
         <View style={styles.header}>
-          <View style={styles.headerIcon}>
-            <PinGlyph size={22} color={colors.primary} />
-          </View>
-          <View>
-            <Eyebrow tone="coral">Find a pro near you</Eyebrow>
-            <Text
-              allowFontScaling={false}
-              style={{
-                marginTop: 4,
-                fontFamily: fonts.heroItalicBold,
-                fontSize: 26,
-                color: colors.onSurface,
-                letterSpacing: tracking.hero,
-                lineHeight: 30,
-              }}
-            >
-              Three trusted places.{'\n'}You choose.
-            </Text>
-          </View>
+          <DocRef>PRO_ARCHITECT</DocRef>
+          <DocRef tone="cyan">ARCHITECTURAL · 0.4 MI</DocRef>
         </View>
 
-        <View style={{ gap: spacing.md, marginTop: spacing.xl }}>
+        <View style={styles.heroWrap}>
+          <PinGlyph size={28} color={colors.cyan} />
+          <SerifHero size={32} align="center" style={{ marginTop: spacing.md }}>
+            Найти мастера
+          </SerifHero>
+          <DocRef align="center" tone="neutral" style={{ marginTop: 6 }}>
+            ARCHITECTURAL MAINTENANCE SEARCH
+          </DocRef>
+        </View>
+
+        <Label tone="tertiary" size="micro" style={{ marginTop: spacing.xxl }}>
+          Handoff channels
+        </Label>
+
+        <View style={{ marginTop: spacing.md, gap: spacing.sm }}>
           {PLATFORMS.map((p) => (
             <Pressable
               key={p.name}
@@ -91,44 +68,21 @@ export default function FindAPro() {
               accessibilityRole="button"
               accessibilityLabel={`Open ${p.name}`}
             >
-              <GlassCard tint="default" radius="pill" padding={0}>
-                <View style={styles.platformRow}>
-                  <View style={[styles.platformSwatch, { backgroundColor: p.color }]} />
+              <NoirCard variant="default" radius="md" padding={16}>
+                <View style={styles.pRow}>
+                  <View style={styles.pDot} />
                   <View style={{ flex: 1 }}>
-                    <Text
-                      allowFontScaling={false}
-                      style={{
-                        fontFamily: fonts.displayBold,
-                        fontSize: typeScale.titleSmall,
-                        color: colors.onSurface,
-                        letterSpacing: tracking.hero,
-                      }}
-                    >
-                      {p.name}
-                    </Text>
-                    <Text
-                      allowFontScaling={false}
-                      style={{
-                        marginTop: 2,
-                        fontFamily: fonts.body,
-                        fontSize: typeScale.bodySmall,
-                        color: colors.onSurfaceVariant,
-                      }}
-                    >
-                      {p.tagline}
-                    </Text>
+                    <Text allowFontScaling={false} style={styles.pName}>{p.name.toUpperCase()}</Text>
+                    <DocRef>{p.meta}</DocRef>
                   </View>
-                  <ArrowRightGlyph size={16} color={colors.primary} />
+                  <ChevronRightGlyph size={14} color={colors.cyan} />
                 </View>
-              </GlassCard>
+              </NoirCard>
             </Pressable>
           ))}
         </View>
 
-        <Text
-          allowFontScaling={false}
-          style={styles.disclaimer}
-        >
+        <Text allowFontScaling={false} style={styles.disclaimer}>
           We don't earn from these links. Pick whoever you trust.
         </Text>
       </Pressable>
@@ -142,53 +96,53 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   sheet: {
-    backgroundColor: colors.background,
+    backgroundColor: colors.bg,
     borderTopLeftRadius: radii.xl,
     borderTopRightRadius: radii.xl,
-    paddingHorizontal: spacing.xxl,
-    paddingTop: spacing.md,
+    paddingHorizontal: spacing.xl,
+    borderWidth: 1,
+    borderColor: colors.hairlineStrong,
   },
   grabber: {
     alignSelf: 'center',
     width: 44,
-    height: 5,
-    borderRadius: 3,
-    backgroundColor: colors.outlineVariant,
-    marginBottom: spacing.lg,
+    height: 4,
+    borderRadius: 2,
+    backgroundColor: colors.hairlineStrong,
+    marginBottom: spacing.md,
   },
   header: {
     flexDirection: 'row',
-    gap: spacing.md,
-    alignItems: 'flex-start',
+    justifyContent: 'space-between',
   },
-  headerIcon: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: 'rgba(255,255,255,0.65)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.6)',
+  heroWrap: {
+    marginTop: spacing.lg,
     alignItems: 'center',
-    justifyContent: 'center',
   },
-  platformRow: {
+  pRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.md,
-    paddingHorizontal: spacing.lg,
-    paddingVertical: spacing.lg,
   },
-  platformSwatch: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
+  pDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.cyan,
+  },
+  pName: {
+    fontFamily: fonts.displayBold,
+    fontSize: typeScale.bodyLarge,
+    color: colors.text,
+    letterSpacing: tracking.tight,
+    marginBottom: 2,
   },
   disclaimer: {
-    marginTop: spacing.xl,
+    marginTop: spacing.xxl,
+    fontFamily: fonts.mono,
+    fontSize: 10,
+    color: colors.textTertiary,
+    letterSpacing: tracking.docRef,
     textAlign: 'center',
-    fontFamily: fonts.bodyLight,
-    fontSize: typeScale.bodySmall,
-    color: colors.tertiary,
-    letterSpacing: tracking.label,
   },
 });

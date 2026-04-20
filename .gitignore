@@ -1,12 +1,8 @@
-# Dependencies
 node_modules/
-
-# Expo
 .expo/
 dist/
 web-build/
 
-# Native
 *.orig.*
 *.jks
 *.p8
@@ -14,41 +10,26 @@ web-build/
 *.key
 *.mobileprovision
 
-# iOS
 ios/
-*.hmap
-*.ipa
-*.xcuserstate
-
-# Android
 android/
-*.apk
-*.aab
 
-# Metro
 .metro-health-check*
 
-# Debug logs
 npm-debug.*
 yarn-debug.*
 yarn-error.*
 
-# Env + secrets
 .env
 .env.local
 .env.*.local
 
-# Typescript
 *.tsbuildinfo
 
-# OS
 .DS_Store
 Thumbs.db
 
-# Editor
 .vscode/
 .idea/
 *.swp
 
-# Expo router
 expo-env.d.ts

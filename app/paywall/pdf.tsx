@@ -2,38 +2,13 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Line, Path } from 'react-native-svg';
 import { NoirCard } from '@/components/ui/NoirCard';
 import { DocRef } from '@/components/ui/DocRef';
 import { Label } from '@/components/ui/Label';
 import { SerifHero } from '@/components/ui/SerifHero';
 import { AmberCTA } from '@/components/ui/AmberCTA';
+import { DocumentGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, typeScale } from '@/constants/tokens';
-
-function DocumentGlyph({ size = 36, color = colors.mint }: { size?: number; color?: string }) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 36 36">
-      <Path
-        d="M9 4 H22 L27 9 V32 H9 Z"
-        stroke={color}
-        strokeWidth={1.6}
-        fill={color}
-        fillOpacity={0.14}
-        strokeLinejoin="round"
-      />
-      <Path
-        d="M22 4 V9 H27"
-        stroke={color}
-        strokeWidth={1.4}
-        fill="none"
-        strokeLinejoin="round"
-      />
-      <Line x1={13} y1={16} x2={23} y2={16} stroke={color} strokeWidth={1.2} />
-      <Line x1={13} y1={20} x2={23} y2={20} stroke={color} strokeWidth={1.2} />
-      <Line x1={13} y1={24} x2={19} y2={24} stroke={color} strokeWidth={1.2} />
-    </Svg>
-  );
-}
 
 export default function PdfPaywall() {
   const router = useRouter();

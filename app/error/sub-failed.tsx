@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(255,90,90,0.35)',
+    borderColor: colors.hairlineDanger,
     backgroundColor: colors.surface1,
   },
   title: {

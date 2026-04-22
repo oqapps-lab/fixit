@@ -6,12 +6,19 @@ type Tone = 'neutral' | 'amber' | 'cyan' | 'mint' | 'danger' | 'dim';
 type Size = 'xs' | 'sm';
 
 type Props = {
-  children: string;
+  children: React.ReactNode;
   tone?: Tone;
   size?: Size;
   align?: TextStyle['textAlign'];
   style?: TextStyle;
 };
+
+function flatten(node: React.ReactNode): string {
+  if (node == null || node === false) return '';
+  if (typeof node === 'string' || typeof node === 'number') return String(node);
+  if (Array.isArray(node)) return node.map(flatten).join('');
+  return '';
+}
 
 const TONE_COLOR: Record<Tone, string> = {
   neutral: colors.textTertiary,
@@ -37,7 +44,7 @@ export function DocRef({ children, tone = 'neutral', size = 'xs', align, style }
         style,
       ]}
     >
-      {children.toUpperCase()}
+      {flatten(children).toUpperCase()}
     </Text>
   );
 }

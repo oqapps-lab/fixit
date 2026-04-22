@@ -2,28 +2,13 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Path } from 'react-native-svg';
 import { NoirCard } from '@/components/ui/NoirCard';
 import { DocRef } from '@/components/ui/DocRef';
 import { Label } from '@/components/ui/Label';
 import { SerifHero } from '@/components/ui/SerifHero';
 import { AmberCTA } from '@/components/ui/AmberCTA';
+import { BookmarkGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, typeScale } from '@/constants/tokens';
-
-function BookmarkGlyph({ size = 36, color = colors.amber }: { size?: number; color?: string }) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 36 36">
-      <Path
-        d="M10 6 h16 v24 l-8 -6 l-8 6 z"
-        stroke={color}
-        strokeWidth={1.6}
-        fill={color}
-        fillOpacity={0.16}
-        strokeLinejoin="round"
-      />
-    </Svg>
-  );
-}
 
 export default function SavePaywall() {
   const router = useRouter();

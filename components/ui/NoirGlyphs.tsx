@@ -20,6 +20,84 @@ type GlyphProps = {
   strokeWidth?: number;
 };
 
+export function BookmarkGlyph({ size = 36, color = colors.amber }: GlyphProps) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 36 36">
+      <Path
+        d="M10 6 h16 v24 l-8 -6 l-8 6 z"
+        stroke={color}
+        strokeWidth={1.6}
+        fill={color}
+        fillOpacity={0.16}
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+}
+
+export function ShieldGlyph({ size = 36, color = colors.cyan }: GlyphProps) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 36 36">
+      <Path
+        d="M18 4 L6 9 V18 C6 25 11 30 18 32 C25 30 30 25 30 18 V9 Z"
+        stroke={color}
+        strokeWidth={1.6}
+        fill={color}
+        fillOpacity={0.14}
+        strokeLinejoin="round"
+      />
+      <Path
+        d="M13 18 L16.5 21 L23 14"
+        stroke={color}
+        strokeWidth={1.8}
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+}
+
+export function DocumentGlyph({ size = 36, color = colors.mint }: GlyphProps) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 36 36">
+      <Path
+        d="M9 4 H22 L27 9 V32 H9 Z"
+        stroke={color}
+        strokeWidth={1.6}
+        fill={color}
+        fillOpacity={0.14}
+        strokeLinejoin="round"
+      />
+      <Path
+        d="M22 4 V9 H27"
+        stroke={color}
+        strokeWidth={1.4}
+        fill="none"
+        strokeLinejoin="round"
+      />
+      <Line x1={13} y1={16} x2={23} y2={16} stroke={color} strokeWidth={1.2} />
+      <Line x1={13} y1={20} x2={23} y2={20} stroke={color} strokeWidth={1.2} />
+      <Line x1={13} y1={24} x2={19} y2={24} stroke={color} strokeWidth={1.2} />
+    </Svg>
+  );
+}
+
+export function CheckGlyph({ size = 22, color = '#72EACF', strokeWidth = 2 }: GlyphProps) {
+  return (
+    <Svg width={size} height={size} viewBox="0 0 22 22">
+      <Polyline
+        points="5,12 9,16 17,7"
+        stroke={color}
+        strokeWidth={strokeWidth}
+        fill="none"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </Svg>
+  );
+}
+
 export function ChevronLeftGlyph({ size = 20, color = '#F5F5F7', strokeWidth = 1.6 }: GlyphProps) {
   return (
     <Svg width={size} height={size} viewBox="0 0 20 20">

@@ -30,6 +30,7 @@ export const colors = {
   hairlineStrong: 'rgba(255,255,255,0.12)',
   hairlineCyan: 'rgba(107,203,217,0.20)',
   hairlineAmber: 'rgba(255,169,92,0.28)',
+  hairlineDanger: 'rgba(255,90,90,0.35)',
 
   // text
   text: '#F5F5F7',

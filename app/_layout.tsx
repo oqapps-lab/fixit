@@ -59,10 +59,6 @@ export default function RootLayout() {
             name="find-a-pro"
             options={{ presentation: 'transparentModal', animation: 'fade' }}
           />
-          <Stack.Screen
-            name="(onboarding)/signup-ask"
-            options={{ presentation: 'transparentModal', animation: 'fade' }}
-          />
         </Stack>
       </SafeAreaProvider>
     </GestureHandlerRootView>

@@ -43,6 +43,7 @@ export default function RootLayout() {
           <Stack.Screen name="paywall" />
           <Stack.Screen name="error" />
           <Stack.Screen name="settings" />
+          <Stack.Screen name="estimates" />
           <Stack.Screen name="your-house" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="fix-selection" options={{ animation: 'slide_from_right' }} />
           <Stack.Screen name="repair/[id]" options={{ animation: 'slide_from_right' }} />

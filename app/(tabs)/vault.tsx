@@ -61,7 +61,7 @@ export default function VaultTab() {
             label="Saved Projects"
             ref="SAVED · 0 ITEMS"
             tone="mint"
-            onPress={() => router.push('/saved-projects' as any)}
+            onPress={() => router.push('/estimates' as any)}
           />
           <CollectionRow
             label="Warranty Vault"

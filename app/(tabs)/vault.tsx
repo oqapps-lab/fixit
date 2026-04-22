@@ -1,14 +1,15 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { Pressable, StyleSheet, Text, View, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as Haptics from 'expo-haptics';
 import { NoirScreen } from '@/components/ui/NoirScreen';
 import { NoirHeader } from '@/components/ui/NoirHeader';
 import { NoirCard } from '@/components/ui/NoirCard';
 import { DocRef } from '@/components/ui/DocRef';
 import { Label } from '@/components/ui/Label';
 import { AmberCTA } from '@/components/ui/AmberCTA';
-import { HouseCalmIllustration } from '@/components/ui/NoirGlyphs';
+import { ChevronRightGlyph, HouseCalmIllustration } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
 
 export default function VaultTab() {
@@ -56,21 +57,84 @@ export default function VaultTab() {
         </Label>
 
         <View style={{ marginTop: spacing.md, gap: spacing.sm }}>
-          <NoirCard variant="default" radius="md" padding={16}>
-            <DocRef tone="mint">SAVED · 0 ITEMS</DocRef>
-            <Text allowFontScaling={false} style={styles.collItem}>Saved Projects</Text>
-          </NoirCard>
-          <NoirCard variant="default" radius="md" padding={16}>
-            <DocRef tone="cyan">WARRANTY · 3 TRACKED</DocRef>
-            <Text allowFontScaling={false} style={styles.collItem}>Warranty Vault</Text>
-          </NoirCard>
-          <NoirCard variant="default" radius="md" padding={16}>
-            <DocRef>PHOTOS · 12 FILES</DocRef>
-            <Text allowFontScaling={false} style={styles.collItem}>Photo Journal</Text>
-          </NoirCard>
+          <CollectionRow
+            label="Saved Projects"
+            ref="SAVED · 0 ITEMS"
+            tone="mint"
+            onPress={() => router.push('/saved-projects' as any)}
+          />
+          <CollectionRow
+            label="Warranty Vault"
+            ref="WARRANTY · 3 TRACKED"
+            tone="cyan"
+            onPress={() => router.push('/warranty')}
+          />
+          <CollectionRow
+            label="Photo Journal"
+            ref="PHOTOS · 12 FILES"
+            tone="neutral"
+            onPress={() => router.push('/your-house')}
+          />
+        </View>
+
+        <Label tone="tertiary" size="micro" style={{ marginTop: spacing.xxxl }}>
+          Account
+        </Label>
+        <View style={{ marginTop: spacing.md, gap: spacing.sm }}>
+          <CollectionRow
+            label="Settings"
+            ref="SECTOR · CONFIG"
+            tone="amber"
+            onPress={() => router.push('/settings')}
+          />
+          <CollectionRow
+            label="Invite friends"
+            ref="REFERRAL · +1 ESTIMATE"
+            tone="mint"
+            onPress={() => router.push('/invite' as any)}
+          />
         </View>
       </ScrollView>
     </NoirScreen>
+  );
+}
+
+function CollectionRow({
+  label, ref, tone, onPress,
+}: {
+  label: string;
+  ref: string;
+  tone: 'mint' | 'cyan' | 'amber' | 'neutral';
+  onPress: () => void;
+}) {
+  return (
+    <Pressable
+      onPress={() => {
+        Haptics.selectionAsync().catch(() => {});
+        onPress();
+      }}
+      accessibilityRole="button"
+      accessibilityLabel={label}
+      hitSlop={6}
+    >
+      {({ pressed }) => (
+        <NoirCard
+          variant="default"
+          radius="md"
+          padding={16}
+          style={[
+            { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+            pressed ? { opacity: 0.65 } : null,
+          ]}
+        >
+          <View style={{ flex: 1 }}>
+            <DocRef tone={tone === 'neutral' ? 'neutral' : tone}>{ref}</DocRef>
+            <Text allowFontScaling={false} style={styles.collItem}>{label}</Text>
+          </View>
+          <ChevronRightGlyph size={14} color={colors.textTertiary} />
+        </NoirCard>
+      )}
+    </Pressable>
   );
 }
 

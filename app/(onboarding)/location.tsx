@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, TextInput, View, Pressable } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, Text, TextInput, View, Pressable, Keyboard } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NoirScreen } from '@/components/ui/NoirScreen';
@@ -21,79 +21,96 @@ export default function Location() {
     <NoirScreen>
       <NoirHeader brand="SECTOR · LOCATE" showBack />
 
-      <View style={[
-        styles.content,
-        { paddingTop: insets.top + spacing.huge, paddingBottom: insets.bottom + spacing.xxxl },
-      ]}>
-        <View>
-          <DocRef>STEP 01 · 03 · REGION</DocRef>
-          <Text allowFontScaling={false} style={styles.title}>
-            WHERE DO{'\n'}YOU LIVE?
-          </Text>
-          <Text allowFontScaling={false} style={styles.body}>
-            Prices vary 40% by region. Denver ≠ Memphis. We price to your ZIP.
-          </Text>
-        </View>
-
-        <View style={styles.inputBlock}>
-          <Label tone="tertiary" size="micro">Your ZIP code</Label>
-          <NoirCard variant="elevated" radius="md" padding={0} style={{ marginTop: spacing.sm }}>
-            <View style={styles.inputRow}>
-              <PinGlyph size={20} color={valid ? colors.amber : colors.textTertiary} />
-              <TextInput
-                value={zip}
-                onChangeText={(t) => setZip(t.replace(/[^\d]/g, '').slice(0, 5))}
-                keyboardType="number-pad"
-                placeholder="80203"
-                placeholderTextColor={colors.textDim}
-                maxLength={5}
-                style={styles.input}
-                accessibilityLabel="ZIP code"
-                autoFocus
-              />
-            </View>
-          </NoirCard>
-          <Pressable
-            onPress={() => setZip('80203')}
-            hitSlop={8}
-            accessibilityRole="button"
-            accessibilityLabel="Use my location"
-            style={styles.useLocation}
-          >
-            <ArrowUpRightGlyph size={12} color={colors.cyan} />
-            <Text allowFontScaling={false} style={styles.useLocationText}>USE MY LOCATION</Text>
-          </Pressable>
-        </View>
-
-        <View style={styles.anchor}>
-          <AmberCTA
-            label={valid ? 'Continue' : 'Enter 5-digit ZIP'}
-            variant="primary"
-            size="lg"
-            disabled={!valid}
-            onPress={() => router.push('/(onboarding)/camera-primer')}
-          />
-          <Pressable
-            onPress={() => router.push('/(onboarding)/camera-primer')}
-            hitSlop={8}
-            style={styles.skip}
-          >
-            <Text allowFontScaling={false} style={styles.skipText}>Skip — use national average</Text>
-          </Pressable>
-          <View style={styles.dots}>
-            <View style={styles.dotActive} />
-            <View style={styles.dot} />
-            <View style={styles.dot} />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={{ flex: 1 }}
+        keyboardVerticalOffset={0}
+      >
+        <ScrollView
+          contentContainerStyle={[
+            styles.content,
+            { paddingTop: spacing.xxl, paddingBottom: insets.bottom + spacing.xxxl },
+          ]}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          <View>
+            <DocRef>STEP 01 · 03 · REGION</DocRef>
+            <Text allowFontScaling={false} style={styles.title}>
+              WHERE DO{'\n'}YOU LIVE?
+            </Text>
+            <Text allowFontScaling={false} style={styles.body}>
+              Prices vary 40% by region. Denver ≠ Memphis. We price to your ZIP.
+            </Text>
           </View>
-        </View>
-      </View>
+
+          <View style={styles.inputBlock}>
+            <Label tone="tertiary" size="micro">Your ZIP code</Label>
+            <NoirCard variant="elevated" radius="md" padding={0} style={{ marginTop: spacing.sm }}>
+              <View style={styles.inputRow}>
+                <PinGlyph size={20} color={valid ? colors.amber : colors.textTertiary} />
+                <TextInput
+                  value={zip}
+                  onChangeText={(t) => {
+                    const next = t.replace(/[^\d]/g, '').slice(0, 5);
+                    setZip(next);
+                    if (next.length === 5) Keyboard.dismiss();
+                  }}
+                  keyboardType="number-pad"
+                  placeholder="80203"
+                  placeholderTextColor={colors.textDim}
+                  maxLength={5}
+                  style={styles.input}
+                  accessibilityLabel="ZIP code"
+                  accessibilityHint="5-digit US postal code"
+                  accessibilityValue={{ text: zip ? zip : 'empty' }}
+                  returnKeyType="done"
+                  onSubmitEditing={() => Keyboard.dismiss()}
+                />
+              </View>
+            </NoirCard>
+            <Pressable
+              onPress={() => { setZip('80203'); Keyboard.dismiss(); }}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel="Use my location"
+              style={styles.useLocation}
+            >
+              <ArrowUpRightGlyph size={12} color={colors.cyan} />
+              <Text allowFontScaling={false} style={styles.useLocationText}>USE MY LOCATION</Text>
+            </Pressable>
+          </View>
+
+          <View style={styles.anchor}>
+            <AmberCTA
+              label={valid ? 'Continue' : 'Enter 5-digit ZIP'}
+              variant="primary"
+              size="lg"
+              disabled={!valid}
+              onPress={() => router.push('/(onboarding)/camera-primer')}
+            />
+            <Pressable
+              onPress={() => router.push('/(onboarding)/camera-primer')}
+              hitSlop={8}
+              style={styles.skip}
+            >
+              <Text allowFontScaling={false} style={styles.skipText}>Skip — use national average</Text>
+            </Pressable>
+            <View style={styles.dots}>
+              <View style={styles.dotActive} />
+              <View style={styles.dot} />
+              <View style={styles.dot} />
+            </View>
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </NoirScreen>
   );
 }
 
 const styles = StyleSheet.create({
   content: {
-    flex: 1,
+    flexGrow: 1,
     paddingHorizontal: spacing.xl,
     justifyContent: 'space-between',
   },

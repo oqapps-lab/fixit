@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, ViewStyle, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Defs, RadialGradient, Stop, Rect } from 'react-native-svg';
 import { colors, gradients } from '@/constants/tokens';
 
@@ -8,11 +9,14 @@ type Props = {
   children: React.ReactNode;
   glow?: 'amber' | 'cyan' | 'none';
   style?: ViewStyle;
+  /** Top fade overlay. Prevents scroll content bleeding through status bar. */
+  topFade?: boolean;
 };
 
-export function NoirScreen({ children, glow = 'amber', style }: Props) {
+export function NoirScreen({ children, glow = 'amber', style, topFade = true }: Props) {
   const { width } = Dimensions.get('window');
   const orbSize = width * 1.6;
+  const insets = useSafeAreaInsets();
 
   return (
     <View style={[styles.root, style]}>
@@ -79,6 +83,22 @@ export function NoirScreen({ children, glow = 'amber', style }: Props) {
       ) : null}
 
       {children}
+
+      {/* top fade — prevents scroll content bleeding through status bar */}
+      {topFade ? (
+        <LinearGradient
+          pointerEvents="none"
+          colors={['rgba(8,8,10,0.95)', 'rgba(8,8,10,0.55)', 'rgba(8,8,10,0)'] as const}
+          locations={[0, 0.6, 1] as const}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: insets.top + 12,
+          }}
+        />
+      ) : null}
     </View>
   );
 }

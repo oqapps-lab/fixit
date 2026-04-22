@@ -140,10 +140,12 @@ const styles = StyleSheet.create({
   },
   progressPct: {
     marginLeft: spacing.md,
-    fontFamily: fonts.mono,
-    fontSize: typeScale.labelMicro,
-    color: colors.textTertiary,
+    fontFamily: fonts.monoMedium,
+    fontSize: typeScale.labelSmall,
+    color: colors.textSecondary,
     letterSpacing: tracking.docRef,
+    minWidth: 36,
+    textAlign: 'right',
   },
   pastRow: {
     flexDirection: 'row',

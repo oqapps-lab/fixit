@@ -90,7 +90,14 @@ function RouteCard({
   onPress?: () => void;
 }) {
   return (
-    <Pressable onPress={onPress} accessibilityRole="radio" accessibilityState={{ selected }}>
+    <Pressable
+      onPress={onPress}
+      accessibilityRole="radio"
+      accessibilityState={{ selected }}
+      accessibilityLabel={`${price} · ${meta}${recommended ? ' · recommended' : ''}`}
+      accessibilityHint="Tap to pick this repair route"
+      hitSlop={6}
+    >
       <NoirCard
         variant={selected ? 'elevated' : 'default'}
         radius="md"

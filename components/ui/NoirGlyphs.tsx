@@ -10,7 +10,6 @@ import Svg, {
   Polyline,
   Rect,
   Stop,
-  Text as SvgText,
 } from 'react-native-svg';
 import { colors } from '@/constants/tokens';
 

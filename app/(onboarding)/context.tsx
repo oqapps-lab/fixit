@@ -130,6 +130,8 @@ export default function Context() {
           <Pressable
             onPress={() => router.push('/(onboarding)/processing')}
             hitSlop={8}
+            accessibilityRole="button"
+            accessibilityLabel="Skip context questions and use defaults"
           >
             <Text allowFontScaling={false} style={styles.skipText}>Skip — use defaults</Text>
           </Pressable>

@@ -5,7 +5,6 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NoirScreen } from '@/components/ui/NoirScreen';
 import { NoirHeader } from '@/components/ui/NoirHeader';
 import { NoirCard } from '@/components/ui/NoirCard';
-import { DocRef } from '@/components/ui/DocRef';
 import { HeroNumber } from '@/components/ui/HeroNumber';
 import { AmberCTA } from '@/components/ui/AmberCTA';
 import { ToolsPhoto, HandshakePhoto, ToolboxPhoto } from '@/components/ui/NoirGlyphs';
@@ -150,7 +149,7 @@ const styles = StyleSheet.create({
   },
   recBadge: {
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(255,169,92,0.12)',
+    backgroundColor: colors.amberTint12,
     borderRadius: 4,
     paddingHorizontal: 8,
     paddingVertical: 4,

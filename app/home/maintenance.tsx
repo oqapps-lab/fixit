@@ -8,7 +8,6 @@ import { NoirHeader } from '@/components/ui/NoirHeader';
 import { NoirCard } from '@/components/ui/NoirCard';
 import { DocRef } from '@/components/ui/DocRef';
 import { Label } from '@/components/ui/Label';
-import { AmberCTA } from '@/components/ui/AmberCTA';
 import { CheckGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
 
@@ -194,7 +193,7 @@ function TaskRow({
           <View
             style={[
               styles.checkbox,
-              isDone ? { borderColor: colors.mint, backgroundColor: 'rgba(107,222,154,0.18)' } : null,
+              isDone ? { borderColor: colors.mint, backgroundColor: colors.mintTint18 } : null,
             ]}
           >
             {isDone ? <CheckGlyph size={14} color={colors.mint} /> : null}

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert, Clipboard, Pressable, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
+import { Alert, Clipboard, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';

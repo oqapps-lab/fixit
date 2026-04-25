@@ -1,7 +1,6 @@
 import React from 'react';
 import { Platform, StyleSheet, View, ViewProps, ViewStyle } from 'react-native';
 import { BlurView } from 'expo-blur';
-import { LinearGradient } from 'expo-linear-gradient';
 import { colors, radii } from '@/constants/tokens';
 
 type Variant = 'default' | 'elevated' | 'outlined' | 'blueprint' | 'glass';

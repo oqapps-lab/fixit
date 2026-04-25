@@ -35,7 +35,7 @@ export default function WarrantyPaywall() {
       accessibilityLabel="Close paywall"
     >
       <View
-        style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.78)' }]}
+        style={[StyleSheet.absoluteFill, { backgroundColor: colors.scrimStrong }]}
       />
 
       <Pressable

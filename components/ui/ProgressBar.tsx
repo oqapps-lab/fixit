@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { colors, gradients } from '@/constants/tokens';
+import { colors } from '@/constants/tokens';
 
 type Tone = 'amber' | 'cyan' | 'mint';
 

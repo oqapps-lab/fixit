@@ -3,8 +3,9 @@ import { StyleSheet, Pressable, View, Text, Platform } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
+import type { BottomTabBarProps } from '@react-navigation/bottom-tabs';
 import { HomeGlyph, WrenchGlyph, ClockGlyph, VaultGlyph } from './NoirGlyphs';
-import { colors, fonts, radii, spacing, tracking } from '@/constants/tokens';
+import { colors, fonts, spacing, tracking } from '@/constants/tokens';
 
 const TABS = [
   { name: 'index', label: 'SYSTEMS', Icon: HomeGlyph },
@@ -13,10 +14,10 @@ const TABS = [
   { name: 'vault', label: 'VAULT', Icon: VaultGlyph },
 ];
 
-export function NoirTabBar({ state, navigation }: any) {
+export function NoirTabBar({ state, navigation }: BottomTabBarProps) {
   const insets = useSafeAreaInsets();
 
-  const visibleRoutes = state.routes.filter((r: any) => !r.name.startsWith('('));
+  const visibleRoutes = state.routes.filter((r) => !r.name.startsWith('('));
 
   return (
     <View
@@ -47,7 +48,7 @@ export function NoirTabBar({ state, navigation }: any) {
         <View pointerEvents="none" style={styles.edgeTop} />
 
         <View style={styles.row}>
-          {visibleRoutes.map((route: any, index: number) => {
+          {visibleRoutes.map((route, index) => {
             const isFocused = state.index === index;
             const cfg = TABS.find((t) => t.name === route.name) ?? TABS[0]!;
             const Icon = cfg.Icon;

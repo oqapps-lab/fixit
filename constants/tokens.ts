@@ -60,6 +60,19 @@ export const colors = {
   danger: '#FF5A5A',
   dangerDim: '#8F2929',
   dangerGlow: 'rgba(255,90,90,0.18)',
+
+  // scrims (modal/sheet backdrops)
+  scrim: 'rgba(0,0,0,0.70)',
+  scrimStrong: 'rgba(0,0,0,0.78)',
+
+  // accent tints (semi-transparent fills derived from accent palette)
+  amberTint05: 'rgba(255,169,92,0.05)',
+  amberTint08: 'rgba(255,169,92,0.08)',
+  amberTint10: 'rgba(255,169,92,0.10)',
+  amberTint12: 'rgba(255,169,92,0.12)',
+  amberTint15: 'rgba(255,169,92,0.15)',
+  cyanTint15: 'rgba(107,203,217,0.15)',
+  mintTint18: 'rgba(107,222,154,0.18)',
 } as const;
 
 export type ColorToken = keyof typeof colors;

@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/Label';
 import { HeroNumber } from '@/components/ui/HeroNumber';
 import { AmberCTA } from '@/components/ui/AmberCTA';
 import { ChevronRightGlyph } from '@/components/ui/NoirGlyphs';
-import { colors, fonts, radii, spacing, tracking, typeScale } from '@/constants/tokens';
+import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
 
 const BENEFITS = [
   'Unlimited estimates',

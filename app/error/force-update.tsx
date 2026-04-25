@@ -5,7 +5,7 @@ import Svg, { Line, Polyline, Rect } from 'react-native-svg';
 import { AmberCTA } from '@/components/ui/AmberCTA';
 import { DocRef } from '@/components/ui/DocRef';
 import { NoirScreen } from '@/components/ui/NoirScreen';
-import { colors, fonts, radii, spacing, tracking, typeScale } from '@/constants/tokens';
+import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
 
 const APP_STORE_URL = Platform.select({
   ios: 'https://apps.apple.com/app/idYOUR_APP_ID',

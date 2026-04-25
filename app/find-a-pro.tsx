@@ -31,7 +31,7 @@ export default function FindAPro() {
 
   return (
     <Pressable style={styles.backdrop} onPress={close} accessibilityLabel="Close">
-      <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.70)' }]} />
+      <View style={[StyleSheet.absoluteFill, { backgroundColor: colors.scrim }]} />
       <Pressable
         onPress={(e) => e.stopPropagation()}
         style={[

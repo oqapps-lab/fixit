@@ -7,7 +7,6 @@ import { NoirScreen } from '@/components/ui/NoirScreen';
 import { NoirHeader } from '@/components/ui/NoirHeader';
 import { NoirCard } from '@/components/ui/NoirCard';
 import { DocRef } from '@/components/ui/DocRef';
-import { Label } from '@/components/ui/Label';
 import { AmberCTA } from '@/components/ui/AmberCTA';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
 

@@ -92,6 +92,8 @@ export default function Location() {
             <Pressable
               onPress={() => router.push('/(onboarding)/camera-primer')}
               hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel="Skip ZIP and use national average pricing"
               style={styles.skip}
             >
               <Text allowFontScaling={false} style={styles.skipText}>Skip — use national average</Text>

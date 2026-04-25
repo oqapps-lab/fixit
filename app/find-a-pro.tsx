@@ -49,7 +49,7 @@ export default function FindAPro() {
         <View style={styles.heroWrap}>
           <PinGlyph size={28} color={colors.cyan} />
           <SerifHero size={32} align="center" style={{ marginTop: spacing.md }}>
-            Найти мастера
+            Find a pro
           </SerifHero>
           <DocRef align="center" tone="neutral" style={{ marginTop: 6 }}>
             ARCHITECTURAL MAINTENANCE SEARCH

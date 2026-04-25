@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
+import React, { useCallback, useEffect, useState } from 'react';
+import { ActivityIndicator, StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NoirScreen } from '@/components/ui/NoirScreen';
@@ -13,20 +13,12 @@ import { SeverityChip } from '@/components/ui/SeverityChip';
 import * as Haptics from 'expo-haptics';
 import { ArrowUpRightGlyph, BellGlyph, RescanGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
+import { listEstimates } from '@/services/estimates';
+import { listRepairs } from '@/services/repairs';
+import { listMaintenance } from '@/services/maintenance';
+import type { EstimateRow, MaintenanceTaskRow, RepairRow, Severity, CategoryKind } from '@/types/database';
 
 type Status = 'calm' | 'watch' | 'fair' | 'urgent';
-type Category = {
-  label: string;
-  status: Status;
-};
-
-const CATEGORIES: Category[] = [
-  { label: 'ROOF',       status: 'urgent' },
-  { label: 'WALLS',      status: 'fair' },
-  { label: 'PLUMBING',   status: 'calm' },
-  { label: 'ELECTRICAL', status: 'calm' },
-  { label: 'APPLIANCES', status: 'watch' },
-];
 
 const STATUS_TONE: Record<Status, { color: string; label: string }> = {
   calm:   { color: colors.mint,   label: 'CALM' },
@@ -35,9 +27,103 @@ const STATUS_TONE: Record<Status, { color: string; label: string }> = {
   urgent: { color: colors.danger, label: 'URGENT' },
 };
 
+const CATEGORY_LABELS: Record<CategoryKind, string> = {
+  roof: 'ROOF',
+  walls: 'WALLS',
+  plumbing: 'PLUMBING',
+  electrical: 'ELECTRICAL',
+  appliance: 'APPLIANCES',
+  floor: 'FLOOR',
+  hvac: 'HVAC',
+};
+
+const SEVERITY_RANK: Record<Severity, number> = { low: 0, moderate: 1, high: 2 };
+
+function severityToStatus(s: Severity): Status {
+  if (s === 'high') return 'urgent';
+  if (s === 'moderate') return 'watch';
+  return 'calm';
+}
+
+function computeHealth(args: {
+  urgentCount: number;
+  highSeverityCount: number;
+  overdueMaintCount: number;
+}) {
+  const raw = 100 - args.urgentCount * 15 - args.highSeverityCount * 10 - args.overdueMaintCount * 5;
+  return Math.max(0, Math.min(100, Math.round(raw)));
+}
+
+function healthLabel(score: number): string {
+  if (score >= 85) return 'Good';
+  if (score >= 65) return 'Fair';
+  return 'Poor';
+}
+
 export default function HomeTab() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const [loading, setLoading] = useState(true);
+  const [estimates, setEstimates] = useState<EstimateRow[]>([]);
+  const [repairs, setRepairs] = useState<RepairRow[]>([]);
+  const [maintenance, setMaintenance] = useState<MaintenanceTaskRow[]>([]);
+  const [lastScanIso, setLastScanIso] = useState<string | null>(null);
+
+  const refetch = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [e, r, m] = await Promise.all([listEstimates(), listRepairs(), listMaintenance()]);
+      setEstimates(e);
+      setRepairs(r);
+      setMaintenance(m);
+      setLastScanIso(new Date().toISOString());
+    } catch {
+      // silently swallow — keep last good state
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
+
+  // Derived counts
+  const urgentCount =
+    estimates.filter((e) => e.severity === 'high').length +
+    repairs.filter((r) => r.severity === 'high').length;
+  const highSeverityCount = estimates.filter((e) => e.severity === 'moderate').length;
+  const todayIso = new Date().toISOString().slice(0, 10);
+  const overdueMaintCount = maintenance.filter(
+    (t) => !t.done_at && t.due_date && t.due_date < todayIso,
+  ).length;
+  const dueMaintCount = maintenance.filter((t) => !t.done_at).length;
+
+  const health = computeHealth({ urgentCount, highSeverityCount, overdueMaintCount });
+  const hLabel = healthLabel(health);
+
+  // Build categories from estimates: each category → max severity
+  const categoryMap = new Map<CategoryKind, Severity>();
+  for (const e of estimates) {
+    const prev = categoryMap.get(e.category);
+    if (!prev || SEVERITY_RANK[e.severity] > SEVERITY_RANK[prev]) {
+      categoryMap.set(e.category, e.severity);
+    }
+  }
+  const categories: { label: string; status: Status }[] = Array.from(categoryMap.entries()).map(
+    ([cat, sev]) => ({
+      label: CATEGORY_LABELS[cat] ?? String(cat).toUpperCase(),
+      status: severityToStatus(sev),
+    }),
+  );
+
+  // Featured alert — pick highest-severity estimate
+  const featured =
+    [...estimates].sort((a, b) => SEVERITY_RANK[b.severity] - SEVERITY_RANK[a.severity])[0] ?? null;
+
+  const lastScanLabel = lastScanIso
+    ? `Last Scan · ${new Date(lastScanIso).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })} · Today`
+    : 'Last Scan · —';
 
   return (
     <NoirScreen>
@@ -77,17 +163,23 @@ export default function HomeTab() {
         {/* Health Ring card */}
         <NoirCard variant="elevated" radius="lg" padding={26} style={styles.ringCard}>
           <View style={styles.ringWrap}>
-            <RingChart size={200} value={87} tone="cyan" segments={0} strokeWidth={3} />
+            <RingChart size={200} value={health} tone="cyan" segments={0} strokeWidth={3} />
             <View style={styles.ringCenter}>
-              <HeroNumber value="87" size="xl" tone="white" align="center" />
-              <View style={{ height: 4 }} />
-              <Label tone="tertiary" size="micro" align="center">Home Health · Fair</Label>
+              {loading ? (
+                <ActivityIndicator color={colors.amber} />
+              ) : (
+                <>
+                  <HeroNumber value={String(health)} size="xl" tone="white" align="center" />
+                  <View style={{ height: 4 }} />
+                  <Label tone="tertiary" size="micro" align="center">{`Home Health · ${hLabel}`}</Label>
+                </>
+              )}
             </View>
           </View>
 
           {/* Category legend — two-column grid, right below the ring */}
           <View style={styles.legend}>
-            {CATEGORIES.map((c) => {
+            {categories.map((c) => {
               const t = STATUS_TONE[c.status];
               return (
                 <View key={c.label} style={styles.legendItem}>
@@ -104,8 +196,16 @@ export default function HomeTab() {
           </View>
 
           <View style={styles.scanRow}>
-            <DocRef>Last Scan · 08:42 AM · Today</DocRef>
-            <Pressable hitSlop={8} accessibilityRole="button" accessibilityLabel="Rescan home health">
+            <DocRef>{lastScanLabel}</DocRef>
+            <Pressable
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel="Rescan home health"
+              onPress={() => {
+                Haptics.selectionAsync().catch(() => {});
+                refetch();
+              }}
+            >
               <View style={styles.scanRight}>
                 <RescanGlyph size={12} color={colors.cyan} />
                 <Text allowFontScaling={false} style={styles.rescanText}>RESCAN</Text>
@@ -115,41 +215,53 @@ export default function HomeTab() {
         </NoirCard>
 
         {/* Alert card */}
-        <Pressable
-          onPress={() => router.push('/repair/rp-002')}
-          accessibilityRole="button"
-          accessibilityLabel="Roof inspection recommended"
-          style={{ marginTop: spacing.lg }}
-        >
-          <NoirCard variant="default" radius="md" padding={20} style={styles.alertCard}>
-            <View style={styles.alertBar} />
-            <View style={{ flex: 1 }}>
-              <View style={styles.alertHeader}>
-                <SeverityChip level="moderate" label="▲" />
-                <Text allowFontScaling={false} style={styles.alertTitle}>
-                  Roof Inspection Recommended
+        {featured ? (
+          <Pressable
+            onPress={() => router.push(`/repair/${featured.id}` as any)}
+            accessibilityRole="button"
+            accessibilityLabel={`${featured.title} — open details`}
+            style={{ marginTop: spacing.lg }}
+          >
+            <NoirCard variant="default" radius="md" padding={20} style={styles.alertCard}>
+              <View style={styles.alertBar} />
+              <View style={{ flex: 1 }}>
+                <View style={styles.alertHeader}>
+                  <SeverityChip level={featured.severity} label="▲" />
+                  <Text allowFontScaling={false} style={styles.alertTitle}>
+                    {featured.title}
+                  </Text>
+                </View>
+                <Text allowFontScaling={false} style={styles.alertBody}>
+                  {featured.diagnosis}
                 </Text>
+                <View style={styles.alertCta}>
+                  <Text allowFontScaling={false} style={styles.alertCtaText}>VIEW DETAILS</Text>
+                  <ArrowUpRightGlyph size={12} color={colors.amber} />
+                </View>
               </View>
-              <Text allowFontScaling={false} style={styles.alertBody}>
-                Minor moisture detected in upper attic quadrant C. Schedule an assessment to prevent structural degradation.
-              </Text>
-              <View style={styles.alertCta}>
-                <Text allowFontScaling={false} style={styles.alertCtaText}>VIEW DETAILS</Text>
-                <ArrowUpRightGlyph size={12} color={colors.amber} />
-              </View>
-            </View>
-          </NoirCard>
-        </Pressable>
+            </NoirCard>
+          </Pressable>
+        ) : null}
 
-        {/* Stat pair */}
+        {/* Stat pair — derived counts */}
         <View style={styles.statsRow}>
           <NoirCard variant="default" radius="md" padding={18} style={styles.statCard}>
-            <DocRef>HVAC Efficiency</DocRef>
-            <HeroNumber value="94" suffix="%" size="md" tone="white" style={{ marginTop: 8 }} />
+            <DocRef>Active Estimates</DocRef>
+            <HeroNumber
+              value={String(estimates.length)}
+              size="md"
+              tone="white"
+              style={{ marginTop: 8 }}
+            />
           </NoirCard>
           <NoirCard variant="default" radius="md" padding={18} style={styles.statCard}>
-            <DocRef>Water Pressure</DocRef>
-            <HeroNumber value="62" suffix="PSI" size="md" tone="white" style={{ marginTop: 8 }} />
+            <DocRef>Active Repairs</DocRef>
+            <HeroNumber
+              value={String(repairs.filter((r) => r.progress < 1).length)}
+              size="md"
+              tone="white"
+              style={{ marginTop: 8 }}
+            />
           </NoirCard>
         </View>
 
@@ -160,7 +272,7 @@ export default function HomeTab() {
             router.push('/home/maintenance' as any);
           }}
           accessibilityRole="button"
-          accessibilityLabel="Maintenance calendar — 3 tasks due"
+          accessibilityLabel={`Maintenance calendar — ${dueMaintCount} tasks due`}
           style={{ marginTop: spacing.lg }}
         >
           {({ pressed }) => (
@@ -175,7 +287,7 @@ export default function HomeTab() {
             >
               <View style={styles.maintTick} />
               <View style={{ flex: 1 }}>
-                <DocRef tone="amber">SCHEDULE · 3 DUE</DocRef>
+                <DocRef tone="amber">{`SCHEDULE · ${dueMaintCount} DUE`}</DocRef>
                 <Text allowFontScaling={false} style={styles.maintTitle}>Spring maintenance is up</Text>
                 <Text allowFontScaling={false} style={styles.maintMeta}>HVAC filter, gutters, smoke alarms.</Text>
               </View>

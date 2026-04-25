@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import {
   KeyboardAvoidingView,
   Platform,
@@ -30,6 +30,7 @@ export default function SignIn() {
   const [password, setPassword] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const passwordRef = useRef<TextInput>(null);
 
   const submit = async () => {
     if (!email.trim() || password.length < 6) {
@@ -87,6 +88,9 @@ export default function SignIn() {
                 autoCapitalize="none"
                 autoComplete="email"
                 autoCorrect={false}
+                textContentType="emailAddress"
+                returnKeyType="next"
+                onSubmitEditing={() => passwordRef.current?.focus()}
                 style={styles.input}
                 accessibilityLabel="Email"
               />
@@ -95,6 +99,7 @@ export default function SignIn() {
             <Label tone="tertiary" size="micro" style={{ marginTop: spacing.lg }}>Password</Label>
             <NoirCard variant="outlined" radius="md" padding={0} style={styles.fieldCard}>
               <TextInput
+                ref={passwordRef}
                 value={password}
                 onChangeText={setPassword}
                 placeholder="• • • • • •"
@@ -102,6 +107,9 @@ export default function SignIn() {
                 secureTextEntry
                 autoCapitalize="none"
                 autoComplete="password"
+                textContentType="password"
+                keyboardType="ascii-capable"
+                returnKeyType="go"
                 style={styles.input}
                 accessibilityLabel="Password"
                 onSubmitEditing={submit}
@@ -133,6 +141,27 @@ export default function SignIn() {
               No account yet?  <Text style={styles.switchLinkAccent}>Sign up →</Text>
             </Text>
           </Pressable>
+
+          {__DEV__ ? (
+            <Pressable
+              onPress={async () => {
+                setSubmitting(true);
+                setError(null);
+                const { error: err } = await signIn('demo@fixit.test', 'demo12345');
+                setSubmitting(false);
+                if (err) { setError(err); return; }
+                router.replace('/(tabs)');
+              }}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel="Sign in as demo"
+              style={styles.demoLink}
+            >
+              <Text allowFontScaling={false} style={styles.demoLinkText}>
+                DEV · sign in as demo
+              </Text>
+            </Pressable>
+          ) : null}
 
           <Text allowFontScaling={false} style={styles.legal}>
             By continuing you agree to Terms and Privacy
@@ -189,6 +218,13 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
   },
   switchLinkAccent: { fontFamily: fonts.bodySemibold, color: colors.amber },
+  demoLink: { marginTop: spacing.md, alignSelf: 'center', paddingVertical: spacing.sm },
+  demoLinkText: {
+    fontFamily: fonts.mono,
+    fontSize: typeScale.labelSmall,
+    color: colors.cyan,
+    letterSpacing: tracking.docRef,
+  },
   legal: {
     marginTop: spacing.xl,
     alignSelf: 'center',

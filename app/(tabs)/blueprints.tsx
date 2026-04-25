@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NoirScreen } from '@/components/ui/NoirScreen';
@@ -9,16 +9,40 @@ import { DocRef } from '@/components/ui/DocRef';
 import { Label } from '@/components/ui/Label';
 import { BlueprintRoofScene, ChevronRightGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
-
-const BLUEPRINTS = [
-  { id: 'seasonal-spring', title: 'Spring · The Tune-Up',      code: 'SEC_04 // ELEV_12', href: '/seasonal' },
-  { id: 'warranty-fridge', title: 'Kitchen Fridge · Warranty', code: 'REF: 0092-B2',      href: '/warranty' },
-  { id: 'home-overview',   title: 'House Overview · Noir',      code: 'HOME_CODE // OBSV',  href: '/home-overview' },
-];
+import { listEstimates } from '@/services/estimates';
+import type { EstimateRow } from '@/types/database';
 
 export default function BlueprintsTab() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const [loading, setLoading] = useState(true);
+  const [estimates, setEstimates] = useState<EstimateRow[]>([]);
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      setLoading(true);
+      try {
+        const e = await listEstimates();
+        if (!alive) return;
+        setEstimates(e);
+      } catch {
+        // keep last good state
+      } finally {
+        if (alive) setLoading(false);
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const BLUEPRINTS = estimates.map((e) => ({
+    id: e.id,
+    title: e.title,
+    code: `REF: ${e.code} · ${String(e.room).toUpperCase()}`,
+    href: `/repair/${e.id}` as const,
+  }));
 
   return (
     <NoirScreen>
@@ -49,29 +73,37 @@ export default function BlueprintsTab() {
           </Text>
         </NoirCard>
 
-        <Label tone="tertiary" size="micro" style={{ marginTop: spacing.xxl }}>Plans</Label>
+        <Label tone="tertiary" size="micro" style={{ marginTop: spacing.xxl }}>
+          {`Plans · ${BLUEPRINTS.length}`}
+        </Label>
 
-        <View style={{ marginTop: spacing.md, gap: spacing.sm }}>
-          {BLUEPRINTS.map((b) => (
-            <Pressable
-              key={b.id}
-              onPress={() => router.push(b.href as any)}
-              accessibilityRole="button"
-              accessibilityLabel={b.title}
-            >
-              <NoirCard variant="default" radius="md" padding={16}>
-                <View style={styles.row}>
-                  <View style={styles.markerDot} />
-                  <View style={{ flex: 1 }}>
-                    <DocRef>{b.code}</DocRef>
-                    <Text allowFontScaling={false} style={styles.itemTitle}>{b.title}</Text>
+        {loading ? (
+          <View style={{ marginTop: spacing.lg, alignItems: 'center' }}>
+            <ActivityIndicator color={colors.amber} />
+          </View>
+        ) : (
+          <View style={{ marginTop: spacing.md, gap: spacing.sm }}>
+            {BLUEPRINTS.map((b) => (
+              <Pressable
+                key={b.id}
+                onPress={() => router.push(b.href as any)}
+                accessibilityRole="button"
+                accessibilityLabel={b.title}
+              >
+                <NoirCard variant="default" radius="md" padding={16}>
+                  <View style={styles.row}>
+                    <View style={styles.markerDot} />
+                    <View style={{ flex: 1 }}>
+                      <DocRef>{b.code}</DocRef>
+                      <Text allowFontScaling={false} style={styles.itemTitle}>{b.title}</Text>
+                    </View>
+                    <ChevronRightGlyph size={14} color={colors.textTertiary} />
                   </View>
-                  <ChevronRightGlyph size={14} color={colors.textTertiary} />
-                </View>
-              </NoirCard>
-            </Pressable>
-          ))}
-        </View>
+                </NoirCard>
+              </Pressable>
+            ))}
+          </View>
+        )}
       </ScrollView>
     </NoirScreen>
   );

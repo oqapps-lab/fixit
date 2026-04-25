@@ -1,5 +1,5 @@
-import React from 'react';
-import { Pressable, StyleSheet, Text, View, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Pressable, StyleSheet, Text, View, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
@@ -11,10 +11,40 @@ import { Label } from '@/components/ui/Label';
 import { AmberCTA } from '@/components/ui/AmberCTA';
 import { ChevronRightGlyph, HouseCalmIllustration } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
+import { listEstimates } from '@/services/estimates';
+import { getMyProfile } from '@/services/profile';
+import type { EstimateRow, ProfileRow } from '@/types/database';
 
 export default function VaultTab() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<ProfileRow | null>(null);
+  const [estimates, setEstimates] = useState<EstimateRow[]>([]);
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      setLoading(true);
+      try {
+        const [p, e] = await Promise.all([getMyProfile(), listEstimates()]);
+        if (!alive) return;
+        setProfile(p);
+        setEstimates(e);
+      } catch {
+        // keep last good state
+      } finally {
+        if (alive) setLoading(false);
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const savedCount = estimates.filter((e) => e.is_saved).length;
+  const totalEstimates = estimates.length;
+  const displayName = profile?.display_name ?? profile?.email ?? 'Your house';
 
   return (
     <NoirScreen>
@@ -35,12 +65,22 @@ export default function VaultTab() {
             <HouseCalmIllustration size={160} />
           </View>
 
-          <Text allowFontScaling={false} style={styles.heroTitle}>
-            Your house is calm
-          </Text>
-          <Text allowFontScaling={false} style={styles.heroBody}>
-            Snap a photo when something needs attention. Your saved fixes will live here.
-          </Text>
+          {loading ? (
+            <View style={{ marginTop: spacing.xl, alignItems: 'center' }}>
+              <ActivityIndicator color={colors.amber} />
+            </View>
+          ) : (
+            <>
+              <Text allowFontScaling={false} style={styles.heroTitle}>
+                {displayName}
+              </Text>
+              <Text allowFontScaling={false} style={styles.heroBody}>
+                {totalEstimates === 0
+                  ? 'Snap a photo when something needs attention. Your saved fixes will live here.'
+                  : `${totalEstimates} estimate${totalEstimates === 1 ? '' : 's'} on file · ${savedCount} saved.`}
+              </Text>
+            </>
+          )}
 
           <AmberCTA
             label="Take a photo →"
@@ -59,19 +99,19 @@ export default function VaultTab() {
         <View style={{ marginTop: spacing.md, gap: spacing.sm }}>
           <CollectionRow
             label="Saved Projects"
-            ref="SAVED · 0 ITEMS"
+            refLabel={`SAVED · ${savedCount} ITEM${savedCount === 1 ? '' : 'S'}`}
             tone="mint"
             onPress={() => router.push('/estimates' as any)}
           />
           <CollectionRow
             label="Warranty Vault"
-            ref="WARRANTY · 3 TRACKED"
+            refLabel="WARRANTY · 3 TRACKED"
             tone="cyan"
             onPress={() => router.push('/warranty')}
           />
           <CollectionRow
             label="Photo Journal"
-            ref="PHOTOS · 12 FILES"
+            refLabel={`ESTIMATES · ${totalEstimates} FILE${totalEstimates === 1 ? '' : 'S'}`}
             tone="neutral"
             onPress={() => router.push('/your-house')}
           />
@@ -83,13 +123,13 @@ export default function VaultTab() {
         <View style={{ marginTop: spacing.md, gap: spacing.sm }}>
           <CollectionRow
             label="Settings"
-            ref="SECTOR · CONFIG"
+            refLabel="SECTOR · CONFIG"
             tone="amber"
             onPress={() => router.push('/settings')}
           />
           <CollectionRow
             label="Invite friends"
-            ref="REFERRAL · +1 ESTIMATE"
+            refLabel="REFERRAL · +1 ESTIMATE"
             tone="mint"
             onPress={() => router.push('/invite' as any)}
           />
@@ -100,10 +140,10 @@ export default function VaultTab() {
 }
 
 function CollectionRow({
-  label, ref, tone, onPress,
+  label, refLabel, tone, onPress,
 }: {
   label: string;
-  ref: string;
+  refLabel: string;
   tone: 'mint' | 'cyan' | 'amber' | 'neutral';
   onPress: () => void;
 }) {
@@ -128,7 +168,7 @@ function CollectionRow({
           ]}
         >
           <View style={{ flex: 1 }}>
-            <DocRef tone={tone === 'neutral' ? 'neutral' : tone}>{ref}</DocRef>
+            <DocRef tone={tone === 'neutral' ? 'neutral' : tone}>{refLabel}</DocRef>
             <Text allowFontScaling={false} style={styles.collItem}>{label}</Text>
           </View>
           <ChevronRightGlyph size={14} color={colors.textTertiary} />

@@ -100,6 +100,8 @@ export default function SignUp() {
                 secureTextEntry
                 autoCapitalize="none"
                 autoComplete="password-new"
+                textContentType="newPassword"
+                keyboardType="ascii-capable"
                 style={styles.input}
                 accessibilityLabel="Password"
                 onSubmitEditing={submit}

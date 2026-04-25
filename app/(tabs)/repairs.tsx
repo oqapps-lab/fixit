@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NoirScreen } from '@/components/ui/NoirScreen';
@@ -13,20 +13,97 @@ import { ProgressBar } from '@/components/ui/ProgressBar';
 import { AmberCTA } from '@/components/ui/AmberCTA';
 import { ChevronRightGlyph, PulseDot } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
+import { listEstimates } from '@/services/estimates';
+import { listRepairs } from '@/services/repairs';
+import type { EstimateRow, RepairRow, Severity } from '@/types/database';
 
-const ACTIVE_REPAIRS = [
-  { id: 'rp-002', code: 'RP-002', title: 'Roof Leak',       severity: 'moderate' as const, progress: 0.35, impact: '$450' },
-  { id: 'rp-003', code: 'RP-003', title: 'Attic Moisture',  severity: 'low' as const,      progress: 0.15, impact: '$80'  },
-];
+type ActiveItem = {
+  id: string;
+  code: string;
+  title: string;
+  severity: Severity;
+  progress: number;
+  impact: string;
+};
 
-const PAST_REPAIRS = [
-  { id: 'rp-001', title: 'Kitchen Tap Replacement', impact: '$145' },
-  { id: 'rp-000', title: 'Bathroom Tile Grout',     impact: '$320' },
-];
+type PastItem = {
+  id: string;
+  title: string;
+  impact: string;
+};
+
+function formatPrice(n: number | null | undefined): string {
+  const v = Number(n ?? 0);
+  return `$${Math.round(v).toLocaleString('en-US')}`;
+}
 
 export default function RepairsTab() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const [loading, setLoading] = useState(true);
+  const [repairs, setRepairs] = useState<RepairRow[]>([]);
+  const [estimates, setEstimates] = useState<EstimateRow[]>([]);
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      setLoading(true);
+      try {
+        const [r, e] = await Promise.all([listRepairs(), listEstimates()]);
+        if (!alive) return;
+        setRepairs(r);
+        setEstimates(e);
+      } catch {
+        // keep last good state
+      } finally {
+        if (alive) setLoading(false);
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  // Active = repairs progress < 1, plus in-progress estimates without a matching repair
+  const activeFromRepairs: ActiveItem[] = repairs
+    .filter((r) => r.progress < 1)
+    .map((r) => ({
+      id: r.id,
+      code: r.code,
+      title: r.title,
+      severity: r.severity,
+      progress: r.progress,
+      impact: r.impact ?? '—',
+    }));
+
+  const repairEstimateIds = new Set(repairs.map((r) => r.estimate_id).filter(Boolean) as string[]);
+  const activeFromEstimates: ActiveItem[] = estimates
+    .filter((e) => e.status === 'in-progress' && !repairEstimateIds.has(e.id))
+    .map((e) => ({
+      id: e.id,
+      code: e.code,
+      title: e.title,
+      severity: e.severity,
+      progress: 0,
+      impact: formatPrice(e.actual_paid ?? e.pro_price),
+    }));
+
+  const ACTIVE_REPAIRS: ActiveItem[] = [...activeFromRepairs, ...activeFromEstimates];
+
+  // Past = repairs with progress >= 1, plus completed estimates
+  const pastFromRepairs: PastItem[] = repairs
+    .filter((r) => r.progress >= 1)
+    .map((r) => ({ id: r.id, title: r.title, impact: r.impact ?? '—' }));
+
+  const pastFromEstimates: PastItem[] = estimates
+    .filter((e) => e.status === 'completed')
+    .map((e) => ({
+      id: e.id,
+      title: e.title,
+      impact: formatPrice(e.actual_paid ?? e.pro_price),
+    }));
+
+  const PAST_REPAIRS: PastItem[] = [...pastFromRepairs, ...pastFromEstimates];
 
   return (
     <NoirScreen>
@@ -42,7 +119,7 @@ export default function RepairsTab() {
         ]}
         showsVerticalScrollIndicator={false}
       >
-        <DocRef>LIVE PROJECTS</DocRef>
+        <DocRef>{`LIVE PROJECTS · ACTIVE ${ACTIVE_REPAIRS.length} / DUE ${PAST_REPAIRS.length}`}</DocRef>
         <Text allowFontScaling={false} style={styles.title}>
           PROJECTS
         </Text>
@@ -59,39 +136,51 @@ export default function RepairsTab() {
           Active Repairs
         </Label>
 
-        <View style={{ marginTop: spacing.md, gap: spacing.md }}>
-          {ACTIVE_REPAIRS.map((r) => (
-            <Pressable
-              key={r.id}
-              onPress={() => router.push(`/repair/${r.id}`)}
-              accessibilityRole="button"
-              accessibilityLabel={`${r.title} — open details`}
-            >
-              <NoirCard variant="default" radius="md" padding={18}>
-                <View style={styles.repairRow}>
-                  <PulseDot size={8} color={r.severity === 'moderate' ? colors.amber : colors.mint} />
-                  <View style={{ flex: 1 }}>
-                    <DocRef>{`REF: ${r.code} · ACTIVE`}</DocRef>
-                    <Text allowFontScaling={false} style={styles.repairTitle}>
-                      {r.title}
+        {loading ? (
+          <View style={{ marginTop: spacing.lg, alignItems: 'center' }}>
+            <ActivityIndicator color={colors.amber} />
+          </View>
+        ) : (
+          <View style={{ marginTop: spacing.md, gap: spacing.md }}>
+            {ACTIVE_REPAIRS.map((r) => (
+              <Pressable
+                key={r.id}
+                onPress={() => router.push(`/repair/${r.id}` as any)}
+                accessibilityRole="button"
+                accessibilityLabel={`${r.title} — open details`}
+              >
+                <NoirCard variant="default" radius="md" padding={18}>
+                  <View style={styles.repairRow}>
+                    <PulseDot
+                      size={8}
+                      color={r.severity === 'high' || r.severity === 'moderate' ? colors.amber : colors.mint}
+                    />
+                    <View style={{ flex: 1 }}>
+                      <DocRef>{`REF: ${r.code} · ACTIVE`}</DocRef>
+                      <Text allowFontScaling={false} style={styles.repairTitle}>
+                        {r.title}
+                      </Text>
+                    </View>
+                    <HeroNumber value={r.impact} size="sm" tone="white" />
+                    <ChevronRightGlyph size={14} color={colors.textTertiary} />
+                  </View>
+                  <View style={styles.progressRow}>
+                    <SeverityChip level={r.severity} />
+                    <View style={{ flex: 1, marginLeft: spacing.md }}>
+                      <ProgressBar
+                        value={r.progress}
+                        tone={r.severity === 'high' || r.severity === 'moderate' ? 'amber' : 'mint'}
+                      />
+                    </View>
+                    <Text allowFontScaling={false} style={styles.progressPct}>
+                      {`${Math.round(r.progress * 100)}%`}
                     </Text>
                   </View>
-                  <HeroNumber value={r.impact} size="sm" tone="white" />
-                  <ChevronRightGlyph size={14} color={colors.textTertiary} />
-                </View>
-                <View style={styles.progressRow}>
-                  <SeverityChip level={r.severity} />
-                  <View style={{ flex: 1, marginLeft: spacing.md }}>
-                    <ProgressBar value={r.progress} tone={r.severity === 'moderate' ? 'amber' : 'mint'} />
-                  </View>
-                  <Text allowFontScaling={false} style={styles.progressPct}>
-                    {`${Math.round(r.progress * 100)}%`}
-                  </Text>
-                </View>
-              </NoirCard>
-            </Pressable>
-          ))}
-        </View>
+                </NoirCard>
+              </Pressable>
+            ))}
+          </View>
+        )}
 
         <View style={styles.archiveHead}>
           <Label tone="tertiary" size="micro">Archive · Complete</Label>

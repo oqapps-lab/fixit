@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
@@ -13,21 +13,85 @@ import { HeroNumber } from '@/components/ui/HeroNumber';
 import { SeverityChip } from '@/components/ui/SeverityChip';
 import { BlueprintPhoto } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
-import { MOCK_ESTIMATES, formatCapturedAt, type ChosenMode } from '@/mock/estimates';
+import { getEstimate, setEstimateMode, formatCapturedAt } from '@/services/estimates';
+import type { ChosenMode, EstimateRow } from '@/types/database';
 
 export default function EstimateDetail() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const estimate = MOCK_ESTIMATES.find((e) => e.id === id) ?? MOCK_ESTIMATES[0]!;
-  const [picked, setPicked] = useState<ChosenMode>(estimate.chosenMode ?? 'hybrid');
+
+  const [estimate, setEstimate] = useState<EstimateRow | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [picked, setPicked] = useState<ChosenMode>('hybrid');
+
+  useEffect(() => {
+    let cancelled = false;
+    if (!id) {
+      setLoading(false);
+      setError('Missing estimate id');
+      return;
+    }
+    setLoading(true);
+    setError(null);
+    getEstimate(id)
+      .then((row) => {
+        if (cancelled) return;
+        setEstimate(row);
+        if (row?.chosen_mode) setPicked(row.chosen_mode);
+      })
+      .catch((e: unknown) => {
+        if (cancelled) return;
+        setError(e instanceof Error ? e.message : 'Failed to load estimate');
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  if (loading) {
+    return (
+      <NoirScreen>
+        <NoirHeader brand="ESTIMATE · DETAIL" showBack showAvatar={false} />
+        <View style={styles.center}>
+          <ActivityIndicator color={colors.amber} />
+        </View>
+      </NoirScreen>
+    );
+  }
+
+  if (error || !estimate) {
+    return (
+      <NoirScreen>
+        <NoirHeader brand="ESTIMATE · DETAIL" showBack showAvatar={false} />
+        <View style={styles.center}>
+          <Text allowFontScaling={false} style={styles.errorText}>
+            {error ?? 'Estimate not found.'}
+          </Text>
+        </View>
+      </NoirScreen>
+    );
+  }
+
+  const diyPrice = Number(estimate.diy_price);
+  const hybridPrice = Number(estimate.hybrid_price);
+  const proPrice = Number(estimate.pro_price);
 
   const pickedPrice =
-    picked === 'diy' ? estimate.diyPrice :
-    picked === 'hybrid' ? estimate.hybridPrice :
-    estimate.proPrice;
+    picked === 'diy' ? diyPrice :
+    picked === 'hybrid' ? hybridPrice :
+    proPrice;
 
-  const savingsVsPro = estimate.proPrice - pickedPrice;
+  const savingsVsPro = proPrice - pickedPrice;
+
+  const handlePick = (mode: ChosenMode) => {
+    setPicked(mode);
+    setEstimateMode(estimate.id, mode).catch(() => {});
+  };
 
   const onShare = () => {
     Haptics.selectionAsync().catch(() => {});
@@ -56,7 +120,7 @@ export default function EstimateDetail() {
         showsVerticalScrollIndicator={false}
       >
         <DocRef tone={estimate.severity === 'moderate' ? 'amber' : 'neutral'}>
-          {`${estimate.code} · ${formatCapturedAt(estimate.capturedAt)}`}
+          {`${estimate.code} · ${formatCapturedAt(estimate.captured_at)}`}
         </DocRef>
         <Text allowFontScaling={false} style={styles.title}>{estimate.title}</Text>
         <Text allowFontScaling={false} style={styles.diagnosis}>{estimate.diagnosis}</Text>
@@ -74,7 +138,7 @@ export default function EstimateDetail() {
         <View style={styles.impactRow}>
           <View style={{ flex: 1 }}>
             <Label tone="tertiary" size="micro">Estimated impact</Label>
-            <HeroNumber value={`$${estimate.proPrice}`} size="lg" tone="white" style={{ marginTop: spacing.xs }} />
+            <HeroNumber value={`$${proPrice}`} size="lg" tone="white" style={{ marginTop: spacing.xs }} />
           </View>
           <View style={{ alignItems: 'flex-end' }}>
             <Label tone="tertiary" size="micro">Severity</Label>
@@ -91,26 +155,26 @@ export default function EstimateDetail() {
             mode="diy"
             label="DIY"
             meta="Materials only · AI guide"
-            price={estimate.diyPrice}
+            price={diyPrice}
             active={picked === 'diy'}
-            onPress={() => setPicked('diy')}
+            onPress={() => handlePick('diy')}
           />
           <ModeRow
             mode="hybrid"
             label="Hybrid"
             meta="You buy, handyman installs"
-            price={estimate.hybridPrice}
+            price={hybridPrice}
             active={picked === 'hybrid'}
             recommended
-            onPress={() => setPicked('hybrid')}
+            onPress={() => handlePick('hybrid')}
           />
           <ModeRow
             mode="pro"
             label="Full Pro"
             meta="Deeplink · Thumbtack · Google · Yelp"
-            price={estimate.proPrice}
+            price={proPrice}
             active={picked === 'pro'}
-            onPress={() => setPicked('pro')}
+            onPress={() => handlePick('pro')}
           />
         </View>
 
@@ -132,7 +196,7 @@ export default function EstimateDetail() {
         {/* Actions */}
         <Label tone="tertiary" size="micro" style={styles.section}>Actions</Label>
         <AmberCTA
-          label={estimate.actualPaid != null ? 'Re-estimate this issue' : 'Mark complete & log cost'}
+          label={estimate.actual_paid != null ? 'Re-estimate this issue' : 'Mark complete & log cost'}
           variant="primary"
           size="lg"
           onPress={onMarkComplete}
@@ -153,7 +217,7 @@ export default function EstimateDetail() {
         />
 
         <Text allowFontScaling={false} style={styles.disclaimer}>
-          AI estimate · actual prices ±25% · updated {formatCapturedAt(estimate.capturedAt)}
+          AI estimate · actual prices ±25% · updated {formatCapturedAt(estimate.captured_at)}
         </Text>
       </ScrollView>
     </NoirScreen>
@@ -215,6 +279,18 @@ const styles = StyleSheet.create({
   scroll: {
     paddingHorizontal: spacing.xl,
     paddingTop: spacing.sm,
+  },
+  center: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: spacing.xl,
+  },
+  errorText: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.bodyMedium,
+    color: colors.textSecondary,
+    textAlign: 'center',
   },
   title: {
     marginTop: spacing.sm,

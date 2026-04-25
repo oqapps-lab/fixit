@@ -1,5 +1,5 @@
-import React from 'react';
-import { Alert, Clipboard, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Alert, Clipboard, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
@@ -12,20 +12,52 @@ import { AmberCTA } from '@/components/ui/AmberCTA';
 import { HeroNumber } from '@/components/ui/HeroNumber';
 import { CheckGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
+import { getMyProfile, getMyReferral } from '@/services/profile';
 
-const CODE = 'FIXIT-AMANDA-185';
-const SHARE_COPY = 'I saved $185 going DIY with FixIt — try it: https://fixit.oqapps.com/r/AMANDA-185';
+function shareCopyFor(code: string): string {
+  return `I saved on home repairs with FixIt — try it with code ${code}: https://fixit.oqapps.com/r/${code}`;
+}
 
 export default function Invite() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const invited = 2;
-  const earned = 2;
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [code, setCode] = useState<string>('');
+  const [invited, setInvited] = useState(0);
+  const [earned, setEarned] = useState(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+    Promise.all([getMyProfile(), getMyReferral()])
+      .then(([profile, referral]) => {
+        if (cancelled) return;
+        setCode(profile?.referral_code ?? '');
+        setInvited(referral?.invited_count ?? 0);
+        setEarned(referral?.earned_count ?? 0);
+      })
+      .catch((e) => {
+        if (cancelled) return;
+        setError(e?.message ?? 'Failed to load referral');
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const SHARE_COPY = shareCopyFor(code || 'FIXIT');
 
   const copyCode = () => {
+    if (!code) return;
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
-    Clipboard.setString(CODE);
-    Alert.alert('Copied', `${CODE} is on your clipboard.`);
+    Clipboard.setString(code);
+    Alert.alert('Copied', `${code} is on your clipboard.`);
   };
 
   const share = async () => {
@@ -54,66 +86,79 @@ export default function Invite() {
           Share FixIt with anyone who’s ever paid a pro blind. You both earn a free estimate.
         </Text>
 
-        {/* Code card */}
-        <NoirCard variant="elevated" radius="lg" padding={22} style={{ marginTop: spacing.xl }}>
-          <DocRef tone="amber">YOUR CODE</DocRef>
-          <Text allowFontScaling={false} style={styles.code}>{CODE}</Text>
-          <Text allowFontScaling={false} style={styles.codeMeta}>
-            Works on any new install. Trial starts immediately.
-          </Text>
-          <View style={{ flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md }}>
-            <View style={{ flex: 1 }}>
-              <AmberCTA label="Copy" variant="outlined" size="md" onPress={copyCode} />
-            </View>
-            <View style={{ flex: 2 }}>
-              <AmberCTA label="Share link" variant="primary" size="md" onPress={share} />
-            </View>
+        {loading ? (
+          <View style={styles.loadingWrap}>
+            <ActivityIndicator color={colors.amber} />
           </View>
-        </NoirCard>
-
-        {/* Stats */}
-        <View style={styles.statsRow}>
-          <NoirCard variant="default" radius="md" padding={16} style={{ flex: 1 }}>
-            <DocRef tone="cyan">INVITED</DocRef>
-            <HeroNumber value={String(invited)} size="md" tone="white" />
+        ) : error ? (
+          <NoirCard variant="outlined" radius="md" padding={18} style={{ marginTop: spacing.xl }}>
+            <DocRef tone="danger">ERROR</DocRef>
+            <Text allowFontScaling={false} style={styles.errorText}>{error}</Text>
           </NoirCard>
-          <NoirCard variant="default" radius="md" padding={16} style={{ flex: 1 }}>
-            <DocRef tone="mint">EARNED</DocRef>
-            <HeroNumber value={`+${earned}`} size="md" tone="mint" />
-            <Text allowFontScaling={false} style={styles.statMeta}>free estimates</Text>
-          </NoirCard>
-        </View>
+        ) : (
+          <>
+            {/* Code card */}
+            <NoirCard variant="elevated" radius="lg" padding={22} style={{ marginTop: spacing.xl }}>
+              <DocRef tone="amber">YOUR CODE</DocRef>
+              <Text allowFontScaling={false} style={styles.code}>{code || '—'}</Text>
+              <Text allowFontScaling={false} style={styles.codeMeta}>
+                Works on any new install. Trial starts immediately.
+              </Text>
+              <View style={{ flexDirection: 'row', gap: spacing.sm, marginTop: spacing.md }}>
+                <View style={{ flex: 1 }}>
+                  <AmberCTA label="Copy" variant="outlined" size="md" onPress={copyCode} />
+                </View>
+                <View style={{ flex: 2 }}>
+                  <AmberCTA label="Share link" variant="primary" size="md" onPress={share} />
+                </View>
+              </View>
+            </NoirCard>
 
-        {/* How it works */}
-        <Label tone="tertiary" size="micro" style={styles.section}>How it works</Label>
-        <View style={{ gap: spacing.sm }}>
-          <Step
-            n="01"
-            title="Share your link"
-            meta="Message, email, or any share sheet that pops up."
-          />
-          <Step
-            n="02"
-            title="They install + finish onboarding"
-            meta="First ZIP + first photo. That’s all."
-          />
-          <Step
-            n="03"
-            title="Both of you unlock a free estimate"
-            meta="Stackable — invite 10, earn 10. Fair enough."
-          />
-        </View>
+            {/* Stats */}
+            <View style={styles.statsRow}>
+              <NoirCard variant="default" radius="md" padding={16} style={{ flex: 1 }}>
+                <DocRef tone="cyan">INVITED</DocRef>
+                <HeroNumber value={String(invited)} size="md" tone="white" />
+              </NoirCard>
+              <NoirCard variant="default" radius="md" padding={16} style={{ flex: 1 }}>
+                <DocRef tone="mint">EARNED</DocRef>
+                <HeroNumber value={`+${earned}`} size="md" tone="mint" />
+                <Text allowFontScaling={false} style={styles.statMeta}>free estimates</Text>
+              </NoirCard>
+            </View>
 
-        {/* Preview share copy */}
-        <Label tone="tertiary" size="micro" style={styles.section}>Share preview</Label>
-        <NoirCard variant="blueprint" radius="md" padding={18}>
-          <DocRef tone="cyan">MESSAGE · PREVIEW</DocRef>
-          <Text allowFontScaling={false} style={styles.sharePreview}>{SHARE_COPY}</Text>
-        </NoirCard>
+            {/* How it works */}
+            <Label tone="tertiary" size="micro" style={styles.section}>How it works</Label>
+            <View style={{ gap: spacing.sm }}>
+              <Step
+                n="01"
+                title="Share your link"
+                meta="Message, email, or any share sheet that pops up."
+              />
+              <Step
+                n="02"
+                title="They install + finish onboarding"
+                meta="First ZIP + first photo. That’s all."
+              />
+              <Step
+                n="03"
+                title="Both of you unlock a free estimate"
+                meta="Stackable — invite 10, earn 10. Fair enough."
+              />
+            </View>
 
-        <Text allowFontScaling={false} style={styles.disclaimer}>
-          Referral credits apply to your next billing cycle. Fraud detection on duplicate installs.
-        </Text>
+            {/* Preview share copy */}
+            <Label tone="tertiary" size="micro" style={styles.section}>Share preview</Label>
+            <NoirCard variant="blueprint" radius="md" padding={18}>
+              <DocRef tone="cyan">MESSAGE · PREVIEW</DocRef>
+              <Text allowFontScaling={false} style={styles.sharePreview}>{SHARE_COPY}</Text>
+            </NoirCard>
+
+            <Text allowFontScaling={false} style={styles.disclaimer}>
+              Referral credits apply to your next billing cycle. Fraud detection on duplicate installs.
+            </Text>
+          </>
+        )}
       </ScrollView>
     </NoirScreen>
   );
@@ -140,6 +185,16 @@ const styles = StyleSheet.create({
   scroll: {
     paddingHorizontal: spacing.xl,
     paddingTop: spacing.sm,
+  },
+  loadingWrap: {
+    marginTop: spacing.xxxl,
+    alignItems: 'center',
+  },
+  errorText: {
+    marginTop: 4,
+    fontFamily: fonts.body,
+    fontSize: typeScale.bodySmall,
+    color: colors.textSecondary,
   },
   title: {
     marginTop: spacing.sm,

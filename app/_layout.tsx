@@ -7,6 +7,7 @@ import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import * as SplashScreen from 'expo-splash-screen';
 import { useAppFonts } from '@/hooks/useAppFonts';
 import { colors } from '@/constants/tokens';
+import { AuthProvider } from '@/contexts/AuthContext';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -28,6 +29,7 @@ export default function RootLayout() {
   return (
     <GestureHandlerRootView style={{ flex: 1, backgroundColor: colors.bg }}>
       <SafeAreaProvider>
+        <AuthProvider>
         <StatusBar style="light" translucent />
         <Stack
           screenOptions={{
@@ -60,6 +62,7 @@ export default function RootLayout() {
             options={{ presentation: 'transparentModal', animation: 'fade' }}
           />
         </Stack>
+        </AuthProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );

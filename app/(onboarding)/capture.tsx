@@ -1,17 +1,59 @@
-import React from 'react';
-import { StyleSheet, Text, View, Pressable } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, Pressable, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Rect, Line, Circle, Path } from 'react-native-svg';
+import * as ImagePicker from 'expo-image-picker';
+import { File as FsFile } from 'expo-file-system';
 import { NoirScreen } from '@/components/ui/NoirScreen';
 import { NoirCard } from '@/components/ui/NoirCard';
 import { DocRef } from '@/components/ui/DocRef';
 import { CameraGlyph, ChevronLeftGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
+import { uploadPhoto } from '@/services/photos';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function Capture() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { session } = useAuth();
+  const [uploading, setUploading] = useState(false);
+  const [uploadError, setUploadError] = useState<string | null>(null);
+
+  const pickFromGallery = async () => {
+    setUploadError(null);
+    if (!session?.user) {
+      // not signed in — skip upload, go forward
+      router.push('/(onboarding)/context');
+      return;
+    }
+    const perm = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!perm.granted) {
+      setUploadError('Photo library permission denied.');
+      return;
+    }
+    const res = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      quality: 0.7,
+    });
+    if (res.canceled || !res.assets[0]) return;
+    setUploading(true);
+    try {
+      const asset = res.assets[0];
+      const file = new FsFile(asset.uri);
+      const bytes = await file.bytes(); // Uint8Array
+      const mime = asset.mimeType ?? 'image/jpeg';
+      await uploadPhoto({
+        fileBytes: bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer,
+        contentType: mime,
+      });
+      router.push('/(onboarding)/context');
+    } catch (e: any) {
+      setUploadError(e?.message ?? 'Upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
 
   return (
     <NoirScreen glow="none">
@@ -74,13 +116,18 @@ export default function Capture() {
       <View style={[styles.bottomBand, { paddingBottom: insets.bottom + spacing.xl }]}>
         <View style={styles.bottomRow}>
           <Pressable
-            onPress={() => router.push('/(onboarding)/context')}
+            onPress={pickFromGallery}
             hitSlop={8}
             accessibilityRole="button"
             accessibilityLabel="Use saved photo"
+            disabled={uploading}
             style={styles.smallBtn}
           >
-            <Text allowFontScaling={false} style={styles.smallBtnText}>GALLERY</Text>
+            {uploading ? (
+              <ActivityIndicator color={colors.amber} size="small" />
+            ) : (
+              <Text allowFontScaling={false} style={styles.smallBtnText}>GALLERY</Text>
+            )}
           </Pressable>
 
           <Pressable
@@ -109,6 +156,11 @@ export default function Capture() {
         <Text allowFontScaling={false} style={styles.hint}>
           Tap when framed · hold for multi-angle
         </Text>
+        {uploadError ? (
+          <Text allowFontScaling={false} style={[styles.hint, { color: colors.danger, marginTop: 4 }]}>
+            {uploadError}
+          </Text>
+        ) : null}
       </View>
     </NoirScreen>
   );

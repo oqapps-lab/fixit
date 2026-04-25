@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
@@ -12,7 +12,8 @@ import { AmberCTA } from '@/components/ui/AmberCTA';
 import { HeroNumber } from '@/components/ui/HeroNumber';
 import { SeverityChip } from '@/components/ui/SeverityChip';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
-import { MOCK_ESTIMATES, formatCapturedAt, type ChosenMode } from '@/mock/estimates';
+import { getEstimate, formatCapturedAt } from '@/services/estimates';
+import type { ChosenMode, EstimateRow } from '@/types/database';
 
 type Selections = Record<string, ChosenMode>;
 
@@ -21,18 +22,63 @@ export default function EstimateCompare() {
   const insets = useSafeAreaInsets();
   const { ids } = useLocalSearchParams<{ ids: string }>();
 
-  const estimates = useMemo(() => {
-    const wanted = (ids ?? '').split(',').filter(Boolean);
-    const list = wanted
-      .map((id) => MOCK_ESTIMATES.find((e) => e.id === id))
-      .filter(Boolean) as typeof MOCK_ESTIMATES;
-    // fallback — pick first 2 if nothing selected (dev convenience)
-    return list.length >= 2 ? list : MOCK_ESTIMATES.slice(0, 2);
+  const [estimates, setEstimates] = useState<EstimateRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [picks, setPicks] = useState<Selections>({});
+
+  useEffect(() => {
+    let cancelled = false;
+    const wanted = (ids ?? '').split(',').map((s) => s.trim()).filter(Boolean);
+    setLoading(true);
+    setError(null);
+    Promise.all(wanted.map((id) => getEstimate(id)))
+      .then((rows) => {
+        if (cancelled) return;
+        const list = rows.filter((r): r is EstimateRow => r != null);
+        setEstimates(list);
+        setPicks(
+          list.reduce<Selections>(
+            (acc, e) => ({ ...acc, [e.id]: e.chosen_mode ?? 'hybrid' }),
+            {},
+          ),
+        );
+      })
+      .catch((e: unknown) => {
+        if (cancelled) return;
+        setError(e instanceof Error ? e.message : 'Failed to load estimates');
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, [ids]);
 
-  const [picks, setPicks] = useState<Selections>(() =>
-    estimates.reduce((acc, e) => ({ ...acc, [e.id]: e.chosenMode ?? 'hybrid' }), {} as Selections),
-  );
+  if (loading) {
+    return (
+      <NoirScreen>
+        <NoirHeader brand="ESTIMATE · COMPARE" showBack showAvatar={false} />
+        <View style={styles.center}>
+          <ActivityIndicator color={colors.amber} />
+        </View>
+      </NoirScreen>
+    );
+  }
+
+  if (error || estimates.length === 0) {
+    return (
+      <NoirScreen>
+        <NoirHeader brand="ESTIMATE · COMPARE" showBack showAvatar={false} />
+        <View style={styles.center}>
+          <Text allowFontScaling={false} style={styles.errorText}>
+            {error ?? 'No estimates to compare.'}
+          </Text>
+        </View>
+      </NoirScreen>
+    );
+  }
 
   const pick = (id: string, mode: ChosenMode) => {
     Haptics.selectionAsync().catch(() => {});
@@ -42,12 +88,12 @@ export default function EstimateCompare() {
   const priceFor = (id: string) => {
     const e = estimates.find((x) => x.id === id)!;
     const m = picks[id] ?? 'hybrid';
-    return m === 'diy' ? e.diyPrice : m === 'hybrid' ? e.hybridPrice : e.proPrice;
+    return m === 'diy' ? Number(e.diy_price) : m === 'hybrid' ? Number(e.hybrid_price) : Number(e.pro_price);
   };
 
   const totalPicked = estimates.reduce((acc, e) => acc + priceFor(e.id), 0);
-  const totalDiy    = estimates.reduce((acc, e) => acc + e.diyPrice, 0);
-  const totalPro    = estimates.reduce((acc, e) => acc + e.proPrice, 0);
+  const totalDiy    = estimates.reduce((acc, e) => acc + Number(e.diy_price), 0);
+  const totalPro    = estimates.reduce((acc, e) => acc + Number(e.pro_price), 0);
   const saved       = totalPro - totalPicked;
 
   const shareCompare = () => {
@@ -104,7 +150,7 @@ export default function EstimateCompare() {
                   <DocRef tone={e.severity === 'moderate' ? 'amber' : 'neutral'}>{e.code}</DocRef>
                   <Text allowFontScaling={false} style={styles.rowTitle}>{e.title}</Text>
                   <Text allowFontScaling={false} style={styles.rowMeta}>
-                    {`${formatCapturedAt(e.capturedAt)} · ${e.room.toUpperCase()}`}
+                    {`${formatCapturedAt(e.captured_at)} · ${e.room.toUpperCase()}`}
                   </Text>
                 </View>
                 <SeverityChip level={e.severity} />
@@ -113,19 +159,19 @@ export default function EstimateCompare() {
               <View style={styles.modeGrid}>
                 <ModeCell
                   label="DIY"
-                  price={e.diyPrice}
+                  price={Number(e.diy_price)}
                   active={picks[e.id] === 'diy'}
                   onPress={() => pick(e.id, 'diy')}
                 />
                 <ModeCell
                   label="Hybrid"
-                  price={e.hybridPrice}
+                  price={Number(e.hybrid_price)}
                   active={picks[e.id] === 'hybrid'}
                   onPress={() => pick(e.id, 'hybrid')}
                 />
                 <ModeCell
                   label="Pro"
-                  price={e.proPrice}
+                  price={Number(e.pro_price)}
                   active={picks[e.id] === 'pro'}
                   onPress={() => pick(e.id, 'pro')}
                 />
@@ -197,6 +243,18 @@ const styles = StyleSheet.create({
   scroll: {
     paddingHorizontal: spacing.xl,
     paddingTop: spacing.sm,
+  },
+  center: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: spacing.xl,
+  },
+  errorText: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.bodyMedium,
+    color: colors.textSecondary,
+    textAlign: 'center',
   },
   title: {
     marginTop: spacing.sm,

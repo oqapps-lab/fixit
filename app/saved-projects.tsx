@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
@@ -12,7 +12,8 @@ import { AmberCTA } from '@/components/ui/AmberCTA';
 import { SeverityChip } from '@/components/ui/SeverityChip';
 import { BookmarkGlyph, ChevronRightGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
-import { MOCK_ESTIMATES, formatCapturedAt } from '@/mock/estimates';
+import { listSavedEstimates, setEstimateSaved, formatCapturedAt } from '@/services/estimates';
+import type { EstimateRow } from '@/types/database';
 
 // mock tier — real value from Adapty in Stage 07
 const TIER: 'free' | 'pro' = 'free';
@@ -21,30 +22,39 @@ const FREE_SAVE_LIMIT = 5;
 export default function SavedProjects() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  // mock: "saved" flag is true for first 3
-  const [saved, setSaved] = useState<Set<string>>(
-    new Set(MOCK_ESTIMATES.slice(0, 3).map((e) => e.id)),
-  );
 
-  const list = MOCK_ESTIMATES.filter((e) => saved.has(e.id));
-  const remaining = Math.max(0, FREE_SAVE_LIMIT - saved.size);
+  const [list, setList] = useState<EstimateRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+    listSavedEstimates()
+      .then((rows) => {
+        if (cancelled) return;
+        setList(rows);
+      })
+      .catch((e: unknown) => {
+        if (cancelled) return;
+        setError(e instanceof Error ? e.message : 'Failed to load saved projects');
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const remaining = Math.max(0, FREE_SAVE_LIMIT - list.length);
   const nearLimit = TIER === 'free' && remaining <= 2;
 
-  const toggle = (id: string) => {
+  const unsave = (id: string) => {
     Haptics.selectionAsync().catch(() => {});
-    setSaved((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else {
-        if (TIER === 'free' && next.size >= FREE_SAVE_LIMIT) {
-          Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => {});
-          router.push('/paywall/save');
-          return prev;
-        }
-        next.add(id);
-      }
-      return next;
-    });
+    setList((prev) => prev.filter((e) => e.id !== id));
+    setEstimateSaved(id, false).catch(() => {});
   };
 
   const openEstimate = (id: string) => {
@@ -56,6 +66,28 @@ export default function SavedProjects() {
     Haptics.selectionAsync().catch(() => {});
     router.push('/paywall/save');
   };
+
+  if (loading) {
+    return (
+      <NoirScreen>
+        <NoirHeader brand="VAULT · SAVED" showBack showAvatar={false} />
+        <View style={styles.center}>
+          <ActivityIndicator color={colors.amber} />
+        </View>
+      </NoirScreen>
+    );
+  }
+
+  if (error) {
+    return (
+      <NoirScreen>
+        <NoirHeader brand="VAULT · SAVED" showBack showAvatar={false} />
+        <View style={styles.center}>
+          <Text allowFontScaling={false} style={styles.errorText}>{error}</Text>
+        </View>
+      </NoirScreen>
+    );
+  }
 
   return (
     <NoirScreen>
@@ -129,10 +161,10 @@ export default function SavedProjects() {
           <View style={{ gap: spacing.sm }}>
             {list.map((e) => {
               const price =
-                e.chosenMode === 'diy' ? e.diyPrice :
-                e.chosenMode === 'hybrid' ? e.hybridPrice :
-                e.chosenMode === 'pro' ? e.proPrice :
-                e.proPrice;
+                e.chosen_mode === 'diy' ? Number(e.diy_price) :
+                e.chosen_mode === 'hybrid' ? Number(e.hybrid_price) :
+                e.chosen_mode === 'pro' ? Number(e.pro_price) :
+                Number(e.pro_price);
               return (
                 <Pressable
                   key={e.id}
@@ -152,7 +184,7 @@ export default function SavedProjects() {
                       ]}
                     >
                       <Pressable
-                        onPress={() => toggle(e.id)}
+                        onPress={() => unsave(e.id)}
                         hitSlop={8}
                         accessibilityRole="button"
                         accessibilityLabel="Unsave"
@@ -165,7 +197,7 @@ export default function SavedProjects() {
                         <View style={styles.metaRow}>
                           <SeverityChip level={e.severity} />
                           <Text allowFontScaling={false} style={styles.metaText}>
-                            {formatCapturedAt(e.capturedAt)}
+                            {formatCapturedAt(e.captured_at)}
                           </Text>
                         </View>
                       </View>
@@ -189,6 +221,18 @@ const styles = StyleSheet.create({
   scroll: {
     paddingHorizontal: spacing.xl,
     paddingTop: spacing.sm,
+  },
+  center: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingHorizontal: spacing.xl,
+  },
+  errorText: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.bodyMedium,
+    color: colors.textSecondary,
+    textAlign: 'center',
   },
   title: {
     marginTop: spacing.sm,

@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
@@ -12,7 +12,8 @@ import { AmberCTA } from '@/components/ui/AmberCTA';
 import { SeverityChip } from '@/components/ui/SeverityChip';
 import { ChevronRightGlyph, CheckGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
-import { MOCK_ESTIMATES, formatCapturedAt, totalSavings, type Estimate } from '@/mock/estimates';
+import { listEstimates, totalSavings, formatCapturedAt } from '@/services/estimates';
+import type { EstimateRow } from '@/types/database';
 
 type Filter = 'all' | 'kitchen' | 'bath' | 'roof' | 'completed';
 type Sort = 'recent' | 'highCost' | 'lowCost';
@@ -37,29 +38,40 @@ export default function EstimatesList() {
   const [filter, setFilter] = useState<Filter>('all');
   const [sort, setSort] = useState<Sort>('recent');
   const [selected, setSelected] = useState<Set<string>>(new Set());
+  const [estimates, setEstimates] = useState<EstimateRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    listEstimates()
+      .then((rows) => { if (!cancelled) { setEstimates(rows); setLoading(false); } })
+      .catch((e) => { if (!cancelled) { setError(e.message ?? 'Failed to load'); setLoading(false); } });
+    return () => { cancelled = true; };
+  }, []);
 
   const compareMode = selected.size > 0;
   const canCompare = selected.size >= 2 && selected.size <= 3;
 
   const filtered = useMemo(() => {
-    let list = [...MOCK_ESTIMATES];
+    let list = [...estimates];
     if (filter !== 'all') {
       if (filter === 'completed') list = list.filter((e) => e.status === 'completed');
       else list = list.filter((e) => e.room === filter || e.category === filter);
     }
     switch (sort) {
       case 'recent':
-        list.sort((a, b) => b.capturedAt.localeCompare(a.capturedAt));
+        list.sort((a, b) => b.captured_at.localeCompare(a.captured_at));
         break;
       case 'highCost':
-        list.sort((a, b) => b.proPrice - a.proPrice);
+        list.sort((a, b) => Number(b.pro_price) - Number(a.pro_price));
         break;
       case 'lowCost':
-        list.sort((a, b) => a.proPrice - b.proPrice);
+        list.sort((a, b) => Number(a.pro_price) - Number(b.pro_price));
         break;
     }
     return list;
-  }, [filter, sort]);
+  }, [estimates, filter, sort]);
 
   const toggleSelect = (id: string) => {
     Haptics.selectionAsync().catch(() => {});
@@ -67,14 +79,14 @@ export default function EstimatesList() {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);
       else {
-        if (next.size >= 3) return prev; // cap at 3
+        if (next.size >= 3) return prev;
         next.add(id);
       }
       return next;
     });
   };
 
-  const go = (e: Estimate) => {
+  const go = (e: EstimateRow) => {
     if (compareMode) {
       toggleSelect(e.id);
       return;
@@ -111,10 +123,9 @@ export default function EstimatesList() {
         <DocRef>ARCHIVE · FILTERABLE</DocRef>
         <Text allowFontScaling={false} style={styles.title}>ESTIMATES</Text>
         <Text allowFontScaling={false} style={styles.body}>
-          {filtered.length} estimates · total saved vs blind-pro: ${total.toLocaleString()}
+          {loading ? 'Loading…' : `${filtered.length} estimates · total saved vs blind-pro: $${total.toLocaleString()}`}
         </Text>
 
-        {/* Filter pills */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
@@ -142,7 +153,6 @@ export default function EstimatesList() {
           ))}
         </ScrollView>
 
-        {/* Sort row */}
         <View style={styles.sortRow}>
           <Label tone="tertiary" size="micro">Sort</Label>
           <View style={{ flexDirection: 'row', gap: spacing.sm }}>
@@ -169,87 +179,92 @@ export default function EstimatesList() {
           </View>
         </View>
 
-        {/* Estimate list */}
-        <View style={{ marginTop: spacing.lg, gap: spacing.sm }}>
-          {filtered.map((e) => {
-            const isSel = selected.has(e.id);
-            const chosenLabel =
-              e.chosenMode === 'diy' ? 'DIY' :
-              e.chosenMode === 'hybrid' ? 'HYBRID' :
-              e.chosenMode === 'pro' ? 'PRO' : 'PENDING';
-            const chosenPrice =
-              e.chosenMode === 'diy' ? e.diyPrice :
-              e.chosenMode === 'hybrid' ? e.hybridPrice :
-              e.chosenMode === 'pro' ? e.proPrice : null;
-            return (
-              <Pressable
-                key={e.id}
-                onPress={() => go(e)}
-                onLongPress={() => toggleSelect(e.id)}
-                delayLongPress={250}
-                accessibilityRole="button"
-                accessibilityLabel={`${e.title}, ${formatCapturedAt(e.capturedAt)}, ${chosenLabel}`}
-                accessibilityHint="Tap to open. Long-press to select for comparison."
-                accessibilityState={{ selected: isSel }}
-                hitSlop={4}
-              >
-                {({ pressed }) => (
-                  <NoirCard
-                    variant={isSel ? 'elevated' : 'default'}
-                    radius="md"
-                    padding={16}
-                    style={[
-                      styles.row,
-                      isSel ? styles.rowSelected : null,
-                      pressed ? { opacity: 0.7 } : null,
-                    ]}
-                  >
-                    {/* select indicator */}
-                    <View
+        {loading ? (
+          <View style={styles.loader}>
+            <ActivityIndicator color={colors.amber} />
+          </View>
+        ) : error ? (
+          <Text allowFontScaling={false} style={styles.empty}>{error}</Text>
+        ) : (
+          <View style={{ marginTop: spacing.lg, gap: spacing.sm }}>
+            {filtered.map((e) => {
+              const isSel = selected.has(e.id);
+              const chosenLabel =
+                e.chosen_mode === 'diy' ? 'DIY' :
+                e.chosen_mode === 'hybrid' ? 'HYBRID' :
+                e.chosen_mode === 'pro' ? 'PRO' : 'PENDING';
+              const chosenPrice =
+                e.chosen_mode === 'diy' ? Number(e.diy_price) :
+                e.chosen_mode === 'hybrid' ? Number(e.hybrid_price) :
+                e.chosen_mode === 'pro' ? Number(e.pro_price) : null;
+              return (
+                <Pressable
+                  key={e.id}
+                  onPress={() => go(e)}
+                  onLongPress={() => toggleSelect(e.id)}
+                  delayLongPress={250}
+                  accessibilityRole="button"
+                  accessibilityLabel={`${e.title}, ${formatCapturedAt(e.captured_at)}, ${chosenLabel}`}
+                  accessibilityHint="Tap to open. Long-press to select for comparison."
+                  accessibilityState={{ selected: isSel }}
+                  hitSlop={4}
+                >
+                  {({ pressed }) => (
+                    <NoirCard
+                      variant={isSel ? 'elevated' : 'default'}
+                      radius="md"
+                      padding={16}
                       style={[
-                        styles.selector,
-                        isSel ? styles.selectorOn : null,
+                        styles.row,
+                        isSel ? styles.rowSelected : null,
+                        pressed ? { opacity: 0.7 } : null,
                       ]}
                     >
-                      {isSel ? <CheckGlyph size={14} color={colors.amberBright} /> : null}
-                    </View>
+                      <View
+                        style={[
+                          styles.selector,
+                          isSel ? styles.selectorOn : null,
+                        ]}
+                      >
+                        {isSel ? <CheckGlyph size={14} color={colors.amberBright} /> : null}
+                      </View>
 
-                    <View style={{ flex: 1 }}>
-                      <DocRef tone={e.severity === 'moderate' ? 'amber' : 'neutral'}>
-                        {e.code}
-                      </DocRef>
-                      <Text allowFontScaling={false} style={styles.itemTitle}>{e.title}</Text>
-                      <View style={styles.metaRow}>
-                        <SeverityChip level={e.severity} />
-                        <Text allowFontScaling={false} style={styles.metaText}>
-                          {`${formatCapturedAt(e.capturedAt)} · ${chosenLabel}`}
+                      <View style={{ flex: 1 }}>
+                        <DocRef tone={e.severity === 'moderate' ? 'amber' : 'neutral'}>
+                          {e.code}
+                        </DocRef>
+                        <Text allowFontScaling={false} style={styles.itemTitle}>{e.title}</Text>
+                        <View style={styles.metaRow}>
+                          <SeverityChip level={e.severity} />
+                          <Text allowFontScaling={false} style={styles.metaText}>
+                            {`${formatCapturedAt(e.captured_at)} · ${chosenLabel}`}
+                          </Text>
+                        </View>
+                      </View>
+                      <View style={styles.priceCol}>
+                        <Text allowFontScaling={false} style={styles.price}>
+                          {chosenPrice != null ? `$${chosenPrice}` : `$${Number(e.pro_price)}`}
+                        </Text>
+                        <Text allowFontScaling={false} style={styles.priceMeta}>
+                          {chosenPrice != null ? 'PAID' : 'EST'}
                         </Text>
                       </View>
-                    </View>
-                    <View style={styles.priceCol}>
-                      <Text allowFontScaling={false} style={styles.price}>
-                        {chosenPrice != null ? `$${chosenPrice}` : `$${e.proPrice}`}
-                      </Text>
-                      <Text allowFontScaling={false} style={styles.priceMeta}>
-                        {chosenPrice != null ? 'PAID' : 'EST'}
-                      </Text>
-                    </View>
-                    <ChevronRightGlyph size={14} color={colors.textTertiary} />
-                  </NoirCard>
-                )}
-              </Pressable>
-            );
-          })}
-        </View>
+                      <ChevronRightGlyph size={14} color={colors.textTertiary} />
+                    </NoirCard>
+                  )}
+                </Pressable>
+              );
+            })}
+          </View>
+        )}
 
-        {filtered.length === 0 ? (
+        {!loading && !error && filtered.length === 0 ? (
           <Text allowFontScaling={false} style={styles.empty}>
             No estimates match this filter.
           </Text>
         ) : null}
       </ScrollView>
 
-      {/* Compare dock */}
       {compareMode ? (
         <View style={[styles.dock, { paddingBottom: insets.bottom + spacing.md }]}>
           <View style={styles.dockRow}>
@@ -283,10 +298,7 @@ export default function EstimatesList() {
 }
 
 const styles = StyleSheet.create({
-  scroll: {
-    paddingHorizontal: spacing.xl,
-    paddingTop: spacing.sm,
-  },
+  scroll: { paddingHorizontal: spacing.xl, paddingTop: spacing.sm },
   title: {
     marginTop: spacing.sm,
     fontFamily: fonts.displayNarrowBold,
@@ -301,14 +313,8 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     lineHeight: 22,
   },
-  pillScroll: {
-    marginTop: spacing.xl,
-    marginHorizontal: -spacing.xl,
-  },
-  pillRow: {
-    paddingHorizontal: spacing.xl,
-    gap: spacing.sm,
-  },
+  pillScroll: { marginTop: spacing.xl, marginHorizontal: -spacing.xl },
+  pillRow: { paddingHorizontal: spacing.xl, gap: spacing.sm },
   pill: {
     paddingHorizontal: spacing.md,
     paddingVertical: 8,
@@ -317,19 +323,14 @@ const styles = StyleSheet.create({
     borderColor: colors.hairlineStrong,
     backgroundColor: colors.glass1,
   },
-  pillActive: {
-    borderColor: colors.amber,
-    backgroundColor: colors.amberGlow,
-  },
+  pillActive: { borderColor: colors.amber, backgroundColor: colors.amberGlow },
   pillText: {
     fontFamily: fonts.labelSemibold,
     fontSize: typeScale.labelSmall,
     color: colors.textSecondary,
     letterSpacing: tracking.labelWide,
   },
-  pillTextActive: {
-    color: colors.amber,
-  },
+  pillTextActive: { color: colors.amber },
   sortRow: {
     marginTop: spacing.lg,
     flexDirection: 'row',
@@ -342,17 +343,10 @@ const styles = StyleSheet.create({
     color: colors.textTertiary,
     letterSpacing: tracking.docRef,
   },
-  sortItemActive: {
-    color: colors.amber,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: spacing.md,
-  },
-  rowSelected: {
-    borderColor: colors.hairlineAmber,
-  },
+  sortItemActive: { color: colors.amber },
+  loader: { marginTop: spacing.xxxl, alignItems: 'center' },
+  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  rowSelected: { borderColor: colors.hairlineAmber },
   selector: {
     width: 20,
     height: 20,
@@ -362,10 +356,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  selectorOn: {
-    borderColor: colors.amber,
-    backgroundColor: colors.amberGlow,
-  },
+  selectorOn: { borderColor: colors.amber, backgroundColor: colors.amberGlow },
   itemTitle: {
     marginTop: 4,
     fontFamily: fonts.bodySemibold,
@@ -385,9 +376,7 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     letterSpacing: tracking.docRef,
   },
-  priceCol: {
-    alignItems: 'flex-end',
-  },
+  priceCol: { alignItems: 'flex-end' },
   price: {
     fontFamily: fonts.displayBold,
     fontSize: typeScale.titleSmall,
@@ -419,10 +408,7 @@ const styles = StyleSheet.create({
     borderTopColor: colors.hairlineStrong,
     backgroundColor: 'rgba(8,8,10,0.92)',
   },
-  dockRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-  },
+  dockRow: { flexDirection: 'row', alignItems: 'flex-start' },
   dockHint: {
     marginTop: 4,
     fontFamily: fonts.body,

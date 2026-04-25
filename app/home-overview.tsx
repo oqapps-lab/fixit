@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, StyleSheet, Text, View, ScrollView } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Polyline } from 'react-native-svg';
 import { NoirScreen } from '@/components/ui/NoirScreen';
@@ -12,10 +12,35 @@ import { SerifHero } from '@/components/ui/SerifHero';
 import { AmberCTA } from '@/components/ui/AmberCTA';
 import { WarmHouse } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
-import { MOCK_ACTIVITIES } from '@/mock/repair';
+import { listEstimates, totalSavings } from '@/services/estimates';
+import type { EstimateRow } from '@/types/database';
 
 export default function HomeOverview() {
   const insets = useSafeAreaInsets();
+  const [estimates, setEstimates] = useState<EstimateRow[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const rows = await listEstimates();
+        if (alive) setEstimates(rows);
+      } catch {
+        if (alive) setEstimates([]);
+      } finally {
+        if (alive) setLoading(false);
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const saved = totalSavings(estimates);
+  const completed = estimates.filter((e) => e.status === 'completed');
+  const activities = completed.slice(0, 3);
+  const fixesCount = completed.length;
 
   return (
     <NoirScreen>
@@ -39,7 +64,12 @@ export default function HomeOverview() {
         <View style={styles.stats}>
           <NoirCard variant="elevated" radius="md" padding={16} style={styles.statCard}>
             <DocRef>SAVED</DocRef>
-            <HeroNumber value="$2,340" size="sm" tone="amber" style={{ marginTop: 4 }} />
+            <HeroNumber
+              value={loading ? '—' : `$${Math.round(saved).toLocaleString('en-US')}`}
+              size="sm"
+              tone="amber"
+              style={{ marginTop: 4 }}
+            />
           </NoirCard>
           <NoirCard variant="elevated" radius="md" padding={16} style={styles.statCard}>
             <DocRef>HEALTH</DocRef>
@@ -47,7 +77,12 @@ export default function HomeOverview() {
           </NoirCard>
           <NoirCard variant="elevated" radius="md" padding={16} style={styles.statCard}>
             <DocRef>FIXES</DocRef>
-            <HeroNumber value="7" size="sm" tone="mint" style={{ marginTop: 4 }} />
+            <HeroNumber
+              value={loading ? '—' : String(fixesCount)}
+              size="sm"
+              tone="mint"
+              style={{ marginTop: 4 }}
+            />
           </NoirCard>
         </View>
 
@@ -77,14 +112,23 @@ export default function HomeOverview() {
         </Label>
 
         <View style={{ marginTop: spacing.md, gap: spacing.sm }}>
-          {MOCK_ACTIVITIES.map((a) => (
-            <NoirCard key={a.id} variant="outlined" radius="md" padding={14}>
-              <View style={styles.actRow}>
-                <Text allowFontScaling={false} style={styles.actTitle}>{a.title}</Text>
-                <Text allowFontScaling={false} style={styles.actPrice}>{a.price}</Text>
-              </View>
-            </NoirCard>
-          ))}
+          {loading ? (
+            <ActivityIndicator color={colors.amber} />
+          ) : (
+            activities.map((a) => {
+              const price = Number(a.actual_paid ?? a.diy_price);
+              return (
+                <NoirCard key={a.id} variant="outlined" radius="md" padding={14}>
+                  <View style={styles.actRow}>
+                    <Text allowFontScaling={false} style={styles.actTitle}>{a.title}</Text>
+                    <Text allowFontScaling={false} style={styles.actPrice}>
+                      {`$${price.toFixed(2)}`}
+                    </Text>
+                  </View>
+                </NoirCard>
+              );
+            })
+          )}
         </View>
 
         <AmberCTA

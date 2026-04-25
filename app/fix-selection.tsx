@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { ActivityIndicator, StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NoirScreen } from '@/components/ui/NoirScreen';
@@ -9,12 +9,38 @@ import { HeroNumber } from '@/components/ui/HeroNumber';
 import { AmberCTA } from '@/components/ui/AmberCTA';
 import { ToolsPhoto, HandshakePhoto, ToolboxPhoto } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
-import { REPAIR_ROOF_LEAK } from '@/mock/repair';
+import { listRepairs } from '@/services/repairs';
+import type { RepairRow, RepairRoute } from '@/types/database';
 
 export default function FixSelection() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const [selected, setSelected] = useState<'diy' | 'hybrid' | 'pro'>('hybrid');
+  const [repair, setRepair] = useState<RepairRow | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const rows = await listRepairs();
+        if (alive) setRepair(rows[0] ?? null);
+      } catch {
+        if (alive) setRepair(null);
+      } finally {
+        if (alive) setLoading(false);
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, []);
+
+  const routes: RepairRoute[] = repair?.routes ?? [];
+  const diy = routes.find((r) => r.key === 'diy');
+  const hybrid = routes.find((r) => r.key === 'hybrid');
+  const pro = routes.find((r) => r.key === 'pro');
+  const title = repair?.title ?? 'ROOF LEAK';
 
   return (
     <NoirScreen>
@@ -30,40 +56,48 @@ export default function FixSelection() {
         ]}
         showsVerticalScrollIndicator={false}
       >
-        <Text allowFontScaling={false} style={styles.title}>ROOF LEAK</Text>
+        <Text allowFontScaling={false} style={styles.title}>{title.toUpperCase()}</Text>
 
-        <View style={{ marginTop: spacing.xl, gap: spacing.md }}>
-          <RouteCard
-            routeKey="diy"
-            selected={selected === 'diy'}
-            price="$15"
-            meta="DIY · 15 MIN"
-            onPress={() => setSelected('diy')}
-            photo={<ToolsPhoto size={120} />}
-          />
-          <RouteCard
-            routeKey="hybrid"
-            selected={selected === 'hybrid'}
-            price="$45"
-            meta="HYBRID · 45 MIN"
-            recommended
-            onPress={() => setSelected('hybrid')}
-            photo={<HandshakePhoto size={120} />}
-          />
-          <RouteCard
-            routeKey="pro"
-            selected={selected === 'pro'}
-            price="$180"
-            meta="FULL PRO · 2 HOURS"
-            onPress={() => setSelected('pro')}
-            photo={<ToolboxPhoto size={120} />}
-          />
-        </View>
+        {loading ? (
+          <ActivityIndicator color={colors.amber} style={{ marginTop: spacing.xl }} />
+        ) : (
+          <View style={{ marginTop: spacing.xl, gap: spacing.md }}>
+            <RouteCard
+              routeKey="diy"
+              selected={selected === 'diy'}
+              price={diy?.price ?? '$15'}
+              meta={diy?.meta ?? 'DIY · 15 MIN'}
+              recommended={diy?.recommended}
+              onPress={() => setSelected('diy')}
+              photo={<ToolsPhoto size={120} />}
+            />
+            <RouteCard
+              routeKey="hybrid"
+              selected={selected === 'hybrid'}
+              price={hybrid?.price ?? '$45'}
+              meta={hybrid?.meta ?? 'HYBRID · 45 MIN'}
+              recommended={hybrid?.recommended ?? true}
+              onPress={() => setSelected('hybrid')}
+              photo={<HandshakePhoto size={120} />}
+            />
+            <RouteCard
+              routeKey="pro"
+              selected={selected === 'pro'}
+              price={pro?.price ?? '$180'}
+              meta={pro?.meta ?? 'FULL PRO · 2 HOURS'}
+              recommended={pro?.recommended}
+              onPress={() => setSelected('pro')}
+              photo={<ToolboxPhoto size={120} />}
+            />
+          </View>
+        )}
 
         <AmberCTA
           label="Select Plan"
           variant="primary"
-          onPress={() => router.push(`/repair/${REPAIR_ROOF_LEAK.id}`)}
+          onPress={() => {
+            if (repair?.id) router.push(`/repair/${repair.id}`);
+          }}
           style={{ marginTop: spacing.xl }}
         />
       </ScrollView>

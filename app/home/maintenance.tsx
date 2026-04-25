@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
@@ -10,63 +10,132 @@ import { DocRef } from '@/components/ui/DocRef';
 import { Label } from '@/components/ui/Label';
 import { CheckGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
+import { listMaintenance, markTaskDone } from '@/services/maintenance';
+import type { MaintenanceTaskRow, SeasonKind } from '@/types/database';
 
-type Season = 'SPRING' | 'SUMMER' | 'FALL' | 'WINTER';
-type Task = {
-  id: string;
-  title: string;
-  meta: string;
-  due: string; // relative
-  dueDays: number; // negative = overdue
-  season: Season;
-  tone: 'amber' | 'cyan' | 'mint' | 'danger';
-  estimatedCost: string;
-};
+type SeasonUpper = 'SPRING' | 'SUMMER' | 'FALL' | 'WINTER';
+type Tone = 'amber' | 'cyan' | 'mint' | 'danger';
 
-const TASKS: Task[] = [
-  { id: 'm-01', title: 'HVAC filter swap',       meta: '3-month cadence · MERV 11',        due: 'Due in 12 days',  dueDays: 12,  season: 'SPRING', tone: 'amber',  estimatedCost: '$15' },
-  { id: 'm-02', title: 'Gutter clean — spring',   meta: 'Post-pollen load',                 due: 'Due this week',   dueDays: 3,   season: 'SPRING', tone: 'cyan',   estimatedCost: '$40' },
-  { id: 'm-03', title: 'Smoke detector batteries', meta: '4 units · replace all',            due: 'Overdue 6 days',  dueDays: -6,  season: 'SPRING', tone: 'danger', estimatedCost: '$18' },
-  { id: 'm-04', title: 'Water heater flush',      meta: 'Annual sediment clear',            due: 'Due in 3 weeks',  dueDays: 21,  season: 'SUMMER', tone: 'amber',  estimatedCost: '$60' },
-  { id: 'm-05', title: 'Deck reseal',             meta: 'Check first — gentle abrasion',    due: 'Due in 6 weeks',  dueDays: 42,  season: 'SUMMER', tone: 'cyan',   estimatedCost: '$95' },
-  { id: 'm-06', title: 'Chimney sweep',           meta: 'Before 1st burn',                  due: 'Due in Oct',      dueDays: 180, season: 'FALL',   tone: 'mint',   estimatedCost: '$180' },
-];
+const SEASONS: SeasonUpper[] = ['SPRING', 'SUMMER', 'FALL', 'WINTER'];
 
-const SEASONS: Season[] = ['SPRING', 'SUMMER', 'FALL', 'WINTER'];
+function dueDaysFrom(due: string | null): number {
+  if (!due) return 9999;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const d = new Date(`${due}T00:00:00`);
+  const ms = d.getTime() - today.getTime();
+  return Math.round(ms / (1000 * 60 * 60 * 24));
+}
+
+function dueLabel(days: number, due: string | null): string {
+  if (!due) return 'No due date';
+  if (days < 0) return `Overdue ${Math.abs(days)} day${Math.abs(days) === 1 ? '' : 's'}`;
+  if (days === 0) return 'Due today';
+  if (days <= 7) return 'Due this week';
+  if (days <= 30) return `Due in ${days} days`;
+  if (days <= 90) return `Due in ${Math.round(days / 7)} weeks`;
+  const d = new Date(`${due}T00:00:00`);
+  return `Due in ${d.toLocaleDateString('en-US', { month: 'short' })}`;
+}
+
+function toneFor(days: number): Tone {
+  if (days < 0) return 'danger';
+  if (days <= 14) return 'amber';
+  if (days <= 60) return 'cyan';
+  return 'mint';
+}
 
 export default function Maintenance() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const [done, setDone] = useState<Set<string>>(new Set());
-  const [season, setSeason] = useState<Season>('SPRING');
 
-  const toggleDone = (id: string) => {
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [tasks, setTasks] = useState<MaintenanceTaskRow[]>([]);
+  const [season, setSeason] = useState<SeasonUpper>('SPRING');
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    setError(null);
+    listMaintenance()
+      .then((rows) => {
+        if (cancelled) return;
+        setTasks(rows);
+      })
+      .catch((e) => {
+        if (cancelled) return;
+        setError(e?.message ?? 'Failed to load maintenance');
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const toggleDone = async (id: string, isDone: boolean) => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
-    setDone((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
+    // Optimistic update
+    setTasks((prev) =>
+      prev.map((t) =>
+        t.id === id ? { ...t, done_at: isDone ? null : new Date().toISOString() } : t,
+      ),
+    );
+    try {
+      await markTaskDone(id, !isDone);
+    } catch {
+      // revert on failure
+      setTasks((prev) =>
+        prev.map((t) =>
+          t.id === id ? { ...t, done_at: isDone ? new Date().toISOString() : null } : t,
+        ),
+      );
+    }
   };
 
-  const pickSeason = (s: Season) => {
+  const pickSeason = (s: SeasonUpper) => {
     Haptics.selectionAsync().catch(() => {});
     setSeason(s);
   };
 
-  const filtered = useMemo(() => TASKS.filter((t) => t.season === season), [season]);
-  const upcoming = TASKS
-    .filter((t) => !done.has(t.id))
-    .sort((a, b) => a.dueDays - b.dueDays)
-    .slice(0, 3);
+  const filtered = useMemo(
+    () => tasks.filter((t) => t.season === (season.toLowerCase() as SeasonKind)),
+    [season, tasks],
+  );
 
-  const startEstimate = (t: Task) => {
+  const upcoming = useMemo(
+    () =>
+      tasks
+        .filter((t) => !t.done_at)
+        .map((t) => ({ task: t, days: dueDaysFrom(t.due_date) }))
+        .sort((a, b) => a.days - b.days)
+        .slice(0, 3),
+    [tasks],
+  );
+
+  const overdueCount = useMemo(
+    () => tasks.filter((t) => !t.done_at && dueDaysFrom(t.due_date) < 0).length,
+    [tasks],
+  );
+
+  const next30 = useMemo(
+    () =>
+      tasks.filter((t) => {
+        if (t.done_at) return false;
+        const d = dueDaysFrom(t.due_date);
+        return d >= 0 && d <= 30;
+      }).length,
+    [tasks],
+  );
+
+  const doneCount = useMemo(() => tasks.filter((t) => !!t.done_at).length, [tasks]);
+
+  const startEstimate = (_t: MaintenanceTaskRow) => {
     Haptics.selectionAsync().catch(() => {});
     router.push('/your-house');
   };
-
-  const overdueCount = TASKS.filter((t) => t.dueDays < 0 && !done.has(t.id)).length;
 
   return (
     <NoirScreen>
@@ -85,96 +154,118 @@ export default function Maintenance() {
           Small stuff done on time beats emergency repairs. Three items due before summer.
         </Text>
 
-        {/* Status row */}
-        <View style={styles.statusRow}>
-          <NoirCard variant="default" radius="md" padding={14} style={{ flex: 1 }}>
-            <DocRef tone="danger">OVERDUE</DocRef>
-            <Text allowFontScaling={false} style={styles.statusNum}>{overdueCount}</Text>
+        {loading ? (
+          <View style={styles.loadingWrap}>
+            <ActivityIndicator color={colors.amber} />
+          </View>
+        ) : error ? (
+          <NoirCard variant="outlined" radius="md" padding={18} style={{ marginTop: spacing.xl }}>
+            <DocRef tone="danger">ERROR</DocRef>
+            <Text allowFontScaling={false} style={styles.empty}>{error}</Text>
           </NoirCard>
-          <NoirCard variant="default" radius="md" padding={14} style={{ flex: 1 }}>
-            <DocRef tone="amber">NEXT 30D</DocRef>
-            <Text allowFontScaling={false} style={styles.statusNum}>
-              {TASKS.filter((t) => t.dueDays >= 0 && t.dueDays <= 30 && !done.has(t.id)).length}
-            </Text>
-          </NoirCard>
-          <NoirCard variant="default" radius="md" padding={14} style={{ flex: 1 }}>
-            <DocRef tone="mint">DONE</DocRef>
-            <Text allowFontScaling={false} style={styles.statusNum}>{done.size}</Text>
-          </NoirCard>
-        </View>
+        ) : (
+          <>
+            {/* Status row */}
+            <View style={styles.statusRow}>
+              <NoirCard variant="default" radius="md" padding={14} style={{ flex: 1 }}>
+                <DocRef tone="danger">OVERDUE</DocRef>
+                <Text allowFontScaling={false} style={styles.statusNum}>{overdueCount}</Text>
+              </NoirCard>
+              <NoirCard variant="default" radius="md" padding={14} style={{ flex: 1 }}>
+                <DocRef tone="amber">NEXT 30D</DocRef>
+                <Text allowFontScaling={false} style={styles.statusNum}>{next30}</Text>
+              </NoirCard>
+              <NoirCard variant="default" radius="md" padding={14} style={{ flex: 1 }}>
+                <DocRef tone="mint">DONE</DocRef>
+                <Text allowFontScaling={false} style={styles.statusNum}>{doneCount}</Text>
+              </NoirCard>
+            </View>
 
-        {/* Upcoming */}
-        <Label tone="tertiary" size="micro" style={styles.section}>Upcoming · 3</Label>
-        <View style={{ gap: spacing.sm }}>
-          {upcoming.map((t) => (
-            <TaskRow
-              key={t.id}
-              task={t}
-              isDone={done.has(t.id)}
-              onToggle={() => toggleDone(t.id)}
-              onEstimate={() => startEstimate(t)}
-            />
-          ))}
-        </View>
-
-        {/* Season picker */}
-        <Label tone="tertiary" size="micro" style={styles.section}>By season</Label>
-        <View style={styles.seasonRow}>
-          {SEASONS.map((s) => (
-            <Pressable
-              key={s}
-              onPress={() => pickSeason(s)}
-              accessibilityRole="button"
-              accessibilityLabel={`Filter ${s.toLowerCase()}`}
-              accessibilityState={{ selected: season === s }}
-              hitSlop={4}
-              style={{ flex: 1 }}
-            >
-              <View style={[styles.seasonPill, season === s ? styles.seasonPillActive : null]}>
-                <Text
-                  allowFontScaling={false}
-                  style={[styles.seasonPillText, season === s ? styles.seasonPillTextActive : null]}
-                >
-                  {s}
+            {/* Upcoming */}
+            <Label tone="tertiary" size="micro" style={styles.section}>Upcoming · 3</Label>
+            <View style={{ gap: spacing.sm }}>
+              {upcoming.map(({ task, days }) => (
+                <TaskRow
+                  key={task.id}
+                  task={task}
+                  days={days}
+                  onToggle={() => toggleDone(task.id, !!task.done_at)}
+                  onEstimate={() => startEstimate(task)}
+                />
+              ))}
+              {upcoming.length === 0 ? (
+                <Text allowFontScaling={false} style={styles.empty}>
+                  Nothing upcoming — enjoy the quiet.
                 </Text>
-              </View>
-            </Pressable>
-          ))}
-        </View>
+              ) : null}
+            </View>
 
-        <View style={{ gap: spacing.sm, marginTop: spacing.md }}>
-          {filtered.map((t) => (
-            <TaskRow
-              key={t.id}
-              task={t}
-              isDone={done.has(t.id)}
-              onToggle={() => toggleDone(t.id)}
-              onEstimate={() => startEstimate(t)}
-            />
-          ))}
-          {filtered.length === 0 ? (
-            <Text allowFontScaling={false} style={styles.empty}>
-              Nothing in {season.toLowerCase()} — enjoy the quiet.
+            {/* Season picker */}
+            <Label tone="tertiary" size="micro" style={styles.section}>By season</Label>
+            <View style={styles.seasonRow}>
+              {SEASONS.map((s) => (
+                <Pressable
+                  key={s}
+                  onPress={() => pickSeason(s)}
+                  accessibilityRole="button"
+                  accessibilityLabel={`Filter ${s.toLowerCase()}`}
+                  accessibilityState={{ selected: season === s }}
+                  hitSlop={4}
+                  style={{ flex: 1 }}
+                >
+                  <View style={[styles.seasonPill, season === s ? styles.seasonPillActive : null]}>
+                    <Text
+                      allowFontScaling={false}
+                      style={[styles.seasonPillText, season === s ? styles.seasonPillTextActive : null]}
+                    >
+                      {s}
+                    </Text>
+                  </View>
+                </Pressable>
+              ))}
+            </View>
+
+            <View style={{ gap: spacing.sm, marginTop: spacing.md }}>
+              {filtered.map((t) => (
+                <TaskRow
+                  key={t.id}
+                  task={t}
+                  days={dueDaysFrom(t.due_date)}
+                  onToggle={() => toggleDone(t.id, !!t.done_at)}
+                  onEstimate={() => startEstimate(t)}
+                />
+              ))}
+              {filtered.length === 0 ? (
+                <Text allowFontScaling={false} style={styles.empty}>
+                  Nothing in {season.toLowerCase()} — enjoy the quiet.
+                </Text>
+              ) : null}
+            </View>
+
+            <Text allowFontScaling={false} style={styles.note}>
+              Tasks auto-scheduled from home profile age + climate · tune in Settings → Notifications.
             </Text>
-          ) : null}
-        </View>
-
-        <Text allowFontScaling={false} style={styles.note}>
-          Tasks auto-scheduled from home profile age + climate · tune in Settings → Notifications.
-        </Text>
+          </>
+        )}
       </ScrollView>
     </NoirScreen>
   );
 }
 
 function TaskRow({
-  task, isDone, onToggle, onEstimate,
+  task,
+  days,
+  onToggle,
+  onEstimate,
 }: {
-  task: Task;
-  isDone: boolean;
+  task: MaintenanceTaskRow;
+  days: number;
   onToggle: () => void;
   onEstimate: () => void;
 }) {
+  const isDone = !!task.done_at;
+  const tone: Tone = toneFor(days);
+  const due = dueLabel(days, task.due_date);
   return (
     <NoirCard
       variant={isDone ? 'outlined' : 'default'}
@@ -200,7 +291,7 @@ function TaskRow({
           </View>
         </Pressable>
         <View style={{ flex: 1 }}>
-          <DocRef tone={task.tone}>{task.due.toUpperCase()}</DocRef>
+          <DocRef tone={tone}>{due.toUpperCase()}</DocRef>
           <Text
             allowFontScaling={false}
             style={[
@@ -210,10 +301,11 @@ function TaskRow({
           >
             {task.title}
           </Text>
-          <Text allowFontScaling={false} style={styles.taskMeta}>{task.meta}</Text>
+          {task.notes ? (
+            <Text allowFontScaling={false} style={styles.taskMeta}>{task.notes}</Text>
+          ) : null}
         </View>
         <View style={{ alignItems: 'flex-end' }}>
-          <Text allowFontScaling={false} style={styles.costText}>{task.estimatedCost}</Text>
           <Pressable
             onPress={onEstimate}
             hitSlop={8}
@@ -232,6 +324,10 @@ const styles = StyleSheet.create({
   scroll: {
     paddingHorizontal: spacing.xl,
     paddingTop: spacing.sm,
+  },
+  loadingWrap: {
+    marginTop: spacing.xxxl,
+    alignItems: 'center',
   },
   title: {
     marginTop: spacing.sm,
@@ -309,12 +405,6 @@ const styles = StyleSheet.create({
     fontFamily: fonts.body,
     fontSize: typeScale.bodySmall,
     color: colors.textSecondary,
-  },
-  costText: {
-    fontFamily: fonts.displayBold,
-    fontSize: typeScale.bodyLarge,
-    color: colors.text,
-    letterSpacing: tracking.tight,
   },
   startLink: {
     marginTop: 4,

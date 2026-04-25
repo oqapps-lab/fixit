@@ -5,7 +5,7 @@ import Svg, { Circle, Path, Polyline } from 'react-native-svg';
 import { AmberCTA } from '@/components/ui/AmberCTA';
 import { DocRef } from '@/components/ui/DocRef';
 import { NoirScreen } from '@/components/ui/NoirScreen';
-import { colors, fonts, radii, spacing, tracking, typeScale } from '@/constants/tokens';
+import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
 
 /** Wrench + clock combo glyph — maintenance indicator */
 function WrenchClockGlyph({ size = 72, color = colors.cyan }: { size?: number; color?: string }) {

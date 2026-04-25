@@ -2,13 +2,12 @@ import React from 'react';
 import { StyleSheet, Text, View, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { NoirCard } from '@/components/ui/NoirCard';
 import { DocRef } from '@/components/ui/DocRef';
 import { Label } from '@/components/ui/Label';
 import { HeroNumber } from '@/components/ui/HeroNumber';
 import { AmberCTA } from '@/components/ui/AmberCTA';
 import { SerifHero } from '@/components/ui/SerifHero';
-import { colors, fonts, radii, spacing, tracking, typeScale } from '@/constants/tokens';
+import { colors, fonts, radii, spacing, typeScale } from '@/constants/tokens';
 
 /**
  * Presented as transparentModal from repair-detail after first estimate.
@@ -25,7 +24,7 @@ export default function SignupAsk() {
 
   return (
     <Pressable style={styles.backdrop} onPress={close} accessibilityLabel="Close">
-      <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.78)' }]} />
+      <View style={[StyleSheet.absoluteFill, { backgroundColor: colors.scrimStrong }]} />
 
       <Pressable
         onPress={(e) => e.stopPropagation()}
@@ -75,7 +74,13 @@ export default function SignupAsk() {
           />
         </View>
 
-        <Pressable onPress={close} hitSlop={8} style={styles.skip}>
+        <Pressable
+          onPress={close}
+          hitSlop={8}
+          accessibilityRole="button"
+          accessibilityLabel="Continue without signing up"
+          style={styles.skip}
+        >
           <Text allowFontScaling={false} style={styles.skipText}>
             Not now — I'll lose this estimate
           </Text>

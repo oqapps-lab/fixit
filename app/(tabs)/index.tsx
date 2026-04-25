@@ -10,7 +10,8 @@ import { Label } from '@/components/ui/Label';
 import { HeroNumber } from '@/components/ui/HeroNumber';
 import { RingChart } from '@/components/ui/RingChart';
 import { SeverityChip } from '@/components/ui/SeverityChip';
-import { ArrowUpRightGlyph, RescanGlyph } from '@/components/ui/NoirGlyphs';
+import * as Haptics from 'expo-haptics';
+import { ArrowUpRightGlyph, BellGlyph, RescanGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
 
 type Status = 'calm' | 'watch' | 'fair' | 'urgent';
@@ -40,7 +41,23 @@ export default function HomeTab() {
 
   return (
     <NoirScreen>
-      <NoirHeader brand="FIXIT NOIR" showMenu />
+      <NoirHeader
+        brand="FIXIT NOIR"
+        showMenu
+        right={
+          <Pressable
+            onPress={() => {
+              Haptics.selectionAsync().catch(() => {});
+              router.push('/notifications-center' as any);
+            }}
+            hitSlop={10}
+            accessibilityRole="button"
+            accessibilityLabel="Open notifications"
+          >
+            <BellGlyph size={18} color={colors.amber} />
+          </Pressable>
+        }
+      />
 
       <ScrollView
         contentContainerStyle={[
@@ -135,6 +152,66 @@ export default function HomeTab() {
             <HeroNumber value="62" suffix="PSI" size="md" tone="white" style={{ marginTop: 8 }} />
           </NoirCard>
         </View>
+
+        {/* Maintenance card */}
+        <Pressable
+          onPress={() => {
+            Haptics.selectionAsync().catch(() => {});
+            router.push('/home/maintenance' as any);
+          }}
+          accessibilityRole="button"
+          accessibilityLabel="Maintenance calendar — 3 tasks due"
+          style={{ marginTop: spacing.lg }}
+        >
+          {({ pressed }) => (
+            <NoirCard
+              variant="default"
+              radius="md"
+              padding={18}
+              style={[
+                { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+                pressed ? { opacity: 0.7 } : null,
+              ]}
+            >
+              <View style={styles.maintTick} />
+              <View style={{ flex: 1 }}>
+                <DocRef tone="amber">SCHEDULE · 3 DUE</DocRef>
+                <Text allowFontScaling={false} style={styles.maintTitle}>Spring maintenance is up</Text>
+                <Text allowFontScaling={false} style={styles.maintMeta}>HVAC filter, gutters, smoke alarms.</Text>
+              </View>
+              <ArrowUpRightGlyph size={14} color={colors.amber} />
+            </NoirCard>
+          )}
+        </Pressable>
+
+        {/* Home edit link */}
+        <Pressable
+          onPress={() => {
+            Haptics.selectionAsync().catch(() => {});
+            router.push('/home/edit' as any);
+          }}
+          accessibilityRole="button"
+          accessibilityLabel="Edit home profile"
+          style={{ marginTop: spacing.sm }}
+        >
+          {({ pressed }) => (
+            <NoirCard
+              variant="outlined"
+              radius="md"
+              padding={16}
+              style={[
+                { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+                pressed ? { opacity: 0.7 } : null,
+              ]}
+            >
+              <View style={{ flex: 1 }}>
+                <DocRef tone="cyan">PROFILE · METADATA</DocRef>
+                <Text allowFontScaling={false} style={styles.maintTitle}>Edit home profile</Text>
+              </View>
+              <ArrowUpRightGlyph size={14} color={colors.cyan} />
+            </NoirCard>
+          )}
+        </Pressable>
       </ScrollView>
     </NoirScreen>
   );
@@ -274,5 +351,23 @@ const styles = StyleSheet.create({
   },
   statCard: {
     flex: 1,
+  },
+  maintTick: {
+    width: 3,
+    height: 38,
+    borderRadius: 2,
+    backgroundColor: colors.amber,
+  },
+  maintTitle: {
+    marginTop: 4,
+    fontFamily: fonts.bodySemibold,
+    fontSize: typeScale.bodyLarge,
+    color: colors.text,
+  },
+  maintMeta: {
+    marginTop: 2,
+    fontFamily: fonts.body,
+    fontSize: typeScale.bodySmall,
+    color: colors.textSecondary,
   },
 });

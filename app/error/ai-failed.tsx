@@ -110,7 +110,7 @@ export default function AiFailed() {
 
 const styles = StyleSheet.create({
   backdrop: { flex: 1, justifyContent: 'flex-end' },
-  scrim: { backgroundColor: 'rgba(0,0,0,0.70)' },
+  scrim: { backgroundColor: colors.scrim },
   sheet: {
     backgroundColor: colors.bg,
     borderTopLeftRadius: radii.xl,
@@ -159,7 +159,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: 'rgba(255,90,90,0.35)',
+    borderColor: colors.hairlineDanger,
     backgroundColor: colors.surface1,
   },
   title: {

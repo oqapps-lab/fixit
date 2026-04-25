@@ -2,36 +2,13 @@ import React from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import Svg, { Path } from 'react-native-svg';
 import { NoirCard } from '@/components/ui/NoirCard';
 import { DocRef } from '@/components/ui/DocRef';
 import { Label } from '@/components/ui/Label';
 import { SerifHero } from '@/components/ui/SerifHero';
 import { AmberCTA } from '@/components/ui/AmberCTA';
+import { ShieldGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, typeScale } from '@/constants/tokens';
-
-function ShieldGlyph({ size = 36, color = colors.cyan }: { size?: number; color?: string }) {
-  return (
-    <Svg width={size} height={size} viewBox="0 0 36 36">
-      <Path
-        d="M18 4 L6 9 V18 C6 25 11 30 18 32 C25 30 30 25 30 18 V9 Z"
-        stroke={color}
-        strokeWidth={1.6}
-        fill={color}
-        fillOpacity={0.14}
-        strokeLinejoin="round"
-      />
-      <Path
-        d="M13 18 L16.5 21 L23 14"
-        stroke={color}
-        strokeWidth={1.8}
-        fill="none"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </Svg>
-  );
-}
 
 export default function WarrantyPaywall() {
   const router = useRouter();
@@ -58,7 +35,7 @@ export default function WarrantyPaywall() {
       accessibilityLabel="Close paywall"
     >
       <View
-        style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.78)' }]}
+        style={[StyleSheet.absoluteFill, { backgroundColor: colors.scrimStrong }]}
       />
 
       <Pressable

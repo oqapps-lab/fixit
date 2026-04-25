@@ -6,8 +6,6 @@ import Svg, { Rect, Line, Circle, Path } from 'react-native-svg';
 import { NoirScreen } from '@/components/ui/NoirScreen';
 import { NoirCard } from '@/components/ui/NoirCard';
 import { DocRef } from '@/components/ui/DocRef';
-import { Label } from '@/components/ui/Label';
-import { AmberCTA } from '@/components/ui/AmberCTA';
 import { CameraGlyph, ChevronLeftGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
 
@@ -141,7 +139,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 20,
-    backgroundColor: 'rgba(255,169,92,0.10)',
+    backgroundColor: colors.amberTint10,
     borderWidth: 1,
     borderColor: colors.hairlineAmber,
   },

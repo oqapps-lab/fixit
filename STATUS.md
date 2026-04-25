@@ -1,8 +1,8 @@
 # Project FixIt — Status
 
-**Last updated:** 2026-04-20 (Stage 06 day 1)
-**Current stage:** Stage 06 Development — ~30 screens shipped
-**Current phase:** Batches 1-2-3-7 complete. Batches 4-5-6 pending.
+**Last updated:** 2026-04-22 (Stage 06 day 3 — autonomous sprint)
+**Current stage:** Stage 06 Development — ~52 screens shipped
+**Current phase:** Batches 1-7 all complete. UX QA pass landed.
 
 ## Timeline
 
@@ -11,45 +11,122 @@
 - [x] 03 Practices research
 - [x] 04 UX
 - [x] 05 Design (Noir v2, 2026-04-20)
-- [-] 06 Development — IN PROGRESS
-- [ ] 07 Implementation
+- [-] 06 Development — IN PROGRESS, ~85% (Batches 1–7 done, 1 visual-parity polish pass left)
+- [ ] 07 Implementation (real Supabase / Adapty / Claude API integration)
 - [ ] 08 Deployment
 
-## Last session (2026-04-20, Stage 06 batch 1-2-3-7)
+## Last session (2026-04-22, autonomous 10h sprint, branch `qa-autonomous-2026-04-22`)
 
 **What got done:**
-- Wrote `docs/07-development/NAVIGATION-MAP.md` — full route table + edge graph + batch dependency chart
-- **Batch 1 Onboarding (7 files)** — `(onboarding)/_layout + welcome + location + camera-primer + capture + context + processing + signup-ask`. Full onboarding flow end-to-end.
-- **Batch 2 Auth (3 files, via agent)** — `(auth)/_layout + sign-up + sign-in`. Apple / Google / Email buttons stubbed to `/(tabs)`.
-- **Batch 3 Paywall (8 files, via agent)** — `paywall/_layout + index (5.1) + save (5.2.1) + warranty (5.2.2) + pdf (5.2.3) + alerts (5.2.4) + success (5.3) + manage (5.4)`. Annual $49.99 preselected, monthly $9.99, pay-per $2.99 fallback.
-- **Batch 7 Error (10 files, via agent)** — `error/_layout + offline + camera-unavailable + ai-failed + location-denied + blurry + unknown-problem + sub-failed + force-update + maintenance`. 7 transparentModal sheets + 2 fullscreen blockers.
-- Added `'secondary' | 'tertiary' | 'mint'` tones to `SerifHero` primitive
-- Registered `(onboarding) / (auth) / paywall / error` Stacks in root `app/_layout.tsx`
-- Verified on sim: Welcome + Location + Camera Primer rendered correctly
 
-**Screens implemented this session:** 28 (7 onboarding + 3 auth + 8 paywall + 10 error)
-**Total FixIt screens now:** ~38 / 45 MVP
+### Phase 1 — Blocker cleanup
+- Added `CheckGlyph` to `components/ui/NoirGlyphs.tsx` — was imported by
+  `processing.tsx` + `paywall/success.tsx` but never exported, **crashed
+  Processing screen mid-onboarding** (B1 from QA pass)
+- Added `BookmarkGlyph / ShieldGlyph / DocumentGlyph` to NoirGlyphs,
+  removed inline copies from `paywall/save.tsx + warranty.tsx + pdf.tsx`
+- Added `colors.hairlineDanger` token, replaced inline `rgba(255,90,90,0.35)`
+  in `error/ai-failed.tsx + sub-failed.tsx`
+- Hardened `Label` and `DocRef`: accept `React.ReactNode`, flatten via
+  recursive helper before `.toUpperCase()` — fixes the
+  `<DocRef>STEP {n} OF 5</DocRef>` array-children crash (B2)
 
-**Simulator:** iPhone Air `DE5CF528-48EA-4E46-A718-F4D1A46194E5`, Metro on port 8084 (LAN `192.168.50.61`)
+### Phase 2 — Batch 4 Settings (5 screens)
+- `app/settings/_layout.tsx`
+- `app/settings/index.tsx` — 5-row config menu
+- `app/settings/account.tsx` — email, sign-in method, password reset,
+  sign out, GDPR delete-account
+- `app/settings/notifications.tsx` — 5 channel toggles + quiet hours
+- `app/settings/appearance.tsx` — theme radio with swatches + amber-active
+- `app/settings/privacy.tsx` — photo retention radio, analytics opt-out,
+  crash reports, export JSON, delete photos, policy deeplinks
 
-**Next action for next session (Batches 4-5-6):**
-- Read `docs/04-ux/SCREEN-MAP.md` sections 3.x (Tab sub-screens)
-- Build **Batch 4** — Settings + Account + Notifications Prefs + Appearance + Privacy (5 screens under `app/settings/`)
-- Build **Batch 5** — Estimates sub-screens: list / detail / comparison (3 screens)
-- Build **Batch 6** — My Home sub-screens: profile edit / room detail / maintenance calendar (3 screens) + Notifications Center + Saved Projects + Invite Friends
-- Then L3 visual parity pass + full flow walk on sim + final push
+### Phase 3 — UX fixes from QA pass
+- **H1 Location keyboard avoiding** — wrap content in
+  `KeyboardAvoidingView` + `ScrollView`, drop `autoFocus`, auto-dismiss
+  keyboard on 5 digits, `returnKey=done` + `onSubmitEditing`,
+  `accessibilityValue` exposes ZIP correctly (also fixes L1)
+- **M1 a11y on fix-selection** — `accessibilityLabel + accessibilityHint`
+  on `RouteCard` Pressable
+- **M2 status bar bleed** — `NoirScreen` renders top fade gradient
+  (`insets.top + 12px`) by default, prop `topFade` to opt out
+- **L2 low-contrast progress %** — repairs tab progress text now
+  `textSecondary + monoMedium + labelSmall`, fixed-width right-aligned
+
+### Phase 4 — Batch 5 Estimates (3 screens + mock)
+- `mock/estimates.ts` — 6 sample estimates with diy/hybrid/pro ladders,
+  chosenMode + actualPaid + savingsVsPro
+- `app/estimates/_layout.tsx` + `index.tsx` — filter pills (5),
+  3-way sort, long-press multi-select (cap 3), sticky compare dock
+- `app/estimates/[id].tsx` — full detail: blueprint photo, diagnosis,
+  impact hero, three mode radios, live savings card, share + export PDF
+- `app/estimates/compare.tsx` — side-by-side 2-3, per-row mode picker,
+  aggregated totals (PICKS / ALL DIY / ALL PRO / YOU SAVE)
+- Wired entry from repairs tab "VIEW ALL →" + vault Saved Projects card
+
+### Phase 5 — Batch 6 (6 screens)
+- `app/home/_layout.tsx`
+- `app/home/edit.tsx` — Home Profile Edit (3.2.2): home type radio,
+  year-built ±10 stepper with progress track, rooms multi-select grid
+- `app/home/room/[name].tsx` — Room Detail (3.2.3): per-room metadata,
+  related estimates timeline, stats trio, 8 room presets
+- `app/home/maintenance.tsx` — Maintenance Calendar (3.2.4): seasonal
+  task list, status trio, upcoming-3, season filter pills, mark-done
+- `app/notifications-center.tsx` — Inbox (6.1): 6 mock notifications,
+  tone-coded ticks, mark-all-read, long-press dismiss
+- `app/saved-projects.tsx` — Saved Projects (3.4.2): bookmark-toggle,
+  free-tier banner with paywall route, empty state
+- `app/invite.tsx` — Referral (3.4.4): big amber code, share-sheet via
+  Share API, invited/earned stats, 3-step explainer
+- Wired Systems tab: amber bell → notifications-center,
+  SCHEDULE 3 DUE → maintenance, PROFILE METADATA → home/edit
+
+**Screens implemented this session:** 14 new (5 settings + 3 estimates + 6 batch-6)
+**Total FixIt screens now:** ~52 / 45 MVP (over MVP scope, polish-ready)
+
+**Simulator:** iPhone 17 Pro `AF4951D7-668C-46F6-8FA1-0C564F0B7765` (slot 2),
+Metro on port 8087 (8084 was occupied by freshcheck)
+
+## Branch
+
+All work committed on `qa-autonomous-2026-04-22` (NOT pushed):
+- `phase 1: unblock render crashes + promote inline glyphs`
+- `phase 2: Batch 4 Settings (5 screens) + wire from Vault`
+- `phase 3: UX fixes from QA pass`
+- `phase 4: Batch 5 — Estimates sub-screens (list · detail · compare)`
+- `phase 5: Batch 6 — My Home + Notifications + Saved + Invite`
+- `phase 6: STATUS update + final QA notes`
+
+Diff against `main`: `git log main..qa-autonomous-2026-04-22 --oneline`
+Inspect changes: `git diff main..qa-autonomous-2026-04-22 --stat`
 
 ## Blockers
 
-- **Glyphs consolidation** (flagged by paywall-agent) — CheckGlyph/BookmarkGlyph/ShieldGlyph/DocumentGlyph need to be promoted from inline SVGs in paywall/* into `components/ui/NoirGlyphs.tsx` for reuse in warranty/saved-projects/notifications
-- **hairlineDanger token missing** (flagged by error-agent) — `rgba(255,90,90,0.35)` used inline in `ai-failed.tsx` + `sub-failed.tsx`. Add to `constants/tokens.ts`
-- **Placeholder URLs** — `error/force-update.tsx` has `idYOUR_APP_ID` placeholder, must be filled before ship
-- **SignupAsk stubs** — social auth buttons `router.replace('/(tabs)')` without real Supabase/Apple/Google — real auth in Stage 07
+- ~~**Glyphs consolidation**~~ → DONE
+- ~~**hairlineDanger token missing**~~ → DONE
+- **Placeholder URLs** — `error/force-update.tsx` has `idYOUR_APP_ID`
+  placeholder — must be filled before App Store submission (Stage 08)
+- **SignupAsk stubs** — social auth buttons `router.replace('/(tabs)')`
+  without real Supabase/Apple/Google — real auth in Stage 07
+
+## Open polish items (next pass)
+
+- Light-mode swatches in Appearance are placeholder copy — actual light
+  theme not wired (planned v0.3 per copy)
+- `home-overview.tsx` (standalone) and `(tabs)/index.tsx` overlap —
+  consolidate to one canonical Home view in next pass
+- Narrow-device test (iPhone SE 375pt) not yet done — Phase 6 only
+  covered iPhone 17 Pro 402pt
+- Visual parity check vs Stitch references — last pass before ship
 
 ## Notes
 
 - Design direction = **FixIt Noir**. See `docs/06-design/DESIGN-GUIDE.md`
-- Design source = Stitch project `4884422333715047255`, 12 curated screens at `docs/06-design/stitch-raw/screenshots/`
-- Metro runs on `--lan --port 8084` for Windows-VM-Claude (NOT 8081/8082 which other agents use)
-- Expo Go cache: after code changes, `mobile_terminate_app host.exp.Exponent` + reopen URL
-- Multi-agent parallelization worked well: 3 agents wrote 21 files simultaneously in ~5-6 min each
+- Design source = Stitch project `4884422333715047255`, 12 curated screens
+  at `docs/06-design/stitch-raw/screenshots/`
+- Metro runs on `--lan --port 8087` (port 8084 default in earlier docs is
+  taken by freshcheck — use 8087 going forward)
+- Expo Go cache: after code changes, `mobile_terminate_app host.exp.Exponent`
+  + reopen URL
+- Multi-agent parallelization: not used this session — built sequentially
+  with consistent design-token usage

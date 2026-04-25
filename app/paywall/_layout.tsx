@@ -27,6 +27,10 @@ export default function PaywallLayout() {
           contentStyle: { backgroundColor: colors.bg },
         }}
       />
+      <Stack.Screen name="alerts" />
+      <Stack.Screen name="save" />
+      <Stack.Screen name="warranty" />
+      <Stack.Screen name="pdf" />
     </Stack>
   );
 }

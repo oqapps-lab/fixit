@@ -93,9 +93,17 @@ export default function RepairsTab() {
           ))}
         </View>
 
-        <Label tone="tertiary" size="micro" style={{ marginTop: spacing.xxl }}>
-          Archive · Complete
-        </Label>
+        <View style={styles.archiveHead}>
+          <Label tone="tertiary" size="micro">Archive · Complete</Label>
+          <Pressable
+            onPress={() => router.push('/estimates' as any)}
+            hitSlop={8}
+            accessibilityRole="link"
+            accessibilityLabel="View all estimates"
+          >
+            <Text allowFontScaling={false} style={styles.archiveLink}>VIEW ALL →</Text>
+          </Pressable>
+        </View>
         <View style={{ marginTop: spacing.md, gap: spacing.sm }}>
           {PAST_REPAIRS.map((r) => (
             <NoirCard key={r.id} variant="outlined" radius="md" padding={16}>
@@ -140,10 +148,12 @@ const styles = StyleSheet.create({
   },
   progressPct: {
     marginLeft: spacing.md,
-    fontFamily: fonts.mono,
-    fontSize: typeScale.labelMicro,
-    color: colors.textTertiary,
+    fontFamily: fonts.monoMedium,
+    fontSize: typeScale.labelSmall,
+    color: colors.textSecondary,
     letterSpacing: tracking.docRef,
+    minWidth: 36,
+    textAlign: 'right',
   },
   pastRow: {
     flexDirection: 'row',
@@ -160,5 +170,17 @@ const styles = StyleSheet.create({
     fontSize: typeScale.bodyLarge,
     color: colors.text,
     letterSpacing: tracking.tight,
+  },
+  archiveHead: {
+    marginTop: spacing.xxl,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  archiveLink: {
+    fontFamily: fonts.monoMedium,
+    fontSize: typeScale.labelSmall,
+    color: colors.amber,
+    letterSpacing: tracking.labelWide,
   },
 });

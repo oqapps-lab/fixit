@@ -6,12 +6,19 @@ type Tone = 'primary' | 'secondary' | 'tertiary' | 'amber' | 'cyan' | 'mint' | '
 type Size = 'micro' | 'small' | 'medium';
 
 type Props = {
-  children: string;
+  children: React.ReactNode;
   tone?: Tone;
   size?: Size;
   align?: TextStyle['textAlign'];
   style?: TextStyle;
 };
+
+function flatten(node: React.ReactNode): string {
+  if (node == null || node === false) return '';
+  if (typeof node === 'string' || typeof node === 'number') return String(node);
+  if (Array.isArray(node)) return node.map(flatten).join('');
+  return '';
+}
 
 const TONE_COLOR: Record<Tone, string> = {
   primary: colors.text,
@@ -38,7 +45,7 @@ export function Label({ children, tone = 'tertiary', size = 'small', align, styl
         style,
       ]}
     >
-      {children.toUpperCase()}
+      {flatten(children).toUpperCase()}
     </Text>
   );
 }

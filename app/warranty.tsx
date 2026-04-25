@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NoirScreen } from '@/components/ui/NoirScreen';
@@ -11,7 +11,7 @@ import { HeroNumber } from '@/components/ui/HeroNumber';
 import { RingChart } from '@/components/ui/RingChart';
 import { AmberCTA } from '@/components/ui/AmberCTA';
 import { FridgePhoto } from '@/components/ui/NoirGlyphs';
-import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
+import { spacing } from '@/constants/tokens';
 
 export default function Warranty() {
   const router = useRouter();

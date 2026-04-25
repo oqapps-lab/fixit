@@ -36,10 +36,10 @@ export default function YourHouse() {
             <HouseWireframe size={260} />
 
             {/* Tags */}
-            <View style={[styles.tag, { top: '18%', right: '6%', backgroundColor: 'rgba(107,203,217,0.15)', borderColor: colors.cyan }]}>
+            <View style={[styles.tag, { top: '18%', right: '6%', backgroundColor: colors.cyanTint15, borderColor: colors.cyan }]}>
               <Text style={[styles.tagText, { color: colors.cyan }]}>ROOF INTEGRITY</Text>
             </View>
-            <View style={[styles.tag, { top: '58%', left: '10%', backgroundColor: 'rgba(255,169,92,0.15)', borderColor: colors.amber }]}>
+            <View style={[styles.tag, { top: '58%', left: '10%', backgroundColor: colors.amberTint15, borderColor: colors.amber }]}>
               <Text style={[styles.tagText, { color: colors.amber }]}>MAIN LINE</Text>
             </View>
 

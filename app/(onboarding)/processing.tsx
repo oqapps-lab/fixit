@@ -13,9 +13,8 @@ import Svg, { Circle, Defs, LinearGradient as SvgLinearGradient, Stop } from 're
 import { NoirScreen } from '@/components/ui/NoirScreen';
 import { NoirCard } from '@/components/ui/NoirCard';
 import { DocRef } from '@/components/ui/DocRef';
-import { Label } from '@/components/ui/Label';
 import { CheckGlyph, BlueprintPhoto } from '@/components/ui/NoirGlyphs';
-import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
+import { colors, fonts, spacing, typeScale } from '@/constants/tokens';
 
 type State = 'pending' | 'active' | 'done';
 

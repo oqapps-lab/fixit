@@ -48,8 +48,9 @@ export default function Warranty() {
         </DocRef>
 
         <AmberCTA
-          label="+ Add Receipt PDF"
+          label="Add Receipt — coming soon"
           variant="outlined"
+          disabled
           onPress={() => {}}
           style={{ marginTop: spacing.xl, alignSelf: 'center', width: '70%' }}
         />

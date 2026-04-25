@@ -19,6 +19,12 @@ import type { NotificationRow, NotificationTone } from '@/types/database';
 
 type Tone = 'amber' | 'cyan' | 'mint' | 'danger';
 
+const ALLOWED_NAV_PREFIXES = ['/estimates', '/repair/', '/saved-projects', '/home/maintenance', '/invite', '/settings', '/error/'];
+function isAllowedRoute(s: string | null | undefined): boolean {
+  if (!s) return false;
+  return ALLOWED_NAV_PREFIXES.some(p => s.startsWith(p));
+}
+
 function toneFromBackend(t: NotificationTone): Tone {
   switch (t) {
     case 'success':
@@ -83,18 +89,14 @@ export default function NotificationsCenter() {
 
   const markAll = async () => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
+    const snapshot = items.map((i) => ({ ...i }));
     const now = new Date().toISOString();
     setItems((prev) => prev.map((n) => (n.read_at ? n : { ...n, read_at: now })));
     try {
       await markAllRead();
     } catch {
-      // best-effort; refetch on failure
-      try {
-        const rows = await listNotifications();
-        setItems(rows);
-      } catch {
-        /* noop */
-      }
+      setItems(snapshot);
+      setError('Failed to mark read');
     }
   };
 
@@ -102,11 +104,17 @@ export default function NotificationsCenter() {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Warning).catch(() => {});
     const snapshot = items;
     setItems([]);
-    try {
-      await Promise.all(snapshot.map((n) => deleteNotification(n.id)));
-    } catch {
-      // restore on failure
-      setItems(snapshot);
+    const failed: NotificationRow[] = [];
+    for (const n of snapshot) {
+      try {
+        await deleteNotification(n.id);
+      } catch {
+        failed.push(n);
+      }
+    }
+    if (failed.length) {
+      setItems(failed);
+      setError(`${failed.length} couldn't be cleared`);
     }
   };
 
@@ -119,7 +127,7 @@ export default function NotificationsCenter() {
         setItems((prev) => prev.map((x) => (x.id === n.id ? { ...x, read_at: null } : x)));
       });
     }
-    if (n.meta) router.push(n.meta as any);
+    if (isAllowedRoute(n.meta as any)) router.push(n.meta as any);
   };
 
   const dismiss = async (id: string) => {
@@ -238,6 +246,9 @@ export default function NotificationsCenter() {
               );
             })}
 
+            <Text allowFontScaling={false} style={styles.hint}>
+              • tap & hold to dismiss
+            </Text>
             <View style={{ height: spacing.xl }} />
             <AmberCTA label="Clear all" variant="dark" size="md" onPress={clearAll} />
           </View>
@@ -342,5 +353,13 @@ const styles = StyleSheet.create({
     fontSize: typeScale.bodySmall,
     color: colors.textSecondary,
     lineHeight: 18,
+  },
+  hint: {
+    marginTop: spacing.md,
+    fontFamily: fonts.mono,
+    fontSize: typeScale.labelSmall,
+    color: colors.textTertiary,
+    letterSpacing: tracking.docRef,
+    textAlign: 'center',
   },
 });

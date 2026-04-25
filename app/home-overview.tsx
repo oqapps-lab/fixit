@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View, ScrollView } from 'react-native';
+import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Polyline } from 'react-native-svg';
 import { NoirScreen } from '@/components/ui/NoirScreen';
@@ -16,18 +17,23 @@ import { listEstimates, totalSavings } from '@/services/estimates';
 import type { EstimateRow } from '@/types/database';
 
 export default function HomeOverview() {
+  const router = useRouter();
   const insets = useSafeAreaInsets();
   const [estimates, setEstimates] = useState<EstimateRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let alive = true;
     (async () => {
       try {
         const rows = await listEstimates();
-        if (alive) setEstimates(rows);
-      } catch {
-        if (alive) setEstimates([]);
+        if (alive) {
+          setEstimates(rows);
+          setError(null);
+        }
+      } catch (e: any) {
+        if (alive) setError(e?.message ?? 'Failed to load estimates');
       } finally {
         if (alive) setLoading(false);
       }
@@ -114,6 +120,11 @@ export default function HomeOverview() {
         <View style={{ marginTop: spacing.md, gap: spacing.sm }}>
           {loading ? (
             <ActivityIndicator color={colors.amber} />
+          ) : error ? (
+            <NoirCard variant="outlined" radius="md" padding={14} style={styles.errorBanner}>
+              <Text allowFontScaling={false} style={styles.errorTitle}>Couldn’t load activity</Text>
+              <Text allowFontScaling={false} style={styles.errorMeta}>{error}</Text>
+            </NoirCard>
           ) : (
             activities.map((a) => {
               const price = Number(a.actual_paid ?? a.diy_price);
@@ -134,7 +145,7 @@ export default function HomeOverview() {
         <AmberCTA
           label="+ New Fix"
           variant="primary"
-          onPress={() => {}}
+          onPress={() => router.push('/(onboarding)/welcome' as any)}
           fullWidth={false}
           style={{ alignSelf: 'flex-end', marginTop: spacing.xl }}
         />
@@ -172,5 +183,19 @@ const styles = StyleSheet.create({
     fontSize: typeScale.bodyMedium,
     color: colors.text,
     letterSpacing: tracking.docRef,
+  },
+  errorBanner: {
+    borderColor: colors.hairlineDanger,
+  },
+  errorTitle: {
+    fontFamily: fonts.bodySemibold,
+    fontSize: typeScale.bodyMedium,
+    color: colors.danger,
+  },
+  errorMeta: {
+    marginTop: 2,
+    fontFamily: fonts.body,
+    fontSize: typeScale.bodySmall,
+    color: colors.textSecondary,
   },
 });

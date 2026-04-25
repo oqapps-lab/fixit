@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NoirScreen } from '@/components/ui/NoirScreen';
 import { NoirHeader } from '@/components/ui/NoirHeader';
@@ -18,6 +19,7 @@ const TASKS = [
 ];
 
 export default function Seasonal() {
+  const router = useRouter();
   const insets = useSafeAreaInsets();
 
   return (
@@ -75,7 +77,7 @@ export default function Seasonal() {
         <AmberCTA
           label="Start Checklist"
           variant="primary"
-          onPress={() => {}}
+          onPress={() => router.push('/home/maintenance' as any)}
           style={{ marginTop: spacing.xxl }}
         />
       </ScrollView>

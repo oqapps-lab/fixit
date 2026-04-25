@@ -43,24 +43,26 @@ export default function RepairsTab() {
   const [loading, setLoading] = useState(true);
   const [repairs, setRepairs] = useState<RepairRow[]>([]);
   const [estimates, setEstimates] = useState<EstimateRow[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    let alive = true;
+    let cancelled = false;
     (async () => {
       setLoading(true);
       try {
         const [r, e] = await Promise.all([listRepairs(), listEstimates()]);
-        if (!alive) return;
+        if (cancelled) return;
         setRepairs(r);
         setEstimates(e);
-      } catch {
-        // keep last good state
+        setError(null);
+      } catch (e: any) {
+        if (!cancelled) setError(e?.message ?? 'Failed to load');
       } finally {
-        if (alive) setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     })();
     return () => {
-      alive = false;
+      cancelled = true;
     };
   }, []);
 
@@ -124,6 +126,19 @@ export default function RepairsTab() {
           PROJECTS
         </Text>
 
+        {error ? (
+          <NoirCard
+            variant="outlined"
+            radius="md"
+            padding={12}
+            style={[styles.errorBanner, { borderColor: colors.hairlineDanger }]}
+          >
+            <Text allowFontScaling={false} style={styles.errorText}>
+              {error}
+            </Text>
+          </NoirCard>
+        ) : null}
+
         <AmberCTA
           label="+ New Estimate"
           variant="primary"
@@ -140,12 +155,20 @@ export default function RepairsTab() {
           <View style={{ marginTop: spacing.lg, alignItems: 'center' }}>
             <ActivityIndicator color={colors.amber} />
           </View>
+        ) : ACTIVE_REPAIRS.length === 0 ? (
+          <View style={{ marginTop: spacing.md }}>
+            <NoirCard variant="outlined" radius="md" padding={16}>
+              <Text allowFontScaling={false} style={styles.emptyText}>
+                No active repairs · tap a problem photo to start
+              </Text>
+            </NoirCard>
+          </View>
         ) : (
           <View style={{ marginTop: spacing.md, gap: spacing.md }}>
             {ACTIVE_REPAIRS.map((r) => (
               <Pressable
                 key={r.id}
-                onPress={() => router.push(`/repair/${r.id}` as any)}
+                onPress={() => router.push(`/repair/${r.id}`)}
                 accessibilityRole="button"
                 accessibilityLabel={`${r.title} — open details`}
               >
@@ -157,11 +180,18 @@ export default function RepairsTab() {
                     />
                     <View style={{ flex: 1 }}>
                       <DocRef>{`REF: ${r.code} · ACTIVE`}</DocRef>
-                      <Text allowFontScaling={false} style={styles.repairTitle}>
+                      <Text
+                        allowFontScaling={false}
+                        style={styles.repairTitle}
+                        numberOfLines={2}
+                        ellipsizeMode="tail"
+                      >
                         {r.title}
                       </Text>
                     </View>
-                    <HeroNumber value={r.impact} size="sm" tone="white" />
+                    <View style={styles.impactWrap}>
+                      <HeroNumber value={r.impact} size="sm" tone="white" />
+                    </View>
                     <ChevronRightGlyph size={14} color={colors.textTertiary} />
                   </View>
                   <View style={styles.progressRow}>
@@ -185,7 +215,7 @@ export default function RepairsTab() {
         <View style={styles.archiveHead}>
           <Label tone="tertiary" size="micro">Archive · Complete</Label>
           <Pressable
-            onPress={() => router.push('/estimates' as any)}
+            onPress={() => router.push('/estimates')}
             hitSlop={8}
             accessibilityRole="link"
             accessibilityLabel="View all estimates"
@@ -194,14 +224,22 @@ export default function RepairsTab() {
           </Pressable>
         </View>
         <View style={{ marginTop: spacing.md, gap: spacing.sm }}>
-          {PAST_REPAIRS.map((r) => (
-            <NoirCard key={r.id} variant="outlined" radius="md" padding={16}>
-              <View style={styles.pastRow}>
-                <Text allowFontScaling={false} style={styles.pastTitle}>{r.title}</Text>
-                <Text allowFontScaling={false} style={styles.pastPrice}>{r.impact}</Text>
-              </View>
+          {PAST_REPAIRS.length === 0 ? (
+            <NoirCard variant="outlined" radius="md" padding={16}>
+              <Text allowFontScaling={false} style={styles.emptyText}>
+                Past repairs will appear here.
+              </Text>
             </NoirCard>
-          ))}
+          ) : (
+            PAST_REPAIRS.map((r) => (
+              <NoirCard key={r.id} variant="outlined" radius="md" padding={16}>
+                <View style={styles.pastRow}>
+                  <Text allowFontScaling={false} style={styles.pastTitle} numberOfLines={2} ellipsizeMode="tail">{r.title}</Text>
+                  <Text allowFontScaling={false} style={styles.pastPrice}>{r.impact}</Text>
+                </View>
+              </NoirCard>
+            ))
+          )}
         </View>
       </ScrollView>
     </NoirScreen>
@@ -271,5 +309,22 @@ const styles = StyleSheet.create({
     fontSize: typeScale.labelSmall,
     color: colors.amber,
     letterSpacing: tracking.labelWide,
+  },
+  errorBanner: {
+    marginTop: spacing.md,
+  },
+  errorText: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.bodySmall,
+    color: colors.danger,
+  },
+  emptyText: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.bodySmall,
+    color: colors.textSecondary,
+    textAlign: 'center',
+  },
+  impactWrap: {
+    maxWidth: 110,
   },
 });

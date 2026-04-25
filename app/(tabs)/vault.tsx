@@ -21,24 +21,26 @@ export default function VaultTab() {
   const [loading, setLoading] = useState(true);
   const [profile, setProfile] = useState<ProfileRow | null>(null);
   const [estimates, setEstimates] = useState<EstimateRow[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    let alive = true;
+    let cancelled = false;
     (async () => {
       setLoading(true);
       try {
         const [p, e] = await Promise.all([getMyProfile(), listEstimates()]);
-        if (!alive) return;
+        if (cancelled) return;
         setProfile(p);
         setEstimates(e);
-      } catch {
-        // keep last good state
+        setError(null);
+      } catch (e: any) {
+        if (!cancelled) setError(e?.message ?? 'Failed to load');
       } finally {
-        if (alive) setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     })();
     return () => {
-      alive = false;
+      cancelled = true;
     };
   }, []);
 
@@ -60,6 +62,19 @@ export default function VaultTab() {
         ]}
         showsVerticalScrollIndicator={false}
       >
+        {error ? (
+          <NoirCard
+            variant="outlined"
+            radius="md"
+            padding={12}
+            style={[styles.errorBanner, { borderColor: colors.hairlineDanger }]}
+          >
+            <Text allowFontScaling={false} style={styles.errorText}>
+              {error}
+            </Text>
+          </NoirCard>
+        ) : null}
+
         <NoirCard variant="elevated" radius="lg" padding={32} style={styles.emptyCard}>
           <View style={{ alignItems: 'center' }}>
             <HouseCalmIllustration size={160} />
@@ -71,7 +86,12 @@ export default function VaultTab() {
             </View>
           ) : (
             <>
-              <Text allowFontScaling={false} style={styles.heroTitle}>
+              <Text
+                allowFontScaling={false}
+                style={styles.heroTitle}
+                numberOfLines={1}
+                ellipsizeMode="tail"
+              >
                 {displayName}
               </Text>
               <Text allowFontScaling={false} style={styles.heroBody}>
@@ -101,13 +121,14 @@ export default function VaultTab() {
             label="Saved Projects"
             refLabel={`SAVED · ${savedCount} ITEM${savedCount === 1 ? '' : 'S'}`}
             tone="mint"
-            onPress={() => router.push('/estimates' as any)}
+            onPress={() => router.push('/estimates')}
           />
           <CollectionRow
             label="Warranty Vault"
-            refLabel="WARRANTY · 3 TRACKED"
+            refLabel="WARRANTY · COMING SOON"
             tone="cyan"
-            onPress={() => router.push('/warranty')}
+            disabled
+            onPress={() => {}}
           />
           <CollectionRow
             label="Photo Journal"
@@ -131,7 +152,7 @@ export default function VaultTab() {
             label="Invite friends"
             refLabel="REFERRAL · +1 ESTIMATE"
             tone="mint"
-            onPress={() => router.push('/invite' as any)}
+            onPress={() => router.push('/invite')}
           />
         </View>
       </ScrollView>
@@ -140,21 +161,25 @@ export default function VaultTab() {
 }
 
 function CollectionRow({
-  label, refLabel, tone, onPress,
+  label, refLabel, tone, onPress, disabled,
 }: {
   label: string;
   refLabel: string;
   tone: 'mint' | 'cyan' | 'amber' | 'neutral';
   onPress: () => void;
+  disabled?: boolean;
 }) {
   return (
     <Pressable
       onPress={() => {
+        if (disabled) return;
         Haptics.selectionAsync().catch(() => {});
         onPress();
       }}
+      disabled={disabled}
       accessibilityRole="button"
       accessibilityLabel={label}
+      accessibilityState={{ disabled: !!disabled }}
       hitSlop={6}
     >
       {({ pressed }) => (
@@ -164,14 +189,15 @@ function CollectionRow({
           padding={16}
           style={[
             { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-            pressed ? { opacity: 0.65 } : null,
+            pressed && !disabled ? { opacity: 0.65 } : null,
+            disabled ? { opacity: 0.45 } : null,
           ]}
         >
           <View style={{ flex: 1 }}>
             <DocRef tone={tone === 'neutral' ? 'neutral' : tone}>{refLabel}</DocRef>
             <Text allowFontScaling={false} style={styles.collItem}>{label}</Text>
           </View>
-          <ChevronRightGlyph size={14} color={colors.textTertiary} />
+          {disabled ? null : <ChevronRightGlyph size={14} color={colors.textTertiary} />}
         </NoirCard>
       )}
     </Pressable>
@@ -205,5 +231,13 @@ const styles = StyleSheet.create({
     fontSize: typeScale.bodyLarge,
     color: colors.text,
     letterSpacing: tracking.tight,
+  },
+  errorBanner: {
+    marginTop: spacing.md,
+  },
+  errorText: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.bodySmall,
+    color: colors.danger,
   },
 });

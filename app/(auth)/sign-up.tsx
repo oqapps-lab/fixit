@@ -42,11 +42,22 @@ export default function SignUp() {
     const { error: err } = await signUp(email.trim(), password);
     setSubmitting(false);
     if (err) {
-      setError(err);
+      setError(friendlyAuthError(err));
       return;
     }
     setInfo('Check your inbox to confirm. Once confirmed you can sign in.');
   };
+
+  function friendlyAuthError(raw: string): string {
+    const lower = raw.toLowerCase();
+    if (lower.includes('email address') && lower.includes('is invalid')) {
+      return "Please use a real email (test/example domains aren't allowed).";
+    }
+    if (lower.includes('rate limit') || lower.includes('over_email_send_rate_limit')) {
+      return 'Too many sign-ups recently — please wait a few minutes.';
+    }
+    return raw;
+  }
 
   return (
     <NoirScreen glow="amber">

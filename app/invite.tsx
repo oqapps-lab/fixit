@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator, Alert, Clipboard, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, ScrollView, Share, StyleSheet, Text, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
+import * as Clipboard from 'expo-clipboard';
 import { NoirScreen } from '@/components/ui/NoirScreen';
 import { NoirHeader } from '@/components/ui/NoirHeader';
 import { NoirCard } from '@/components/ui/NoirCard';
@@ -56,8 +57,14 @@ export default function Invite() {
   const copyCode = () => {
     if (!code) return;
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
-    Clipboard.setString(code);
-    Alert.alert('Copied', `${code} is on your clipboard.`);
+    (async () => {
+      try {
+        await Clipboard.setStringAsync(code);
+        Alert.alert('Copied', `${code} is on your clipboard.`);
+      } catch {
+        Alert.alert('Copy failed', 'Could not copy to clipboard.');
+      }
+    })();
   };
 
   const share = async () => {

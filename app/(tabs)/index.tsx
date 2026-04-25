@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -68,24 +68,33 @@ export default function HomeTab() {
   const [repairs, setRepairs] = useState<RepairRow[]>([]);
   const [maintenance, setMaintenance] = useState<MaintenanceTaskRow[]>([]);
   const [lastScanIso, setLastScanIso] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const refetchAlive = useRef(true);
 
   const refetch = useCallback(async () => {
     setLoading(true);
     try {
       const [e, r, m] = await Promise.all([listEstimates(), listRepairs(), listMaintenance()]);
+      if (!refetchAlive.current) return;
       setEstimates(e);
       setRepairs(r);
       setMaintenance(m);
       setLastScanIso(new Date().toISOString());
-    } catch {
-      // silently swallow — keep last good state
+      setError(null);
+    } catch (e: any) {
+      if (!refetchAlive.current) return;
+      setError(e?.message ?? 'Failed to load');
     } finally {
-      setLoading(false);
+      if (refetchAlive.current) setLoading(false);
     }
   }, []);
 
   useEffect(() => {
+    refetchAlive.current = true;
     refetch();
+    return () => {
+      refetchAlive.current = false;
+    };
   }, [refetch]);
 
   // Derived counts
@@ -98,6 +107,17 @@ export default function HomeTab() {
     (t) => !t.done_at && t.due_date && t.due_date < todayIso,
   ).length;
   const dueMaintCount = maintenance.filter((t) => !t.done_at).length;
+  const upcoming = maintenance
+    .filter((t) => !t.done_at)
+    .sort((a, b) => {
+      const ad = a.due_date ?? '';
+      const bd = b.due_date ?? '';
+      return ad.localeCompare(bd);
+    });
+  const upcomingDesc =
+    upcoming.length > 0
+      ? upcoming.slice(0, 3).map((t) => t.title).join(', ') + '.'
+      : 'Nothing due soon.';
 
   const health = computeHealth({ urgentCount, highSeverityCount, overdueMaintCount });
   const hLabel = healthLabel(health);
@@ -134,7 +154,7 @@ export default function HomeTab() {
           <Pressable
             onPress={() => {
               Haptics.selectionAsync().catch(() => {});
-              router.push('/notifications-center' as any);
+              router.push('/notifications-center');
             }}
             hitSlop={10}
             accessibilityRole="button"
@@ -159,6 +179,19 @@ export default function HomeTab() {
         <Text allowFontScaling={false} style={styles.displayTitle}>
           HOME HEALTH{'\n'}DASHBOARD
         </Text>
+
+        {error ? (
+          <NoirCard
+            variant="outlined"
+            radius="md"
+            padding={12}
+            style={[styles.errorBanner, { borderColor: colors.hairlineDanger }]}
+          >
+            <Text allowFontScaling={false} style={styles.errorText}>
+              {error}
+            </Text>
+          </NoirCard>
+        ) : null}
 
         {/* Health Ring card */}
         <NoirCard variant="elevated" radius="lg" padding={26} style={styles.ringCard}>
@@ -217,7 +250,7 @@ export default function HomeTab() {
         {/* Alert card */}
         {featured ? (
           <Pressable
-            onPress={() => router.push(`/repair/${featured.id}` as any)}
+            onPress={() => router.push(`/repair/${featured.id}`)}
             accessibilityRole="button"
             accessibilityLabel={`${featured.title} — open details`}
             style={{ marginTop: spacing.lg }}
@@ -231,7 +264,12 @@ export default function HomeTab() {
                     {featured.title}
                   </Text>
                 </View>
-                <Text allowFontScaling={false} style={styles.alertBody}>
+                <Text
+                  allowFontScaling={false}
+                  style={styles.alertBody}
+                  numberOfLines={3}
+                  ellipsizeMode="tail"
+                >
                   {featured.diagnosis}
                 </Text>
                 <View style={styles.alertCta}>
@@ -269,7 +307,7 @@ export default function HomeTab() {
         <Pressable
           onPress={() => {
             Haptics.selectionAsync().catch(() => {});
-            router.push('/home/maintenance' as any);
+            router.push('/home/maintenance');
           }}
           accessibilityRole="button"
           accessibilityLabel={`Maintenance calendar — ${dueMaintCount} tasks due`}
@@ -289,7 +327,7 @@ export default function HomeTab() {
               <View style={{ flex: 1 }}>
                 <DocRef tone="amber">{`SCHEDULE · ${dueMaintCount} DUE`}</DocRef>
                 <Text allowFontScaling={false} style={styles.maintTitle}>Spring maintenance is up</Text>
-                <Text allowFontScaling={false} style={styles.maintMeta}>HVAC filter, gutters, smoke alarms.</Text>
+                <Text allowFontScaling={false} style={styles.maintMeta} numberOfLines={2} ellipsizeMode="tail">{upcomingDesc}</Text>
               </View>
               <ArrowUpRightGlyph size={14} color={colors.amber} />
             </NoirCard>
@@ -300,7 +338,7 @@ export default function HomeTab() {
         <Pressable
           onPress={() => {
             Haptics.selectionAsync().catch(() => {});
-            router.push('/home/edit' as any);
+            router.push('/home/edit');
           }}
           accessibilityRole="button"
           accessibilityLabel="Edit home profile"
@@ -344,6 +382,14 @@ const styles = StyleSheet.create({
   },
   ringCard: {
     marginTop: spacing.xl,
+  },
+  errorBanner: {
+    marginTop: spacing.md,
+  },
+  errorText: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.bodySmall,
+    color: colors.danger,
   },
   ringWrap: {
     alignItems: 'center',

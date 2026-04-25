@@ -17,23 +17,25 @@ export default function BlueprintsTab() {
   const insets = useSafeAreaInsets();
   const [loading, setLoading] = useState(true);
   const [estimates, setEstimates] = useState<EstimateRow[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    let alive = true;
+    let cancelled = false;
     (async () => {
       setLoading(true);
       try {
         const e = await listEstimates();
-        if (!alive) return;
+        if (cancelled) return;
         setEstimates(e);
-      } catch {
-        // keep last good state
+        setError(null);
+      } catch (e: any) {
+        if (!cancelled) setError(e?.message ?? 'Failed to load');
       } finally {
-        if (alive) setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     })();
     return () => {
-      alive = false;
+      cancelled = true;
     };
   }, []);
 
@@ -63,6 +65,19 @@ export default function BlueprintsTab() {
           BLUEPRINTS
         </Text>
 
+        {error ? (
+          <NoirCard
+            variant="outlined"
+            radius="md"
+            padding={12}
+            style={[styles.errorBanner, { borderColor: colors.hairlineDanger }]}
+          >
+            <Text allowFontScaling={false} style={styles.errorText}>
+              {error}
+            </Text>
+          </NoirCard>
+        ) : null}
+
         <NoirCard variant="blueprint" radius="lg" padding={28} style={styles.hero}>
           <BlueprintRoofScene size={260} />
           <DocRef tone="cyan" align="center" style={{ marginTop: spacing.sm }}>X: 42.1 · Y: -18.4</DocRef>
@@ -81,12 +96,25 @@ export default function BlueprintsTab() {
           <View style={{ marginTop: spacing.lg, alignItems: 'center' }}>
             <ActivityIndicator color={colors.amber} />
           </View>
+        ) : BLUEPRINTS.length === 0 ? (
+          <Pressable
+            onPress={() => router.push('/your-house')}
+            accessibilityRole="button"
+            accessibilityLabel="Snap a photo to begin"
+            style={{ marginTop: spacing.md }}
+          >
+            <NoirCard variant="outlined" radius="md" padding={16}>
+              <Text allowFontScaling={false} style={styles.emptyText}>
+                No estimates yet · snap a photo to begin
+              </Text>
+            </NoirCard>
+          </Pressable>
         ) : (
           <View style={{ marginTop: spacing.md, gap: spacing.sm }}>
             {BLUEPRINTS.map((b) => (
               <Pressable
                 key={b.id}
-                onPress={() => router.push(b.href as any)}
+                onPress={() => router.push(b.href)}
                 accessibilityRole="button"
                 accessibilityLabel={b.title}
               >
@@ -155,5 +183,19 @@ const styles = StyleSheet.create({
     fontSize: typeScale.bodyLarge,
     color: colors.text,
     letterSpacing: tracking.tight,
+  },
+  errorBanner: {
+    marginTop: spacing.md,
+  },
+  errorText: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.bodySmall,
+    color: colors.danger,
+  },
+  emptyText: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.bodySmall,
+    color: colors.textSecondary,
+    textAlign: 'center',
   },
 });

@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Pressable } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { DocRef } from '@/components/ui/DocRef';
 import { Label } from '@/components/ui/Label';
@@ -16,6 +16,12 @@ import { colors, fonts, radii, spacing, typeScale } from '@/constants/tokens';
 export default function SignupAsk() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { savings } = useLocalSearchParams<{ savings?: string }>();
+
+  const savingsNum =
+    typeof savings === 'string' && savings.length > 0 && !Number.isNaN(Number(savings))
+      ? Math.max(0, Math.round(Number(savings)))
+      : null;
 
   const close = () => {
     if (router.canGoBack()) router.back();
@@ -41,10 +47,24 @@ export default function SignupAsk() {
         <DocRef align="center">SECTOR · ACCOUNT · SAVE STATE</DocRef>
 
         <View style={styles.header}>
-          <Label tone="amber" size="micro" align="center">
-            You'd save going DIY
-          </Label>
-          <HeroNumber value="$165" size="xl" tone="amber" align="center" style={{ marginTop: 4 }} />
+          {savingsNum != null ? (
+            <>
+              <Label tone="amber" size="micro" align="center">
+                You'd save going DIY
+              </Label>
+              <HeroNumber
+                value={`$${savingsNum}`}
+                size="xl"
+                tone="amber"
+                align="center"
+                style={{ marginTop: 4 }}
+              />
+            </>
+          ) : (
+            <Label tone="amber" size="micro" align="center">
+              You'll lose this estimate
+            </Label>
+          )}
           <SerifHero size={26} align="center" style={{ marginTop: spacing.md }}>
             Keep this estimate?
           </SerifHero>

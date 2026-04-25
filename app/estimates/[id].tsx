@@ -25,6 +25,7 @@ export default function EstimateDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [picked, setPicked] = useState<ChosenMode>('hybrid');
+  const [pickError, setPickError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -89,8 +90,14 @@ export default function EstimateDetail() {
   const savingsVsPro = proPrice - pickedPrice;
 
   const handlePick = (mode: ChosenMode) => {
+    const prev = picked;
     setPicked(mode);
-    setEstimateMode(estimate.id, mode).catch(() => {});
+    setPickError(null);
+    setEstimateMode(estimate.id, mode).catch(() => {
+      setPicked(prev);
+      setPickError("Couldn't save your pick. Try again.");
+      setTimeout(() => setPickError(null), 3000);
+    });
   };
 
   const onShare = () => {
@@ -105,7 +112,7 @@ export default function EstimateDetail() {
 
   const onMarkComplete = () => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
-    Alert.alert('Mark complete', 'Log the actual amount paid and outcome. (Stage 7 — real form.)');
+    Alert.alert('Mark Complete', 'Marking estimates complete will be available soon.');
   };
 
   return (
@@ -177,6 +184,12 @@ export default function EstimateDetail() {
             onPress={() => handlePick('pro')}
           />
         </View>
+
+        {pickError ? (
+          <Text allowFontScaling={false} style={styles.pickErrorToast}>
+            {pickError}
+          </Text>
+        ) : null}
 
         {/* Savings summary */}
         <NoirCard variant="elevated" radius="md" padding={18} style={{ marginTop: spacing.xl }}>
@@ -383,6 +396,13 @@ const styles = StyleSheet.create({
     fontSize: typeScale.docRef,
     color: colors.textTertiary,
     letterSpacing: tracking.docRef,
+    textAlign: 'center',
+  },
+  pickErrorToast: {
+    marginTop: spacing.sm,
+    fontFamily: fonts.body,
+    fontSize: typeScale.bodySmall,
+    color: colors.danger,
     textAlign: 'center',
   },
 });

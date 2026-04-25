@@ -92,13 +92,13 @@ export default function EstimatesList() {
       return;
     }
     Haptics.selectionAsync().catch(() => {});
-    router.push(`/estimates/${e.id}` as any);
+    router.push(`/estimates/${e.id}`);
   };
 
   const goCompare = () => {
     Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success).catch(() => {});
     const ids = Array.from(selected).join(',');
-    router.push(`/estimates/compare?ids=${ids}` as any);
+    router.push(`/estimates/compare?ids=${ids}`);
   };
 
   const clearSelection = () => {

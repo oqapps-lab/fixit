@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NoirScreen } from '@/components/ui/NoirScreen';
 import { NoirHeader } from '@/components/ui/NoirHeader';
 import { NoirCard } from '@/components/ui/NoirCard';
+import { DocRef } from '@/components/ui/DocRef';
 import { HeroNumber } from '@/components/ui/HeroNumber';
 import { AmberCTA } from '@/components/ui/AmberCTA';
 import { ToolsPhoto, HandshakePhoto, ToolboxPhoto } from '@/components/ui/NoirGlyphs';
@@ -60,35 +61,63 @@ export default function FixSelection() {
 
         {loading ? (
           <ActivityIndicator color={colors.amber} style={{ marginTop: spacing.xl }} />
+        ) : !repair?.id ? (
+          <NoirCard
+            variant="outlined"
+            radius="md"
+            padding={22}
+            style={{ marginTop: spacing.xl }}
+          >
+            <DocRef tone="amber">NO ACTIVE REPAIR</DocRef>
+            <Text allowFontScaling={false} style={styles.emptyTitle}>
+              No active repair
+            </Text>
+            <Text allowFontScaling={false} style={styles.emptyMeta}>
+              Pick one from your project list to compare DIY · Hybrid · Pro routes.
+            </Text>
+            <View style={{ height: spacing.md }} />
+            <AmberCTA
+              label="Open estimates"
+              variant="outlined"
+              size="md"
+              onPress={() => router.push('/estimates' as any)}
+            />
+          </NoirCard>
         ) : (
           <View style={{ marginTop: spacing.xl, gap: spacing.md }}>
-            <RouteCard
-              routeKey="diy"
-              selected={selected === 'diy'}
-              price={diy?.price ?? '$15'}
-              meta={diy?.meta ?? 'DIY · 15 MIN'}
-              recommended={diy?.recommended}
-              onPress={() => setSelected('diy')}
-              photo={<ToolsPhoto size={120} />}
-            />
-            <RouteCard
-              routeKey="hybrid"
-              selected={selected === 'hybrid'}
-              price={hybrid?.price ?? '$45'}
-              meta={hybrid?.meta ?? 'HYBRID · 45 MIN'}
-              recommended={hybrid?.recommended ?? true}
-              onPress={() => setSelected('hybrid')}
-              photo={<HandshakePhoto size={120} />}
-            />
-            <RouteCard
-              routeKey="pro"
-              selected={selected === 'pro'}
-              price={pro?.price ?? '$180'}
-              meta={pro?.meta ?? 'FULL PRO · 2 HOURS'}
-              recommended={pro?.recommended}
-              onPress={() => setSelected('pro')}
-              photo={<ToolboxPhoto size={120} />}
-            />
+            {diy ? (
+              <RouteCard
+                routeKey="diy"
+                selected={selected === 'diy'}
+                price={diy.price}
+                meta={diy.meta}
+                recommended={diy.recommended}
+                onPress={() => setSelected('diy')}
+                photo={<ToolsPhoto size={120} />}
+              />
+            ) : null}
+            {hybrid ? (
+              <RouteCard
+                routeKey="hybrid"
+                selected={selected === 'hybrid'}
+                price={hybrid.price}
+                meta={hybrid.meta}
+                recommended={hybrid.recommended ?? true}
+                onPress={() => setSelected('hybrid')}
+                photo={<HandshakePhoto size={120} />}
+              />
+            ) : null}
+            {pro ? (
+              <RouteCard
+                routeKey="pro"
+                selected={selected === 'pro'}
+                price={pro.price}
+                meta={pro.meta}
+                recommended={pro.recommended}
+                onPress={() => setSelected('pro')}
+                photo={<ToolboxPhoto size={120} />}
+              />
+            ) : null}
           </View>
         )}
 
@@ -98,6 +127,7 @@ export default function FixSelection() {
           onPress={() => {
             if (repair?.id) router.push(`/repair/${repair.id}`);
           }}
+          disabled={!repair?.id}
           style={{ marginTop: spacing.xl }}
         />
       </ScrollView>
@@ -201,5 +231,19 @@ const styles = StyleSheet.create({
     color: colors.textTertiary,
     fontSize: typeScale.labelSmall,
     letterSpacing: tracking.labelWide,
+  },
+  emptyTitle: {
+    marginTop: spacing.sm,
+    fontFamily: fonts.displaySemibold,
+    fontSize: typeScale.titleSmall,
+    color: colors.text,
+    letterSpacing: tracking.tight,
+  },
+  emptyMeta: {
+    marginTop: spacing.sm,
+    fontFamily: fonts.body,
+    fontSize: typeScale.bodySmall,
+    color: colors.textSecondary,
+    lineHeight: 18,
   },
 });

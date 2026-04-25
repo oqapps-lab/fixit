@@ -33,7 +33,7 @@ export default function Capture() {
       return;
     }
     const res = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      mediaTypes: ['images'],
       quality: 0.7,
     });
     if (res.canceled || !res.assets[0]) return;
@@ -157,9 +157,20 @@ export default function Capture() {
           Tap when framed · hold for multi-angle
         </Text>
         {uploadError ? (
-          <Text allowFontScaling={false} style={[styles.hint, { color: colors.danger, marginTop: 4 }]}>
-            {uploadError}
-          </Text>
+          <>
+            <Text allowFontScaling={false} style={[styles.hint, { color: colors.danger, marginTop: 4 }]}>
+              {uploadError}
+            </Text>
+            <Pressable
+              onPress={pickFromGallery}
+              hitSlop={8}
+              accessibilityRole="button"
+              accessibilityLabel="Retry upload"
+              style={styles.retryBtn}
+            >
+              <Text allowFontScaling={false} style={styles.retryBtnText}>Retry</Text>
+            </Pressable>
+          </>
         ) : null}
       </View>
     </NoirScreen>
@@ -272,5 +283,21 @@ const styles = StyleSheet.create({
     fontSize: typeScale.labelMicro,
     color: colors.textTertiary,
     letterSpacing: tracking.docRef,
+  },
+  retryBtn: {
+    alignSelf: 'center',
+    marginTop: spacing.sm,
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: colors.hairlineAmber,
+    backgroundColor: colors.amberTint10,
+  },
+  retryBtnText: {
+    fontFamily: fonts.labelSemibold,
+    fontSize: 11,
+    color: colors.amber,
+    letterSpacing: tracking.labelWide,
   },
 });

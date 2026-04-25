@@ -6,7 +6,6 @@
     "orientation": "portrait",
     "scheme": "fixit",
     "userInterfaceStyle": "dark",
-    "newArchEnabled": true,
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.oqapps.fixit"

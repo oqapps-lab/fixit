@@ -26,6 +26,7 @@ export default function SavedProjects() {
   const [list, setList] = useState<EstimateRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [unsaveError, setUnsaveError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -53,13 +54,19 @@ export default function SavedProjects() {
 
   const unsave = (id: string) => {
     Haptics.selectionAsync().catch(() => {});
+    const snapshot = list;
     setList((prev) => prev.filter((e) => e.id !== id));
-    setEstimateSaved(id, false).catch(() => {});
+    setUnsaveError(null);
+    setEstimateSaved(id, false).catch(() => {
+      setList(snapshot);
+      setUnsaveError('Could not unsave. Try again.');
+      setTimeout(() => setUnsaveError(null), 3000);
+    });
   };
 
   const openEstimate = (id: string) => {
     Haptics.selectionAsync().catch(() => {});
-    router.push(`/estimates/${id}` as any);
+    router.push(`/estimates/${id}`);
   };
 
   const upgrade = () => {
@@ -154,60 +161,69 @@ export default function SavedProjects() {
               label="Browse estimates"
               variant="outlined"
               size="md"
-              onPress={() => router.push('/estimates' as any)}
+              onPress={() => router.push('/estimates')}
             />
           </NoirCard>
         ) : (
           <View style={{ gap: spacing.sm }}>
+            {unsaveError ? (
+              <Text allowFontScaling={false} style={styles.toastError}>
+                {unsaveError}
+              </Text>
+            ) : null}
             {list.map((e) => {
-              const price =
+              const chosenPrice =
                 e.chosen_mode === 'diy' ? Number(e.diy_price) :
                 e.chosen_mode === 'hybrid' ? Number(e.hybrid_price) :
                 e.chosen_mode === 'pro' ? Number(e.pro_price) :
-                Number(e.pro_price);
+                null;
+              const displayPrice = chosenPrice != null ? chosenPrice : Number(e.pro_price);
+              const priceMeta = chosenPrice != null ? 'PAID' : 'EST';
               return (
-                <Pressable
+                <NoirCard
                   key={e.id}
-                  onPress={() => openEstimate(e.id)}
-                  accessibilityRole="button"
-                  accessibilityLabel={`${e.title} — open`}
-                  hitSlop={4}
+                  variant="default"
+                  radius="md"
+                  padding={0}
+                  style={styles.row}
                 >
-                  {({ pressed }) => (
-                    <NoirCard
-                      variant="default"
-                      radius="md"
-                      padding={16}
-                      style={[
-                        styles.row,
-                        pressed ? { opacity: 0.7 } : null,
-                      ]}
-                    >
-                      <Pressable
-                        onPress={() => unsave(e.id)}
-                        hitSlop={8}
-                        accessibilityRole="button"
-                        accessibilityLabel="Unsave"
-                      >
-                        <BookmarkGlyph size={24} color={colors.amber} />
-                      </Pressable>
-                      <View style={{ flex: 1 }}>
-                        <DocRef tone={e.severity === 'moderate' ? 'amber' : 'neutral'}>{e.code}</DocRef>
-                        <Text allowFontScaling={false} style={styles.itemTitle}>{e.title}</Text>
-                        <View style={styles.metaRow}>
-                          <SeverityChip level={e.severity} />
-                          <Text allowFontScaling={false} style={styles.metaText}>
-                            {formatCapturedAt(e.captured_at)}
-                          </Text>
+                  <Pressable
+                    onPress={() => unsave(e.id)}
+                    hitSlop={8}
+                    accessibilityRole="button"
+                    accessibilityLabel="Unsave"
+                    style={styles.bookmarkArea}
+                  >
+                    <BookmarkGlyph size={24} color={colors.amber} />
+                  </Pressable>
+                  <Pressable
+                    onPress={() => openEstimate(e.id)}
+                    accessibilityRole="button"
+                    accessibilityLabel={`${e.title} — open`}
+                    hitSlop={4}
+                    style={styles.openArea}
+                  >
+                    {({ pressed }) => (
+                      <View style={[styles.openInner, pressed ? { opacity: 0.7 } : null]}>
+                        <View style={{ flex: 1 }}>
+                          <DocRef tone={e.severity === 'moderate' ? 'amber' : 'neutral'}>{e.code}</DocRef>
+                          <Text allowFontScaling={false} style={styles.itemTitle}>{e.title}</Text>
+                          <View style={styles.metaRow}>
+                            <SeverityChip level={e.severity} />
+                            <Text allowFontScaling={false} style={styles.metaText}>
+                              {formatCapturedAt(e.captured_at)}
+                            </Text>
+                          </View>
                         </View>
+                        <View style={{ alignItems: 'flex-end' }}>
+                          <Text allowFontScaling={false} style={styles.price}>{`$${displayPrice}`}</Text>
+                          <Text allowFontScaling={false} style={styles.priceMeta}>{priceMeta}</Text>
+                        </View>
+                        <ChevronRightGlyph size={14} color={colors.textTertiary} />
                       </View>
-                      <View style={{ alignItems: 'flex-end' }}>
-                        <Text allowFontScaling={false} style={styles.price}>{`$${price}`}</Text>
-                      </View>
-                      <ChevronRightGlyph size={14} color={colors.textTertiary} />
-                    </NoirCard>
-                  )}
-                </Pressable>
+                    )}
+                  </Pressable>
+                </NoirCard>
               );
             })}
           </View>
@@ -272,8 +288,41 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: 'row',
+    alignItems: 'stretch',
+    overflow: 'hidden',
+  },
+  bookmarkArea: {
+    paddingVertical: spacing.md,
+    paddingLeft: spacing.md,
+    paddingRight: spacing.sm,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  openArea: {
+    flex: 1,
+  },
+  openInner: {
+    flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
     gap: spacing.md,
+    paddingVertical: spacing.md,
+    paddingRight: spacing.md,
+    paddingLeft: spacing.sm,
+  },
+  toastError: {
+    fontFamily: fonts.body,
+    fontSize: typeScale.bodySmall,
+    color: colors.danger,
+    textAlign: 'center',
+    marginBottom: spacing.xs,
+  },
+  priceMeta: {
+    marginTop: 2,
+    fontFamily: fonts.mono,
+    fontSize: typeScale.docRef,
+    color: colors.textTertiary,
+    letterSpacing: tracking.docRef,
   },
   itemTitle: {
     marginTop: 4,

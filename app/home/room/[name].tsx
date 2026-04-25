@@ -81,7 +81,7 @@ export default function RoomDetail() {
 
   const goEstimate = (e: EstimateRow) => {
     Haptics.selectionAsync().catch(() => {});
-    router.push(`/estimates/${e.id}` as any);
+    router.push(`/estimates/${e.id}`);
   };
 
   const newEstimate = () => {

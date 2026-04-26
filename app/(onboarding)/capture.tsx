@@ -11,6 +11,7 @@ import { DocRef } from '@/components/ui/DocRef';
 import { CameraGlyph, ChevronLeftGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
 import { uploadPhoto } from '@/services/photos';
+import { analyzePhoto, AiAnalysisError } from '@/services/ai';
 import { useAuth } from '@/contexts/AuthContext';
 
 export default function Capture() {
@@ -23,7 +24,6 @@ export default function Capture() {
   const pickFromGallery = async () => {
     setUploadError(null);
     if (!session?.user) {
-      // not signed in — skip upload, go forward
       router.push('/(onboarding)/context');
       return;
     }
@@ -41,13 +41,30 @@ export default function Capture() {
     try {
       const asset = res.assets[0];
       const file = new FsFile(asset.uri);
-      const bytes = await file.bytes(); // Uint8Array
+      const bytes = await file.bytes();
       const mime = asset.mimeType ?? 'image/jpeg';
-      await uploadPhoto({
+      const photo = await uploadPhoto({
         fileBytes: bytes.buffer.slice(bytes.byteOffset, bytes.byteOffset + bytes.byteLength) as ArrayBuffer,
         contentType: mime,
       });
-      router.push('/(onboarding)/context');
+
+      // Drop user into the existing processing UI immediately so the wait
+      // feels intentional. The screen already animates stages and after a
+      // ~7s timer routes them onward — but we override that by replacing
+      // the route once the AI returns.
+      router.push('/(onboarding)/processing');
+
+      try {
+        const result = await analyzePhoto(photo.id);
+        router.replace(`/estimates/${result.estimate_id}`);
+      } catch (aiErr) {
+        const code = aiErr instanceof AiAnalysisError ? aiErr.code : 'unknown';
+        if (code === 'photo_not_found' || code === 'forbidden') {
+          router.replace('/error/unknown-problem');
+        } else {
+          router.replace('/error/ai-failed');
+        }
+      }
     } catch (e: any) {
       setUploadError(e?.message ?? 'Upload failed');
     } finally {

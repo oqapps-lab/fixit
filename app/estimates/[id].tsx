@@ -129,8 +129,8 @@ export default function EstimateDetail() {
         <DocRef tone={estimate.severity === 'moderate' ? 'amber' : 'neutral'}>
           {`${estimate.code} · ${formatCapturedAt(estimate.captured_at)}`}
         </DocRef>
-        <Text allowFontScaling={false} style={styles.title}>{estimate.title}</Text>
-        <Text allowFontScaling={false} style={styles.diagnosis}>{estimate.diagnosis}</Text>
+        <Text allowFontScaling={false} style={styles.title} numberOfLines={3} ellipsizeMode="tail">{estimate.title}</Text>
+        <Text allowFontScaling={false} style={styles.diagnosis} numberOfLines={6} ellipsizeMode="tail">{estimate.diagnosis}</Text>
 
         {/* Photo card */}
         <NoirCard variant="blueprint" radius="md" padding={16} style={{ marginTop: spacing.xl, alignItems: 'center' }}>

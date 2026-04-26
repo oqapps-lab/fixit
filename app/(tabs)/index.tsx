@@ -260,7 +260,7 @@ export default function HomeTab() {
               <View style={{ flex: 1 }}>
                 <View style={styles.alertHeader}>
                   <SeverityChip level={featured.severity} label="▲" />
-                  <Text allowFontScaling={false} style={styles.alertTitle}>
+                  <Text allowFontScaling={false} style={styles.alertTitle} numberOfLines={2} ellipsizeMode="tail">
                     {featured.title}
                   </Text>
                 </View>

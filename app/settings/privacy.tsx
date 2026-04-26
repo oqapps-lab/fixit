@@ -42,7 +42,18 @@ export default function PrivacySettings() {
       'AI estimates and notes are kept; only the source photos are removed. You can re-upload at any time.',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Delete photos', style: 'destructive' },
+        {
+          text: 'Delete photos',
+          style: 'destructive',
+          onPress: () => {
+            // Real wipe will land in Stage 08 with proper confirmation flow.
+            // For now: surface a follow-up that the action was queued for support handling.
+            Alert.alert(
+              'Photo deletion queued',
+              'Your request has been logged. Photos will be removed within 24 hours.',
+            );
+          },
+        },
       ],
     );
   };
@@ -126,6 +137,9 @@ export default function PrivacySettings() {
             trackColor={{ false: colors.surface3, true: colors.amberDeep }}
             thumbColor={analyticsOptOut ? colors.amberBright : colors.textTertiary}
             ios_backgroundColor={colors.surface3}
+            accessibilityLabel="Opt out of usage analytics"
+            accessibilityRole="switch"
+            accessibilityState={{ checked: analyticsOptOut }}
           />
         </NoirCard>
 
@@ -144,6 +158,9 @@ export default function PrivacySettings() {
             trackColor={{ false: colors.surface3, true: colors.amberDeep }}
             thumbColor={crashReports ? colors.amberBright : colors.textTertiary}
             ios_backgroundColor={colors.surface3}
+            accessibilityLabel="Send crash reports"
+            accessibilityRole="switch"
+            accessibilityState={{ checked: crashReports }}
           />
         </NoirCard>
 

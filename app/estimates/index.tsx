@@ -233,7 +233,7 @@ export default function EstimatesList() {
                         <DocRef tone={e.severity === 'moderate' ? 'amber' : 'neutral'}>
                           {e.code}
                         </DocRef>
-                        <Text allowFontScaling={false} style={styles.itemTitle}>{e.title}</Text>
+                        <Text allowFontScaling={false} style={styles.itemTitle} numberOfLines={2} ellipsizeMode="tail">{e.title}</Text>
                         <View style={styles.metaRow}>
                           <SeverityChip level={e.severity} />
                           <Text allowFontScaling={false} style={styles.metaText}>

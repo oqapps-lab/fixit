@@ -249,7 +249,7 @@ Instrument Serif Italic wrapper for the rare soft-hero moment. Max 3 lines, cent
 
 ## 6. Screen recipes (12 screens → implementation)
 
-### 6.1 Home Blueprint Noir (#4) → `app/(tabs)/index.tsx`
+### 6.1 Home Blueprint Noir (#4) → `app/(tabs)/index.js`
 
 ```
 <NoirScreen>
@@ -274,7 +274,7 @@ Instrument Serif Italic wrapper for the rare soft-hero moment. Max 3 lines, cent
 </NoirScreen>
 ```
 
-### 6.2 Home Health Indicator (#8) → `app/(tabs)/health.tsx` or tap-through from Home
+### 6.2 Home Health Indicator (#8) → `app/(tabs)/health.js` or tap-through from Home
 
 ```
 Header: "☰ FIXIT NOIR 👤"
@@ -302,7 +302,7 @@ Display: "HOME HEALTH / DASHBOARD"
 <NoirTabBar active="projects" />   {/* PROJECTS highlighted per screenshot */}
 ```
 
-### 6.3 Your House / First Estimate (#6) → `app/your-house.tsx`
+### 6.3 Your House / First Estimate (#6) → `app/your-house.js`
 
 First-view of what FixIt analyzed. Hero verdict + tagged diagnosis.
 
@@ -320,7 +320,7 @@ Display: "YOUR HOUSE"
 <NoirTabBar active="home" />
 ```
 
-### 6.4 Fix Selection - Noir (#7) → `app/fix-selection.tsx`
+### 6.4 Fix Selection - Noir (#7) → `app/fix-selection.js`
 
 Three routes stacked as cards with monochrome photos.
 
@@ -347,7 +347,7 @@ Display: ROOF LEAK
 <NoirTabBar />
 ```
 
-### 6.5 Repair Detail Noir (#3 / #12) → `app/repair/[id].tsx`
+### 6.5 Repair Detail Noir (#3 / #12) → `app/repair/[id].js`
 
 The core diagnostic screen.
 
@@ -381,7 +381,7 @@ row:
 <NoirTabBar active="projects" />
 ```
 
-### 6.6 Repair Step: Faucet Nut (#2) → `app/repair/[id]/step/[n].tsx`
+### 6.6 Repair Step: Faucet Nut (#2) → `app/repair/[id]/step/[n].js`
 
 Step-by-step guide.
 
@@ -409,7 +409,7 @@ DocRef: "SYSTEM STATUS · Step 2 of 5"
 <NoirTabBar />
 ```
 
-### 6.7 Spring Tune-Up Blueprint (#5) → `app/seasonal-plan.tsx`
+### 6.7 Spring Tune-Up Blueprint (#5) → `app/seasonal-plan.js`
 
 ```
 Header: ◁ OBSIDIAN ARCH 👤
@@ -427,7 +427,7 @@ Header: ◁ OBSIDIAN ARCH 👤
 <NoirTabBar active="repairs" />
 ```
 
-### 6.8 Warranty Tracker (#10) → `app/warranty.tsx`
+### 6.8 Warranty Tracker (#10) → `app/warranty.js`
 
 ```
 Header: ◁ MAINTENANCE_SYSTEM 👤
@@ -451,7 +451,7 @@ Header: ◁ MAINTENANCE_SYSTEM 👤
 <NoirTabBar active="repairs" />
 ```
 
-### 6.9 My Home Empty (#11) → `app/(tabs)/vault.tsx` or initial empty state
+### 6.9 My Home Empty (#11) → `app/(tabs)/vault.js` or initial empty state
 
 ```
 Header: ◁ ARCHITECT.REPAIR 👤
@@ -468,7 +468,7 @@ Header: ◁ ARCHITECT.REPAIR 👤
 <NoirTabBar active="plan" />
 ```
 
-### 6.10 Find a Pro - Bottom Sheet (#1) → `app/find-a-pro.tsx`
+### 6.10 Find a Pro - Bottom Sheet (#1) → `app/find-a-pro.js`
 
 ```
 Modal sheet, 70% height.
@@ -486,7 +486,7 @@ Header: ☰ PRO_ARCHITECT 👤
 <TabBar active="search" />
 ```
 
-### 6.11 Твой дом - Обзор (#9) → `app/(tabs)/home-overview.tsx`
+### 6.11 Твой дом - Обзор (#9) → `app/(tabs)/home-overview.js`
 
 ```
 Header: ☰ # HOME_CODE 🔔
@@ -557,21 +557,21 @@ Same rules as UX-SPEC §3-4. Noir-specific:
 
 ## 10. Artifacts
 
-- `constants/tokens.ts` — dark palette
-- `components/ui/NoirScreen.tsx`
-- `components/ui/NoirCard.tsx`
-- `components/ui/NoirHeader.tsx`
-- `components/ui/NoirTabBar.tsx`
-- `components/ui/DocRef.tsx`
-- `components/ui/AmberCTA.tsx`
-- `components/ui/HeroNumber.tsx`
-- `components/ui/SeverityChip.tsx`
-- `components/ui/ProgressBar.tsx`
-- `components/ui/RingChart.tsx`
-- `components/ui/ToolChip.tsx`
-- `components/ui/SerifHero.tsx`
-- `components/ui/BlueprintGlyphs.tsx`
-- `mock/repair.ts`
+- `src/constants/tokens.js` — dark palette
+- `src/components/ui/NoirScreen.js`
+- `src/components/ui/NoirCard.js`
+- `src/components/ui/NoirHeader.js`
+- `src/components/ui/NoirTabBar.js`
+- `src/components/ui/DocRef.js`
+- `src/components/ui/AmberCTA.js`
+- `src/components/ui/HeroNumber.js`
+- `src/components/ui/SeverityChip.js`
+- `src/components/ui/ProgressBar.js`
+- `src/components/ui/RingChart.js`
+- `src/components/ui/ToolChip.js`
+- `src/components/ui/SerifHero.js`
+- `src/components/ui/BlueprintGlyphs.js`
+- `src/lib/data/repair-content.js`
 
 Plus 11 screens mapping to Stitch output.
 

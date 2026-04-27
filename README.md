@@ -21,7 +21,16 @@
 
 ## Stack
 
-Expo SDK 55 · React Native 0.83 · TypeScript strict · expo-router v6 · Supabase · Adapty · Claude API
+Expo SDK 55 · React Native 0.83 · JavaScript (ES modules) · expo-router v6 · Supabase · Adapty · Claude API
+
+## Architecture
+
+- Frontend-only mobile app in this repo (`app/`, `components/`, `hooks/`, `constants/`)
+- Supabase as backend platform (`supabase/` migrations + local infra)
+- Direct frontend Supabase client (`src/lib/supabase/client.js`)
+- No custom Nest/Node middleware layer in this repository
+
+Details: [`docs/07-development/ARCHITECTURE.md`](docs/07-development/ARCHITECTURE.md)
 
 ## Stage
 
@@ -54,7 +63,7 @@ npx expo start --ios
 ## Structure
 
 ```
-app/                 expo-router routes (file-based)
+src/app/             expo-router routes (file-based)
   (tabs)/            Systems / Projects / Blueprints / Vault
   repair/[id]        Repair Detail (dynamic)
   your-house         First estimate assessment
@@ -65,10 +74,10 @@ app/                 expo-router routes (file-based)
   home-overview      "Твой дом" variant
   find-a-pro         Platform deeplink modal
 
-components/ui/       14 design primitives
-constants/           tokens.ts (single source of truth)
-hooks/               useAppFonts
-mock/                mock data (repair.ts)
+src/components/ui/   14 design primitives
+src/constants/       tokens.js (single source of truth)
+src/hooks/           useAppFonts
+src/lib/data/        Supabase-backed app content queries
 
 docs/
   01-research/       Market research
@@ -79,6 +88,13 @@ docs/
   06-design/         DESIGN-GUIDE + stitch-raw screenshots
   07-development/    RUN-LOCAL + implementation notes
   08-deployment/     store listings + release notes
+
+src/lib/
+  supabase/client.js frontend Supabase client
+
+supabase/
+  migrations/        SQL migrations (schema + RLS)
+  config.toml        local Supabase config
 ```
 
 ## Team

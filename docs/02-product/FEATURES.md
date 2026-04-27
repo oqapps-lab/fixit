@@ -46,7 +46,7 @@ FixIt — это фотокамера ремонта. Пользователь (
 - Fallback к **Claude Sonnet Vision** если confidence < 70% (better accuracy at 3-5× cost)
 - Prompt engineering: chain-of-thought "observe → classify → severity → next steps" pattern
 - Image pre-processing: auto-rotate, compress, EXIF strip для privacy
-- Mock data в `/mock/photo-analysis/` до Stage 6 (per CLAUDE.md rules)
+- Seed data в `supabase/seed.sql` + UI content tables до Stage 6 (per CLAUDE.md rules)
 
 **RICE:**
 - **Reach:** 100% users (core entry point — no one uses FixIt without taking photo)

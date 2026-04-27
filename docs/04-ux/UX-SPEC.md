@@ -285,7 +285,7 @@ Haptic feedback — subtle, purposeful, never excessive. Android uses Haptics.im
 
 ### 6.2 Colour tokens
 
-Defined в `/constants/colors.ts` as token pairs:
+Defined в `/src/constants/tokens.js` as token pairs:
 
 ```
 brand/primary: light #E35F1B / dark #FF7A3D

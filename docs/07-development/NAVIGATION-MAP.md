@@ -10,36 +10,36 @@
 
 | Route | Type | Screen-map id | File |
 |---|---|---|---|
-| `/` | Redirect | — | `app/index.tsx` |
-| `/(onboarding)/welcome` | Stack | 1.1 | `app/(onboarding)/welcome.tsx` |
-| `/(onboarding)/location` | Stack | 1.2 | `app/(onboarding)/location.tsx` |
-| `/(onboarding)/camera-primer` | Stack | 1.3 | `app/(onboarding)/camera-primer.tsx` |
-| `/(onboarding)/capture` | Stack | 1.4 / 4.1 | `app/(onboarding)/capture.tsx` |
-| `/(onboarding)/context` | Stack | 1.5 / 4.3 | `app/(onboarding)/context.tsx` |
-| `/(onboarding)/processing` | Stack | 1.6 / 4.4 | `app/(onboarding)/processing.tsx` |
-| `/(onboarding)/signup-ask` | Modal (sheet) | 1.8 | `app/(onboarding)/signup-ask.tsx` |
-| `/(auth)/sign-up` | Stack | 2.1 | `app/(auth)/sign-up.tsx` |
-| `/(auth)/sign-in` | Stack | 2.2 | `app/(auth)/sign-in.tsx` |
-| `/(tabs)` | Tabs | 3 | `app/(tabs)/_layout.tsx` |
-| `/(tabs)/` | Tab | 3.1 / 3.2.1 | `app/(tabs)/index.tsx` — Home Health Dashboard |
-| `/(tabs)/repairs` | Tab | 3.3.1 | `app/(tabs)/repairs.tsx` — Projects / Estimates list |
-| `/(tabs)/blueprints` | Tab | custom | `app/(tabs)/blueprints.tsx` — Blueprints index |
-| `/(tabs)/vault` | Tab | 3.4 | `app/(tabs)/vault.tsx` — Profile / Empty state |
-| `/your-house` | Stack | 1.7 initial / 4.5 re-entry | `app/your-house.tsx` |
-| `/fix-selection` | Stack | 4.5 select | `app/fix-selection.tsx` |
-| `/repair/[id]` | Stack | 4.5.detail | `app/repair/[id].tsx` |
-| `/repair-step` | Stack | 4.5.1 step | `app/repair-step.tsx` |
-| `/warranty` | Stack | 3.2.2 | `app/warranty.tsx` |
-| `/seasonal` | Stack | 3.2.4 | `app/seasonal.tsx` |
-| `/home-overview` | Stack | alt variant | `app/home-overview.tsx` |
-| `/find-a-pro` | Transparent modal | 7.1 | `app/find-a-pro.tsx` |
-| `/paywall` | Modal | 5.1 | `app/paywall.tsx` (batch 5) |
+| `/` | Redirect | — | `src/app/index.js` |
+| `/(onboarding)/welcome` | Stack | 1.1 | `src/app/(onboarding)/welcome.js` |
+| `/(onboarding)/location` | Stack | 1.2 | `src/app/(onboarding)/location.js` |
+| `/(onboarding)/camera-primer` | Stack | 1.3 | `src/app/(onboarding)/camera-primer.js` |
+| `/(onboarding)/capture` | Stack | 1.4 / 4.1 | `src/app/(onboarding)/capture.js` |
+| `/(onboarding)/context` | Stack | 1.5 / 4.3 | `src/app/(onboarding)/context.js` |
+| `/(onboarding)/processing` | Stack | 1.6 / 4.4 | `src/app/(onboarding)/processing.js` |
+| `/(onboarding)/signup-ask` | Modal (sheet) | 1.8 | `src/app/(onboarding)/signup-ask.js` |
+| `/(auth)/sign-up` | Stack | 2.1 | `src/app/(auth)/sign-up.js` |
+| `/(auth)/sign-in` | Stack | 2.2 | `src/app/(auth)/sign-in.js` |
+| `/(tabs)` | Tabs | 3 | `src/app/(tabs)/_layout.js` |
+| `/(tabs)/` | Tab | 3.1 / 3.2.1 | `src/app/(tabs)/index.js` — Home Health Dashboard |
+| `/(tabs)/repairs` | Tab | 3.3.1 | `src/app/(tabs)/repairs.js` — Projects / Estimates list |
+| `/(tabs)/blueprints` | Tab | custom | `src/app/(tabs)/blueprints.js` — Blueprints index |
+| `/(tabs)/vault` | Tab | 3.4 | `src/app/(tabs)/vault.js` — Profile / Empty state |
+| `/your-house` | Stack | 1.7 initial / 4.5 re-entry | `src/app/your-house.js` |
+| `/fix-selection` | Stack | 4.5 select | `src/app/fix-selection.js` |
+| `/repair/[id]` | Stack | 4.5.detail | `src/app/repair/[id].js` |
+| `/repair-step` | Stack | 4.5.1 step | `src/app/repair-step.js` |
+| `/warranty` | Stack | 3.2.2 | `src/app/warranty.js` |
+| `/seasonal` | Stack | 3.2.4 | `src/app/seasonal.js` |
+| `/home-overview` | Stack | alt variant | `src/app/home-overview.js` |
+| `/find-a-pro` | Transparent modal | 7.1 | `src/app/find-a-pro.js` |
+| `/paywall` | Modal | 5.1 | `src/app/paywall.js` (batch 5) |
 | `/paywall/save` | Modal | 5.2.1 | batch 5 |
 | `/paywall/warranty` | Modal | 5.2.2 | batch 5 |
 | `/paywall/pdf` | Modal | 5.2.3 | batch 5 |
 | `/paywall/alerts` | Modal | 5.2.4 | batch 5 |
 | `/paywall/success` | Modal | 5.3 | batch 5 |
-| `/settings` | Stack | 3.4.1 | `app/settings/_layout.tsx` + subs (batch 4) |
+| `/settings` | Stack | 3.4.1 | `src/app/settings/_layout.js` + subs (batch 4) |
 | `/saved-projects` | Stack | 3.4.2 | batch 4 |
 | `/estimates` | Stack | 3.3.1 expanded | batch 4 |
 | `/estimates/[id]` | Stack | 3.3.2 | batch 4 |
@@ -65,7 +65,7 @@
 - **Tabs** — `(tabs)` group, custom floating NoirTabBar
 
 Modal dismiss rule (from `methodology_screen_map_first.md`):
-```ts
+```js
 const close = () => router.canGoBack() ? router.back() : router.replace('/(tabs)');
 ```
 Never plain `router.back()` — deep-linked modals fail.

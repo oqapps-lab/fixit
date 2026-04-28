@@ -191,7 +191,7 @@ function PolicyRow({ label, ref, onPress }: { label: string; ref: string; onPres
   return (
     <Pressable
       onPress={onPress}
-      accessibilityRole="link"
+      accessibilityRole="button"
       accessibilityLabel={label}
       hitSlop={4}
     >

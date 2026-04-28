@@ -1,6 +1,10 @@
 import { Stack } from 'expo-router';
 import { colors } from '@/constants/tokens';
 
+// transparentModal preserves the custom bottom-sheet design (scrim +
+// grabber + dismiss-by-backdrop). Deep-link navigation BETWEEN paywall
+// screens stacks visually (rare in real flows — users dismiss via CTA).
+// Switching to pageSheet would require redesigning all paywall screens.
 export default function PaywallLayout() {
   return (
     <Stack

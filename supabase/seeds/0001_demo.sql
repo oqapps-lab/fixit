@@ -30,7 +30,7 @@ begin
     'Structural breach identified in North-West quadrant. Moisture penetration detected in sub-layer.',
     '$450',
     'Calculated based on local material costs and standard labor rates for a localized patch repair.',
-    'moderate', '4-6', 'Hours', 0.35, '0/1 STAGE COMPLETE · 35%',
+    'moderate', '4-6', 'Hours', 0.35, 'STAGE 1 OF 1 · 35% IN PROGRESS',
     array['Sealant','Ladder','Trowel'],
     '[
       {"key":"diy","label":"DIY","price":"$15","meta":"DIY · 15 MIN"},

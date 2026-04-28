@@ -41,7 +41,15 @@ export default function RepairDetail() {
       })
       .catch((e) => {
         if (cancelled) return;
-        setError(e?.message ?? 'Failed to load repair');
+        const raw = e?.message ?? '';
+        // Postgres rejects non-UUID strings with this message — surface a
+        // clean "not found" instead of leaking internals.
+        if (raw.includes('invalid input syntax for type uuid')) {
+          setR(null);
+          setError(null);
+        } else {
+          setError(raw || 'Failed to load repair');
+        }
       })
       .finally(() => {
         if (!cancelled) setLoading(false);

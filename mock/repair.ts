@@ -39,7 +39,7 @@ export const REPAIR_ROOF_LEAK: Repair = {
   timeEstimate: '4-6',
   timeUnit: 'Hours',
   progress: 0.35,
-  stageLabel: '0/1 STAGE COMPLETE · 35%',
+  stageLabel: 'STAGE 1 OF 1 · 35% IN PROGRESS',
   tools: ['Sealant', 'Ladder', 'Trowel'],
   routes: [
     { key: 'diy', label: 'DIY', price: '$15', meta: 'DIY · 15 MIN' },

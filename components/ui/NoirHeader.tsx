@@ -45,7 +45,12 @@ export function NoirHeader({
           </Pressable>
         ) : null}
         {showMenu ? (
-          <Pressable hitSlop={12} accessibilityRole="button" accessibilityLabel="Menu">
+          <Pressable
+            onPress={() => router.push('/settings')}
+            hitSlop={12}
+            accessibilityRole="button"
+            accessibilityLabel="Open settings"
+          >
             <MenuGlyph size={20} color={colors.text} />
           </Pressable>
         ) : null}

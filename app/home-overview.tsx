@@ -16,6 +16,12 @@ import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens'
 import { listEstimates, totalSavings } from '@/services/estimates';
 import type { EstimateRow } from '@/types/database';
 
+function formatShortMoney(n: number): string {
+  const v = Math.round(n);
+  if (v >= 1000) return `$${(v / 1000).toFixed(v >= 10000 ? 0 : 1)}k`;
+  return `$${v.toLocaleString('en-US')}`;
+}
+
 export default function HomeOverview() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
@@ -60,7 +66,7 @@ export default function HomeOverview() {
         showsVerticalScrollIndicator={false}
       >
         <SerifHero size={38} align="center" style={{ marginTop: spacing.md }}>
-          Твой дом
+          Your home
         </SerifHero>
 
         <View style={styles.houseWrap}>
@@ -71,7 +77,7 @@ export default function HomeOverview() {
           <NoirCard variant="elevated" radius="md" padding={16} style={styles.statCard}>
             <DocRef>SAVED</DocRef>
             <HeroNumber
-              value={loading ? '—' : `$${Math.round(saved).toLocaleString('en-US')}`}
+              value={loading ? '—' : formatShortMoney(saved)}
               size="sm"
               tone="amber"
               style={{ marginTop: 4 }}

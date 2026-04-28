@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NoirScreen } from '@/components/ui/NoirScreen';
 import { NoirHeader } from '@/components/ui/NoirHeader';
@@ -19,25 +19,27 @@ export default function BlueprintsTab() {
   const [estimates, setEstimates] = useState<EstimateRow[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      setLoading(true);
-      try {
-        const e = await listEstimates();
-        if (cancelled) return;
-        setEstimates(e);
-        setError(null);
-      } catch (e: any) {
-        if (!cancelled) setError(e?.message ?? 'Failed to load');
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      let cancelled = false;
+      (async () => {
+        setLoading(true);
+        try {
+          const e = await listEstimates();
+          if (cancelled) return;
+          setEstimates(e);
+          setError(null);
+        } catch (e: any) {
+          if (!cancelled) setError(e?.message ?? 'Failed to load');
+        } finally {
+          if (!cancelled) setLoading(false);
+        }
+      })();
+      return () => {
+        cancelled = true;
+      };
+    }, []),
+  );
 
   const BLUEPRINTS = estimates.map((e) => ({
     id: e.id,

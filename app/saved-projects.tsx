@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { NoirScreen } from '@/components/ui/NoirScreen';
@@ -14,10 +14,10 @@ import { BookmarkGlyph, ChevronRightGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
 import { listSavedEstimates, setEstimateSaved, formatCapturedAt } from '@/services/estimates';
 import type { EstimateRow } from '@/types/database';
+import { FREE_SAVE_LIMIT } from '@/constants/limits';
 
 // mock tier — real value from Adapty in Stage 07
 const TIER: 'free' | 'pro' = 'free';
-const FREE_SAVE_LIMIT = 5;
 
 export default function SavedProjects() {
   const router = useRouter();
@@ -28,26 +28,28 @@ export default function SavedProjects() {
   const [error, setError] = useState<string | null>(null);
   const [unsaveError, setUnsaveError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-    setError(null);
-    listSavedEstimates()
-      .then((rows) => {
-        if (cancelled) return;
-        setList(rows);
-      })
-      .catch((e: unknown) => {
-        if (cancelled) return;
-        setError(e instanceof Error ? e.message : 'Failed to load saved projects');
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      let cancelled = false;
+      setLoading(true);
+      setError(null);
+      listSavedEstimates()
+        .then((rows) => {
+          if (cancelled) return;
+          setList(rows);
+        })
+        .catch((e: unknown) => {
+          if (cancelled) return;
+          setError(e instanceof Error ? e.message : 'Failed to load saved projects');
+        })
+        .finally(() => {
+          if (!cancelled) setLoading(false);
+        });
+      return () => {
+        cancelled = true;
+      };
+    }, []),
+  );
 
   const remaining = Math.max(0, FREE_SAVE_LIMIT - list.length);
   const nearLimit = TIER === 'free' && remaining <= 2;

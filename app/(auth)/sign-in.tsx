@@ -163,27 +163,6 @@ export default function SignIn() {
             </Pressable>
           ) : null}
 
-          {__DEV__ ? (
-            <Pressable
-              onPress={async () => {
-                setSubmitting(true);
-                setError(null);
-                const { error: err } = await signIn('empty-user@fixit.test', 'empty12345');
-                setSubmitting(false);
-                if (err) { setError(err); return; }
-                router.replace('/(tabs)');
-              }}
-              hitSlop={8}
-              accessibilityRole="button"
-              accessibilityLabel="Sign in as empty user"
-              style={styles.demoLink}
-            >
-              <Text allowFontScaling={false} style={styles.demoLinkText}>
-                DEV · sign in as empty (no data)
-              </Text>
-            </Pressable>
-          ) : null}
-
           <Text allowFontScaling={false} style={styles.legal}>
             By continuing you agree to Terms and Privacy
           </Text>

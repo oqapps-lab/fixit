@@ -62,7 +62,7 @@ export default function Capture() {
         if (code === 'photo_not_found' || code === 'forbidden') {
           router.replace('/error/unknown-problem');
         } else {
-          router.replace('/error/ai-failed');
+          router.replace({ pathname: '/error/ai-failed', params: { photoId: photo.id } });
         }
       }
     } catch (e: any) {

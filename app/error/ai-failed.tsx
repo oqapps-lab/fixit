@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import Svg, { Line, Path } from 'react-native-svg';
 import { AmberCTA } from '@/components/ui/AmberCTA';
 import { DocRef } from '@/components/ui/DocRef';
 import { colors, fonts, radii, spacing, tracking, typeScale } from '@/constants/tokens';
+import { analyzePhoto, AiAnalysisError } from '@/services/ai';
 
 /** Warning triangle glyph */
 function WarningTriangleGlyph({ size = 56, color = colors.danger }: { size?: number; color?: string }) {
@@ -27,14 +28,33 @@ function WarningTriangleGlyph({ size = 56, color = colors.danger }: { size?: num
 export default function AiFailed() {
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const { photoId } = useLocalSearchParams<{ photoId?: string }>();
+  const [retrying, setRetrying] = useState(false);
 
   const close = () => {
     if (router.canGoBack()) router.back();
     else router.replace('/(tabs)');
   };
 
-  const retry = () => {
-    router.replace('/(onboarding)/processing');
+  const retry = async () => {
+    if (!photoId) {
+      // No photo id (e.g. user landed here via deep link) — fall back to retake.
+      router.replace('/(onboarding)/capture');
+      return;
+    }
+    setRetrying(true);
+    try {
+      const result = await analyzePhoto(photoId);
+      router.replace(`/estimates/${result.estimate_id}`);
+    } catch (e) {
+      const code = e instanceof AiAnalysisError ? e.code : 'unknown';
+      if (code === 'photo_not_found' || code === 'forbidden') {
+        router.replace('/error/unknown-problem');
+      }
+      // otherwise stay on this screen so user can try again or retake
+    } finally {
+      setRetrying(false);
+    }
   };
 
   const retake = () => {
@@ -77,10 +97,11 @@ export default function AiFailed() {
 
         <View style={styles.ctaStack}>
           <AmberCTA
-            label="Retry analysis"
+            label={retrying ? 'Retrying…' : 'Retry analysis'}
             variant="primary"
             size="lg"
             onPress={retry}
+            disabled={retrying}
             accessibilityLabel="Retry AI analysis"
           />
           <AmberCTA

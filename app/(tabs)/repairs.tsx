@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NoirScreen } from '@/components/ui/NoirScreen';
 import { NoirHeader } from '@/components/ui/NoirHeader';
@@ -45,26 +45,28 @@ export default function RepairsTab() {
   const [estimates, setEstimates] = useState<EstimateRow[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      setLoading(true);
-      try {
-        const [r, e] = await Promise.all([listRepairs(), listEstimates()]);
-        if (cancelled) return;
-        setRepairs(r);
-        setEstimates(e);
-        setError(null);
-      } catch (e: any) {
-        if (!cancelled) setError(e?.message ?? 'Failed to load');
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      let cancelled = false;
+      (async () => {
+        setLoading(true);
+        try {
+          const [r, e] = await Promise.all([listRepairs(), listEstimates()]);
+          if (cancelled) return;
+          setRepairs(r);
+          setEstimates(e);
+          setError(null);
+        } catch (e: any) {
+          if (!cancelled) setError(e?.message ?? 'Failed to load');
+        } finally {
+          if (!cancelled) setLoading(false);
+        }
+      })();
+      return () => {
+        cancelled = true;
+      };
+    }, []),
+  );
 
   // Active = repairs progress < 1, plus in-progress estimates without a matching repair
   const activeFromRepairs: ActiveItem[] = repairs
@@ -121,7 +123,7 @@ export default function RepairsTab() {
         ]}
         showsVerticalScrollIndicator={false}
       >
-        <DocRef>{`LIVE PROJECTS · ACTIVE ${ACTIVE_REPAIRS.length} / DUE ${PAST_REPAIRS.length}`}</DocRef>
+        <DocRef>{`LIVE PROJECTS · ACTIVE ${ACTIVE_REPAIRS.length} / DONE ${PAST_REPAIRS.length}`}</DocRef>
         <Text allowFontScaling={false} style={styles.title}>
           PROJECTS
         </Text>
@@ -179,7 +181,7 @@ export default function RepairsTab() {
                       color={r.severity === 'high' || r.severity === 'moderate' ? colors.amber : colors.mint}
                     />
                     <View style={{ flex: 1 }}>
-                      <DocRef>{`REF: ${r.code} · ACTIVE`}</DocRef>
+                      <DocRef>{`${r.code} · ACTIVE`}</DocRef>
                       <Text
                         allowFontScaling={false}
                         style={styles.repairTitle}

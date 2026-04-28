@@ -45,14 +45,14 @@ export default function RepairStep() {
         </NoirCard>
 
         <SerifHero size={34} align="left" style={{ marginTop: spacing.xxl }}>
-          Открути верхнюю гайку
+          Loosen the top nut
         </SerifHero>
 
         <Text allowFontScaling={false} style={styles.body}>
-          Используйте разводной ключ, чтобы ослабить верхнюю крепёжную
-          гайку. Поворачивайте против часовой стрелки, прилагая равномерное
-          усилие. Что бы ключ плотно прилегал к граням гайки, чтобы избежать
-          повреждения декоративного покрытия.
+          Use an adjustable wrench to loosen the upper retaining nut. Turn
+          counter-clockwise with steady, even pressure. Keep the wrench
+          flush against the flats of the nut to avoid scarring the
+          decorative finish.
         </Text>
 
         <NoirCard variant="default" radius="md" padding={14} style={styles.warnRow}>
@@ -60,7 +60,7 @@ export default function RepairStep() {
           <View style={{ flex: 1 }}>
             <DocRef tone="amber">STEP WARNING</DocRef>
             <Text allowFontScaling={false} style={styles.warnText}>
-              Не применяйте резких ударов — гайка может треснуть.
+              Don't strike the nut — it can crack under impact.
             </Text>
           </View>
         </NoirCard>
@@ -68,14 +68,14 @@ export default function RepairStep() {
         <View style={styles.ctaRow}>
           <View style={{ flex: 1 }}>
             <AmberCTA
-              label="ГОТОВО"
+              label="DONE"
               variant="outlined"
               onPress={() => router.back()}
             />
           </View>
           <View style={{ flex: 1 }}>
             <AmberCTA
-              label="Я ЗАСТРЯЛ"
+              label="I'M STUCK"
               variant="dark"
               onPress={() => router.push('/find-a-pro')}
             />
@@ -83,7 +83,7 @@ export default function RepairStep() {
         </View>
 
         <Text allowFontScaling={false} style={styles.timeNote}>
-          ВРЕМЯ ЭТОГО ШАГА · 12 MIN
+          THIS STEP · 12 MIN
         </Text>
       </ScrollView>
     </NoirScreen>

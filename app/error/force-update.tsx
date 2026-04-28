@@ -7,10 +7,16 @@ import { DocRef } from '@/components/ui/DocRef';
 import { NoirScreen } from '@/components/ui/NoirScreen';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
 
+// iOS App Store ID is set once the app is listed; until then fall back to a
+// search URL so the CTA never resolves to a 404. Android Play URL works
+// today via the bundle id.
+const IOS_APP_STORE_ID = process.env.EXPO_PUBLIC_IOS_APP_STORE_ID;
 const APP_STORE_URL = Platform.select({
-  ios: 'https://apps.apple.com/app/idYOUR_APP_ID',
-  android: 'https://play.google.com/store/apps/details?id=YOUR_PACKAGE',
-  default: 'https://apps.apple.com/app/idYOUR_APP_ID',
+  ios: IOS_APP_STORE_ID
+    ? `https://apps.apple.com/app/id${IOS_APP_STORE_ID}`
+    : 'https://apps.apple.com/search?term=FixIt%20Noir',
+  android: 'https://play.google.com/store/apps/details?id=com.oqapps.fixit',
+  default: 'https://apps.apple.com/search?term=FixIt%20Noir',
 });
 
 /** Download-arrow glyph — update indicator */

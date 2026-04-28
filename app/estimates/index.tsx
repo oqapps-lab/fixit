@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { NoirScreen } from '@/components/ui/NoirScreen';
@@ -42,13 +42,16 @@ export default function EstimatesList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let cancelled = false;
-    listEstimates()
-      .then((rows) => { if (!cancelled) { setEstimates(rows); setLoading(false); } })
-      .catch((e) => { if (!cancelled) { setError(e.message ?? 'Failed to load'); setLoading(false); } });
-    return () => { cancelled = true; };
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      let cancelled = false;
+      setLoading(true);
+      listEstimates()
+        .then((rows) => { if (!cancelled) { setEstimates(rows); setLoading(false); } })
+        .catch((e) => { if (!cancelled) { setError(e.message ?? 'Failed to load'); setLoading(false); } });
+      return () => { cancelled = true; };
+    }, []),
+  );
 
   const compareMode = selected.size > 0;
   const canCompare = selected.size >= 2 && selected.size <= 3;
@@ -59,15 +62,23 @@ export default function EstimatesList() {
       if (filter === 'completed') list = list.filter((e) => e.status === 'completed');
       else list = list.filter((e) => e.room === filter || e.category === filter);
     }
+    const displayPrice = (e: typeof list[number]) => {
+      switch (e.chosen_mode) {
+        case 'diy': return Number(e.diy_price);
+        case 'hybrid': return Number(e.hybrid_price);
+        case 'pro': return Number(e.pro_price);
+        default: return Number(e.pro_price);
+      }
+    };
     switch (sort) {
       case 'recent':
         list.sort((a, b) => b.captured_at.localeCompare(a.captured_at));
         break;
       case 'highCost':
-        list.sort((a, b) => Number(b.pro_price) - Number(a.pro_price));
+        list.sort((a, b) => displayPrice(b) - displayPrice(a));
         break;
       case 'lowCost':
-        list.sort((a, b) => Number(a.pro_price) - Number(b.pro_price));
+        list.sort((a, b) => displayPrice(a) - displayPrice(b));
         break;
     }
     return list;
@@ -123,7 +134,9 @@ export default function EstimatesList() {
         <DocRef>ARCHIVE · FILTERABLE</DocRef>
         <Text allowFontScaling={false} style={styles.title}>ESTIMATES</Text>
         <Text allowFontScaling={false} style={styles.body}>
-          {loading ? 'Loading…' : `${filtered.length} estimates · total saved vs blind-pro: $${total.toLocaleString()}`}
+          {loading
+            ? 'Loading…'
+            : `${filtered.length} estimate${filtered.length === 1 ? '' : 's'} · total saved vs blind-pro: $${total.toLocaleString()}`}
         </Text>
 
         <ScrollView

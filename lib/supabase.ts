@@ -1,4 +1,5 @@
 import 'react-native-url-polyfill/auto';
+import { AppState } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '@/types/database';
@@ -19,4 +20,19 @@ export const supabase = createClient<Database>(url, anonKey, {
     persistSession: true,
     detectSessionInUrl: false,
   },
+});
+
+// Required for React Native: gate Supabase auth's auto-refresh on app
+// foreground state. Without this, the SDK fires refresh fetches while the
+// app is backgrounded/transitioning and surfaces them as "TypeError:
+// Network request failed". https://supabase.com/docs/reference/javascript/initializing#react-native
+if (AppState.currentState === 'active') {
+  supabase.auth.startAutoRefresh();
+}
+AppState.addEventListener('change', (state) => {
+  if (state === 'active') {
+    supabase.auth.startAutoRefresh();
+  } else {
+    supabase.auth.stopAutoRefresh();
+  }
 });

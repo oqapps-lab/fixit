@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Alert, Linking, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import { Alert, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { NoirScreen } from '@/components/ui/NoirScreen';
@@ -58,9 +58,14 @@ export default function PrivacySettings() {
     );
   };
 
-  const openPolicy = (url: string) => {
+  const openPolicy = (_url: string) => {
     Haptics.selectionAsync().catch(() => {});
-    Linking.openURL(url).catch(() => {});
+    // oqapps.com is not yet live; show a placeholder until the marketing site
+    // ships. Swap back to `Linking.openURL(url)` when policies are published.
+    Alert.alert(
+      'Coming soon',
+      'This document will be available before launch. Email privacy@oqapps.com if you need a copy now.',
+    );
   };
 
   return (

@@ -9,6 +9,7 @@ import { SerifHero } from '@/components/ui/SerifHero';
 import { AmberCTA } from '@/components/ui/AmberCTA';
 import { BookmarkGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, typeScale } from '@/constants/tokens';
+import { FREE_SAVE_LIMIT } from '@/constants/limits';
 
 export default function SavePaywall() {
   const router = useRouter();
@@ -64,8 +65,8 @@ export default function SavePaywall() {
           </SerifHero>
 
           <Text allowFontScaling={false} style={styles.body}>
-            You've saved 5 projects on the free tier. Upgrade to Pro to keep every estimate,
-            compare them later, and never lose a quote again.
+            You've reached the free tier's {FREE_SAVE_LIMIT}-save limit. Upgrade to Pro to keep every
+            estimate, compare them later, and never lose a quote again.
           </Text>
 
           <Label tone="tertiary" size="micro" align="center" style={{ marginTop: spacing.lg }}>

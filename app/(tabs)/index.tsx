@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View, ScrollView, Pressable } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { NoirScreen } from '@/components/ui/NoirScreen';
 import { NoirHeader } from '@/components/ui/NoirHeader';
@@ -47,10 +47,10 @@ function severityToStatus(s: Severity): Status {
 
 function computeHealth(args: {
   urgentCount: number;
-  highSeverityCount: number;
+  moderateCount: number;
   overdueMaintCount: number;
 }) {
-  const raw = 100 - args.urgentCount * 15 - args.highSeverityCount * 10 - args.overdueMaintCount * 5;
+  const raw = 100 - args.urgentCount * 15 - args.moderateCount * 10 - args.overdueMaintCount * 5;
   return Math.max(0, Math.min(100, Math.round(raw)));
 }
 
@@ -89,19 +89,21 @@ export default function HomeTab() {
     }
   }, []);
 
-  useEffect(() => {
-    refetchAlive.current = true;
-    refetch();
-    return () => {
-      refetchAlive.current = false;
-    };
-  }, [refetch]);
+  useFocusEffect(
+    useCallback(() => {
+      refetchAlive.current = true;
+      refetch();
+      return () => {
+        refetchAlive.current = false;
+      };
+    }, [refetch]),
+  );
 
   // Derived counts
   const urgentCount =
     estimates.filter((e) => e.severity === 'high').length +
     repairs.filter((r) => r.severity === 'high').length;
-  const highSeverityCount = estimates.filter((e) => e.severity === 'moderate').length;
+  const moderateCount = estimates.filter((e) => e.severity === 'moderate').length;
   const todayIso = new Date().toISOString().slice(0, 10);
   const overdueMaintCount = maintenance.filter(
     (t) => !t.done_at && t.due_date && t.due_date < todayIso,
@@ -119,7 +121,7 @@ export default function HomeTab() {
       ? upcoming.slice(0, 3).map((t) => t.title).join(', ') + '.'
       : 'Nothing due soon.';
 
-  const health = computeHealth({ urgentCount, highSeverityCount, overdueMaintCount });
+  const health = computeHealth({ urgentCount, moderateCount, overdueMaintCount });
   const hLabel = healthLabel(health);
 
   // Build categories from estimates: each category → max severity
@@ -250,7 +252,7 @@ export default function HomeTab() {
         {/* Alert card */}
         {featured ? (
           <Pressable
-            onPress={() => router.push(`/repair/${featured.id}`)}
+            onPress={() => router.push(`/estimates/${featured.id}`)}
             accessibilityRole="button"
             accessibilityLabel={`${featured.title} — open details`}
             style={{ marginTop: spacing.lg }}

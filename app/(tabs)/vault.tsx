@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View, ScrollView } from 'react-native';
-import { useRouter } from 'expo-router';
+import { useFocusEffect, useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
 import { NoirScreen } from '@/components/ui/NoirScreen';
@@ -23,26 +23,28 @@ export default function VaultTab() {
   const [estimates, setEstimates] = useState<EstimateRow[]>([]);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    let cancelled = false;
-    (async () => {
-      setLoading(true);
-      try {
-        const [p, e] = await Promise.all([getMyProfile(), listEstimates()]);
-        if (cancelled) return;
-        setProfile(p);
-        setEstimates(e);
-        setError(null);
-      } catch (e: any) {
-        if (!cancelled) setError(e?.message ?? 'Failed to load');
-      } finally {
-        if (!cancelled) setLoading(false);
-      }
-    })();
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      let cancelled = false;
+      (async () => {
+        setLoading(true);
+        try {
+          const [p, e] = await Promise.all([getMyProfile(), listEstimates()]);
+          if (cancelled) return;
+          setProfile(p);
+          setEstimates(e);
+          setError(null);
+        } catch (e: any) {
+          if (!cancelled) setError(e?.message ?? 'Failed to load');
+        } finally {
+          if (!cancelled) setLoading(false);
+        }
+      })();
+      return () => {
+        cancelled = true;
+      };
+    }, []),
+  );
 
   const savedCount = estimates.filter((e) => e.is_saved).length;
   const totalEstimates = estimates.length;

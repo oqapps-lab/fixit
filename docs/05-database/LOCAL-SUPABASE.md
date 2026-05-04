@@ -4,6 +4,8 @@
 
 ```bash
 cd /Users/lanabey/dev/fixit
+cp .env.example .env
+# edit .env and set EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY + ANTHROPIC_API_KEY
 npm run supabase:start
 npm run supabase:db:reset
 ```
@@ -39,19 +41,8 @@ npm run supabase:stop
 
 ## Edge Function (Claude analysis)
 
-Set Anthropic key for local edge runtime:
-
-```bash
-cp supabase/functions/.env.example supabase/functions/.env
-# edit supabase/functions/.env and set ANTHROPIC_API_KEY
-```
-
-Restart Supabase after changing function env:
-
-```bash
-npm run supabase:stop
-npm run supabase:start
-```
+Use root `.env` as the single source of truth.  
+`npm run supabase:start` and `npm run supabase:db:reset` auto-sync `.env` -> `supabase/functions/.env` before running, so local edge runtime gets `ANTHROPIC_API_KEY`.
 
 ## Local endpoints
 - API URL: `http://127.0.0.1:54321`

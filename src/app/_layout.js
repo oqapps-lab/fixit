@@ -41,7 +41,6 @@ export default function RootLayout() {
           <Stack.Screen name="seasonal" options={{ animation: 'slide_from_right' }}/>
           <Stack.Screen name="home-overview" options={{ animation: 'slide_from_right' }}/>
           <Stack.Screen name="find-a-pro" options={{ presentation: 'transparentModal', animation: 'fade' }}/>
-          <Stack.Screen name="(onboarding)/signup-ask" options={{ presentation: 'transparentModal', animation: 'fade' }}/>
         </Stack>
       </SafeAreaProvider>
     </GestureHandlerRootView>);

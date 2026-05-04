@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, Pressable, TextInput, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, Pressable, TextInput, ActivityIndicator, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
@@ -125,10 +125,10 @@ export default function Context() {
     return (<NoirScreen>
       <NoirHeader brand="SECTOR · CONTEXT" showBack/>
 
-      <View style={[
+      <ScrollView contentContainerStyle={[
             styles.content,
             { paddingTop: insets.top + spacing.xl, paddingBottom: insets.bottom + spacing.xxxl },
-        ]}>
+        ]} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <View>
           <DocRef>PRE-SCAN · TWO QUICK QUESTIONS</DocRef>
           <Text allowFontScaling={false} style={styles.title}>
@@ -247,14 +247,13 @@ export default function Context() {
             <Text allowFontScaling={false} style={styles.skipText}>Skip — use defaults</Text>
           </Pressable>
         </View>
-      </View>
+      </ScrollView>
     </NoirScreen>);
 }
 const styles = StyleSheet.create({
     content: {
-        flex: 1,
         paddingHorizontal: spacing.xl,
-        justifyContent: 'space-between',
+        paddingBottom: spacing.xl,
     },
     title: {
         marginTop: spacing.sm,
@@ -342,6 +341,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.amber,
     },
     anchor: {
+        marginTop: spacing.xxl,
         alignItems: 'center',
         gap: spacing.md,
     },

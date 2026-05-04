@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { ScrollView, StyleSheet, Text, View, Pressable, TextInput } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { NoirScreen } from '@/components/ui/NoirScreen';
-import { NoirHeader } from '@/components/ui/NoirHeader';
-import { DocRef } from '@/components/ui/DocRef';
-import { AmberCTA } from '@/components/ui/AmberCTA';
-import { colors, fonts, spacing, typeScale } from '@/constants/tokens';
-import { signInWithOAuth, signUpWithEmail } from '@/lib/auth/supabase-auth';
+import { NoirScreen } from '../../components/ui/NoirScreen';
+import { NoirHeader } from '../../components/ui/NoirHeader';
+import { DocRef } from '../../components/ui/DocRef';
+import { AmberCTA } from '../../components/ui/AmberCTA';
+import { colors, fonts, spacing, typeScale } from '../../constants/tokens';
+import { signInWithOAuth, signUpWithEmail } from '../../lib/auth/supabase-auth';
 /**
  * Sign Up (2.1) — new account creation via Apple / Google / Email.
  * Reached from signup-ask modal (after first estimate aha) or from sign-in "no account yet".

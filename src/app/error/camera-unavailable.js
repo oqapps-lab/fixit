@@ -6,6 +6,7 @@ import Svg, { Circle, Line, Path, Rect } from 'react-native-svg';
 import { AmberCTA } from '@/components/ui/AmberCTA';
 import { DocRef } from '@/components/ui/DocRef';
 import { colors, fonts, radii, spacing, tracking, typeScale } from '@/constants/tokens';
+import { getEstimateDraft } from '@/lib/estimate/draft';
 /** Camera-with-slash glyph — permission denied indicator */
 function CameraSlashGlyph({ size = 56, color = colors.amber }) {
     return (<Svg width={size} height={size} viewBox="0 0 56 56">
@@ -18,6 +19,7 @@ function CameraSlashGlyph({ size = 56, color = colors.amber }) {
 export default function CameraUnavailable() {
     const router = useRouter();
     const insets = useSafeAreaInsets();
+    const draft = getEstimateDraft();
     const close = () => {
         if (router.canGoBack())
             router.back();
@@ -59,6 +61,9 @@ export default function CameraUnavailable() {
         <Text allowFontScaling={false} style={styles.body}>
           FixIt needs camera to analyze repair photos. Enable in Settings, or pick from your gallery instead.
         </Text>
+        {draft.errorMessage ? (<Text allowFontScaling={false} style={styles.errorMeta}>
+            {draft.errorMessage}
+          </Text>) : null}
 
         <View style={styles.ctaStack}>
           <AmberCTA label="Open Settings" variant="primary" size="lg" onPress={openSettings} accessibilityLabel="Open iOS Settings to enable camera"/>
@@ -143,8 +148,16 @@ const styles = StyleSheet.create({
         color: colors.textSecondary,
         textAlign: 'center',
         marginTop: spacing.md,
-        marginBottom: spacing.xxl,
+        marginBottom: spacing.lg,
         paddingHorizontal: spacing.sm,
+    },
+    errorMeta: {
+        marginBottom: spacing.xl,
+        fontFamily: fonts.mono,
+        fontSize: typeScale.labelMicro,
+        lineHeight: 14,
+        color: colors.textDim,
+        textAlign: 'center',
     },
     ctaStack: { gap: spacing.md },
     tertiaryWrap: {

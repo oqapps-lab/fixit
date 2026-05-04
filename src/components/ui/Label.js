@@ -10,6 +10,19 @@ const TONE_COLOR = {
     mint: colors.mint,
     danger: colors.danger,
 };
+
+function toLabelText(children) {
+    return React.Children.toArray(children)
+        .map((part) => {
+        if (typeof part === 'string' || typeof part === 'number') {
+            return String(part);
+        }
+        return '';
+    })
+        .join('')
+        .toUpperCase();
+}
+
 export function Label({ children, tone = 'tertiary', size = 'small', align, style }) {
     const fontSize = size === 'micro' ? typeScale.labelMicro :
         size === 'medium' ? typeScale.bodyMedium :
@@ -20,7 +33,7 @@ export function Label({ children, tone = 'tertiary', size = 'small', align, styl
             { color: TONE_COLOR[tone], fontSize, letterSpacing, textAlign: align },
             style,
         ]}>
-      {children.toUpperCase()}
+      {toLabelText(children)}
     </Text>);
 }
 const styles = StyleSheet.create({

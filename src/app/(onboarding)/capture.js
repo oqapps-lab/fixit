@@ -10,7 +10,7 @@ import { NoirCard } from '@/components/ui/NoirCard';
 import { DocRef } from '@/components/ui/DocRef';
 import { CameraGlyph, ChevronLeftGlyph } from '@/components/ui/NoirGlyphs';
 import { colors, fonts, spacing, tracking, typeScale } from '@/constants/tokens';
-import { setEstimatePhoto } from '@/lib/estimate/draft';
+import { setEstimateError, setEstimatePhoto } from '@/lib/estimate/draft';
 export default function Capture() {
     const router = useRouter();
     const insets = useSafeAreaInsets();
@@ -23,47 +23,64 @@ export default function Capture() {
         setEstimatePhoto({
             uri: asset.uri,
             mimeType: asset.mimeType ?? null,
+            base64: asset.base64 ?? null,
         });
         await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light).catch(() => { });
         router.push('/(onboarding)/context');
     };
 
     const onPickFromGallery = async () => {
-        const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (permission.granted !== true) {
+        try {
+            const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+            if (permission.granted !== true) {
+                router.push('/error/camera-unavailable');
+                return;
+            }
+
+            const result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ['images'],
+                allowsEditing: false,
+                quality: 0.7,
+                base64: true,
+            });
+
+            if (result.canceled) {
+                return;
+            }
+            await continueWithAsset(result.assets[0]);
+        }
+        catch (error) {
+            const message = error instanceof Error ? error.message : 'Gallery picker failed.';
+            setEstimateError(`Gallery picker failed: ${message}`);
             router.push('/error/camera-unavailable');
-            return;
         }
-
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ['images'],
-            allowsEditing: false,
-            quality: 0.7,
-        });
-
-        if (result.canceled) {
-            return;
-        }
-        await continueWithAsset(result.assets[0]);
     };
 
     const onCapturePhoto = async () => {
-        const permission = await ImagePicker.requestCameraPermissionsAsync();
-        if (permission.granted !== true) {
+        try {
+            const permission = await ImagePicker.requestCameraPermissionsAsync();
+            if (permission.granted !== true) {
+                router.push('/error/camera-unavailable');
+                return;
+            }
+
+            const result = await ImagePicker.launchCameraAsync({
+                mediaTypes: ['images'],
+                allowsEditing: false,
+                quality: 0.7,
+                base64: true,
+            });
+
+            if (result.canceled) {
+                return;
+            }
+            await continueWithAsset(result.assets[0]);
+        }
+        catch (error) {
+            const message = error instanceof Error ? error.message : 'Camera capture failed.';
+            setEstimateError(`Camera capture failed: ${message}`);
             router.push('/error/camera-unavailable');
-            return;
         }
-
-        const result = await ImagePicker.launchCameraAsync({
-            mediaTypes: ['images'],
-            allowsEditing: false,
-            quality: 0.7,
-        });
-
-        if (result.canceled) {
-            return;
-        }
-        await continueWithAsset(result.assets[0]);
     };
 
     return (<NoirScreen glow="none">

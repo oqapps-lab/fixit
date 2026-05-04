@@ -5,5 +5,7 @@ export default function OnboardingLayout() {
             headerShown: false,
             animation: 'slide_from_right',
             contentStyle: { backgroundColor: colors.bg },
-        }}/>);
+        }}>
+      <Stack.Screen name="signup-ask" options={{ presentation: 'transparentModal', animation: 'fade' }}/>
+    </Stack>);
 }

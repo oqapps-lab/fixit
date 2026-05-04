@@ -15,10 +15,39 @@ function WarningTriangleGlyph({ size = 56, color = colors.danger }) {
       <Line x1={28} y1={40} x2={28} y2={41.5} stroke={color} strokeWidth={2.5} strokeLinecap="round"/>
     </Svg>);
 }
+
+function toUserFriendlyHint(rawMessage) {
+    if (typeof rawMessage !== 'string' || rawMessage.length === 0) {
+        return 'Try again in a moment.';
+    }
+
+    if (rawMessage.includes('Missing ANTHROPIC_API_KEY')) {
+        return 'Backend setup is incomplete: ANTHROPIC_API_KEY is missing in .env.';
+    }
+    if (rawMessage.includes('authentication_error') || rawMessage.includes('invalid x-api-key')) {
+        return 'Anthropic API key is invalid or expired. Update ANTHROPIC_API_KEY in .env.';
+    }
+    if (rawMessage.includes('Unsupported countryCode')) {
+        return 'This build supports United States only right now.';
+    }
+    if (rawMessage.includes('Invalid US ZIP code format')) {
+        return 'Enter a valid 5-digit US ZIP code.';
+    }
+    if (rawMessage.includes('Photo upload failed')) {
+        return 'Photo upload failed. Check local Supabase storage and try again.';
+    }
+    if (rawMessage.includes('Failed to create signed URL')) {
+        return 'Photo could not be read by backend. Retake or reselect image.';
+    }
+
+    return 'Try retaking the photo or retrying the analysis.';
+}
+
 export default function AiFailed() {
     const router = useRouter();
     const insets = useSafeAreaInsets();
     const draft = getEstimateDraft();
+    const userHint = toUserFriendlyHint(draft.errorMessage);
     const close = () => {
         if (router.canGoBack())
             router.back();
@@ -53,6 +82,9 @@ export default function AiFailed() {
 
         <Text allowFontScaling={false} style={styles.body}>
           Our AI took too long to respond. Retry, or try a clearer photo.
+        </Text>
+        <Text allowFontScaling={false} style={styles.hintText}>
+          {userHint}
         </Text>
         {draft.errorMessage ? (<Text allowFontScaling={false} style={styles.errorMeta}>
             {draft.errorMessage}
@@ -140,8 +172,16 @@ const styles = StyleSheet.create({
         color: colors.textSecondary,
         textAlign: 'center',
         marginTop: spacing.md,
-        marginBottom: spacing.xxl,
+        marginBottom: spacing.sm,
         paddingHorizontal: spacing.sm,
+    },
+    hintText: {
+        marginBottom: spacing.lg,
+        fontFamily: fonts.bodyMedium,
+        fontSize: typeScale.bodySmall,
+        lineHeight: 18,
+        color: colors.text,
+        textAlign: 'center',
     },
     errorMeta: {
         marginTop: -spacing.lg,

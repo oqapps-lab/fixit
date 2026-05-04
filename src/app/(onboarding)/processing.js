@@ -42,6 +42,7 @@ export default function Processing() {
                 const result = await runEstimatePipeline({
                     photoUri: draft.photoUri,
                     photoMimeType: draft.photoMimeType,
+                    photoBase64: draft.photoBase64,
                     countryCode: draft.countryCode,
                     zipCode: draft.zipCode,
                     qualityTier: draft.qualityTier,

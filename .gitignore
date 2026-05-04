@@ -34,3 +34,4 @@ Thumbs.db
 *.swp
 
 expo-env.d.ts
+tsconfig.json

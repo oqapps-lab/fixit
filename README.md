@@ -57,7 +57,7 @@ Industrial blueprint dark theme distilled from 12 Stitch screens. Primitives + 1
 Быстро (на Mac):
 ```bash
 npm install --legacy-peer-deps
-npx expo start --ios
+npm run ios
 ```
 
 ## Structure

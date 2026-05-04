@@ -13,7 +13,7 @@ Mac с Xcode + Node 20+:
 ```bash
 cd projects/fixit
 npm install --legacy-peer-deps
-npx expo start --ios
+npm run ios
 ```
 
 Дальше Expo сам откроет симулятор, поставит Expo Go, загрузит бандл (~30-60 сек первый раз), покажет Home Health Dashboard.
@@ -56,7 +56,7 @@ npm install --legacy-peer-deps
 **Вариант A — ты на Mac и хочешь iOS симулятор (самое простое):**
 
 ```bash
-npx expo start --ios
+npm run ios
 ```
 
 Expo сам:
@@ -73,7 +73,7 @@ Expo сам:
 
 ```bash
 # на машине где будет Metro
-npx expo start --lan --port 8082
+EXPO_NO_TYPESCRIPT_SETUP=1 npx expo start --lan --port 8082
 
 # на Mac (в другом терминале или через mobile-mcp)
 # узнать LAN IP Windows / Linux хоста, потом:
@@ -126,7 +126,7 @@ npx expo export --platform ios --output-dir /tmp/fixit-export --clear
 ### 9. Что НЕ поддерживается в текущем билде
 
 - **Нативная камера-модуль Expo Camera** — используется `expo-image-picker` (camera/library launch), а не full custom camera UI.
-- **Claude API** — интегрирован через Supabase Edge Function `analyze-issue`; нужен `ANTHROPIC_API_KEY` в `supabase/functions/.env` (см. `supabase/functions/.env.example`, затем `npm run supabase:stop && npm run supabase:start`).
+- **Claude API** — интегрирован через Supabase Edge Function `analyze-issue`; нужен `ANTHROPIC_API_KEY` в корневом `.env` (скрипты Supabase автоматически синкают его в локальный edge runtime).
 - **Adapty / Store billing** — paywall пока placeholder-flow, без реального биллинга и entitlements.
 - **Push notifications** — нет
 - **Dark/light toggle** — всегда dark

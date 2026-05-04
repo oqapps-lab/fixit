@@ -1,6 +1,7 @@
 const draft = {
   photoUri: null,
   photoMimeType: null,
+  photoBase64: null,
   countryCode: 'US',
   zipCode: '',
   qualityTier: 'standard',
@@ -15,9 +16,10 @@ export function getEstimateDraft() {
   return draft;
 }
 
-export function setEstimatePhoto({ uri, mimeType }) {
+export function setEstimatePhoto({ uri, mimeType, base64 }) {
   draft.photoUri = uri;
   draft.photoMimeType = mimeType ?? null;
+  draft.photoBase64 = typeof base64 === 'string' && base64.length > 0 ? base64 : null;
 }
 
 export function setEstimateContext({ countryCode, zipCode, qualityTier, diyComfort }) {
@@ -49,6 +51,7 @@ export function setEstimateError(message) {
 export function resetEstimateDraft() {
   draft.photoUri = null;
   draft.photoMimeType = null;
+  draft.photoBase64 = null;
   draft.countryCode = 'US';
   draft.zipCode = '';
   draft.qualityTier = 'standard';

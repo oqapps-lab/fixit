@@ -1,5 +1,5 @@
 import { Stack } from 'expo-router';
-import { colors } from '@/constants/tokens';
+import { colors } from '../../constants/tokens';
 export default function AuthLayout() {
     return (<Stack screenOptions={{
             headerShown: false,

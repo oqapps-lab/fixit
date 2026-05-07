@@ -1,8 +1,8 @@
 # MARKET-RESEARCH.md — FixIt
 
-**Дата:** 5 мая 2026
+**Дата:** 7 мая 2026
 **Продукт:** FixIt — AI home repair cost advisor (photo → diagnosis → DIY / Hybrid / Full Pro estimate)
-**Статус:** v2.0 — обновлено с Google Trends, window assessment, GO/NO GO
+**Статус:** v2.1 — добавлены новые AI-конкуренты (SnapFix, Fix AI, YouFixedIt, iFixit FixBot)
 
 ---
 
@@ -325,19 +325,22 @@ Benchmarks аналогичных consumer AI utility apps:
 
 ### 5.1 Матрица функций
 
-| Функция | Thumbtack | Angi | HomeWyse | iFixit/FixBot | **Toolbox.repair** | HomeMD.ai | HomeZada | **FixIt** |
-|---------|-----------|------|----------|--------------|-------------------|-----------|---------|---------|
-| Photo/Video AI input | ❌ | ❌ | ❌ | ❌ | ✅ video+photo | ✅ photo | ✅ photo | ✅ photo |
-| Cost estimate | ❌ | ⚠ article | ✅ | ❌ | ⚠ partial | ✅ | ✅ forecast | ✅ |
-| DIY guide | ❌ | ❌ | ❌ | ✅ devices | ✅ | ❌ | ✅ | ✅ |
-| Pro matching | ✅ | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ | ✅ (affiliate) |
-| Materials pricing | ❌ | ❌ | ❌ | ⚠ parts | ❌ | ❌ | ❌ | ✅ |
-| 3-option output | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| Pricing | Free | Free | Free | Free | $9.99/мес | $7.99/мес | $7.99/мес | $9.99/мес |
+| Функция | Thumbtack | Angi | HomeWyse | iFixit/FixBot | Toolbox.repair | HomeMD.ai | **SnapFix** | **Fix AI** | **YouFixedIt** | **FixIt** |
+|---------|-----------|------|----------|--------------|----------------|-----------|------------|-----------|---------------|---------|
+| Photo/Video AI input | ❌ | ❌ | ❌ | ❌ | ✅ video+photo | ✅ photo | ✅ photo | ✅ photo | ❌ текст | ✅ photo |
+| Cost estimate | ❌ | ⚠ article | ✅ | ❌ | ⚠ partial | ✅ | ⚠ basic | ✅ | ❌ | ✅ |
+| Regional price localization | ❌ | ⚠ web | ✅ zip | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| DIY guide | ❌ | ❌ | ❌ | ✅ devices | ✅ | ❌ | ✅ | ✅ | ✅ | ✅ |
+| Pro matching | ✅ | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ⚠ local | ✅ (affiliate) |
+| Materials list | ❌ | ❌ | ❌ | ⚠ parts | ❌ | ❌ | ✅ | ⚠ | ✅ | ✅ |
+| 3-option output (DIY/Hybrid/Pro) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| Global (non-US) | ⚠ 9 стран | ⚠ US+CA | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| App Store рейтинг | 4.89 | 4.8 | web-only | 4.8 (new) | н/д | н/д | мало | мало | нет | — |
+| Pricing | Free | Free | Free | Free/$50yr | $9.99/мес | $7.99/мес | подписка | $30/год | trial | $9.99/мес |
 
-### 5.2 Новые конкуренты (апрель 2026)
+### 5.2 Новые конкуренты (апрель–май 2026)
 
-**Toolbox.repair** — наиболее прямой конкурент:
+**Toolbox.repair** — наиболее прямой конкурент (апрель 2026):
 - AI video + audio + photo diagnosis ²⁴
 - DIY guides + safety assessment + pro matching
 - Pricing: $9.99/мес или $89.99/год
@@ -353,7 +356,46 @@ Benchmarks аналогичных consumer AI utility apps:
 - Diagnosis через product SKU analysis
 - Нет DIY guides, нет pro matching
 
-**Ключевой вывод:** Gap сохраняется. Ни один из новых конкурентов **не комбинирует** all 4: photo AI + honest cost + DIY + pro matching. Каждый берёт один слой. **FixIt = only all-in-one.**
+---
+
+**iFixit + FixBot** — запуск декабрь 2025 ²⁹:
+- Возврат в App Store после 10-летнего бана (Apple убрал app в 2015)
+- FixBot — AI на базе 125K repair guides + форума + PDF мануалов
+- Монетизация: Free + $4.99/мес или $50/год (голос, загрузка документов)
+- **Слабость:** фокус на электронику и гаджеты, не home repair (стены / сантехника / HVAC вне scope), нет cost estimate, нет pro matching
+- App Store: 4.8 ⭐, ранние отзывы положительные
+
+**SnapFix — AI Home Repair Help** (2025):
+- Photo-input → AI diagnosis → step-by-step guide + shopping list + basic cost estimate
+- Охват: сантехника, стены, бытовая техника, коды ошибок, вредители, мебель
+- Монетизация: подписка (точная цена не публична)
+- App Store: недостаточно отзывов (новое приложение)
+- **Слабость:** нет regional price localization, нет pro matching, нет 3-mode output, нет бренда
+
+**Fix AI — Repair & Home Design** (2025):
+- Photo → damage detection → cost estimate → DIY guide + элементы AR home design
+- Монетизация: $4.99/нед или $29.99/год (3-day free trial)
+- **Слабость:** нет regional localization, нет pro matching, нет Hybrid-варианта
+
+**YouFixedIt: AI Home Repair** (март 2026):
+- Основатель — практикующий электрик (20+ лет опыта)
+- Категории: HVAC, appliances, construction, general maintenance
+- Монетизация: 14-day free trial → subscription (цена не объявлена)
+- **Слабость:** нет photo-input (только текст), нет cost estimate, нет отзывов (слишком новое)
+
+---
+
+**Ключевой вывод (май 2026):** За месяц с момента прошлого обновления появилось ещё 4 игрока. Gap **сохраняется**: ни один не комбинирует all 5 компонентов — photo AI + regional cost estimate + DIY guide + materials list + pro matching. Каждый конкурент берёт 1–2 слоя. **FixIt = only all-in-one.**
+
+| Конкурент | Photo AI | Cost Est | Regional | DIY | Pro match | Все 5 |
+|-----------|:---:|:---:|:---:|:---:|:---:|:---:|
+| Toolbox.repair | ✅ | ❌ | ❌ | ✅ | ✅ | ❌ |
+| SnapFix | ✅ | ⚠ | ❌ | ✅ | ❌ | ❌ |
+| Fix AI | ✅ | ✅ | ❌ | ✅ | ❌ | ❌ |
+| YouFixedIt | ❌ | ❌ | ❌ | ✅ | ⚠ | ❌ |
+| iFixit FixBot | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| HomeMD.ai | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ |
+| **FixIt** | ✅ | ✅ | ✅ | ✅ | ✅ | **✅** |
 
 ---
 
@@ -472,7 +514,10 @@ COMBINED      ****  **  ***  ***  *** **** ****  *** **   ****  *** ****
 | Риск | Вероятность | Mitigation |
 |------|-------------|------------|
 | Toolbox.repair добавляет cost + materials | Medium | Move fast, brand capture first |
+| SnapFix / Fix AI добавляют regional pricing | Medium-High | Региональная локализация = ключевой differentiator, защищать |
+| YouFixedIt добавляет photo-input + cost | Low-Medium | UX качество и brand важнее скорости у них |
 | HomeWyse запускает AI mobile app | Low-Medium | Speed to market critical |
+| iFixit расширяется в home repair (не только devices) | Low | Другой DNA, маловероятно |
 | AI annual plan retention 21% | High | Сильный habit loop + push notifications |
 | Affiliate API revoke (Thumbtack/Angi) | Medium | Multi-source: Amazon + Google Maps + Yelp |
 | AI accuracy <70% edge cases | High | Disclaimers + retry prompts + "call a pro" rails |
@@ -556,7 +601,17 @@ COMBINED      ****  **  ***  ***  *** **** ****  *** **   ****  *** ****
 
 ²⁸ WebFX, "Seasonal Search Shifts in Home Services Demand" — https://www.webfx.com/blog/home-services/seasonal-search-trends/
 
+²⁹ 9to5Mac, "iFixit launches FixBot AI repair helper, with free and paid versions" — https://9to5mac.com/2025/12/09/ifixit-launches-fixbot-ai-repair-helper-with-free-and-paid-versions/
+
+³⁰ App Store: SnapFix — AI Home Repair Help — https://apps.apple.com/us/app/snapfix-ai-home-repair-help/id6758781226
+
+³¹ App Store: Fix AI — Repair & Home Design — https://apps.apple.com/us/app/fix-ai-repair-home-design/id6746446379
+
+³² App Store: YouFixedIt — AI Home Repair — https://apps.apple.com/ca/app/youfixedit-ai-home-repair/id6757339556
+
+³³ HomeMD.ai, "Best AI Home Repair Tools in 2026: A Comparison and the Gap Most Tools Miss" — https://homemd.ai/guides/best-ai-home-repair-tools-2026-comparison
+
 ---
 
-**Дата последнего обновления:** 2026-05-05
-**Следующий шаг:** Обновить COMPETITOR-ANALYSIS.md (добавить Toolbox.repair, FiXA, HomeMD.ai), затем переходить к Design.
+**Дата последнего обновления:** 2026-05-07
+**Следующий шаг:** Переходить к Design (Stage 5). Следующий review конкурентного поля — июль 2026.

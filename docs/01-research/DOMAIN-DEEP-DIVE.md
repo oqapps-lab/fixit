@@ -1,7 +1,7 @@
 ---
 Проект: FixIt — AI home repair cost advisor
-Дата: 2026-04-17
-Статус: Draft v1
+Дата: 2026-05-07
+Статус: v1.1 — добавлен §7.5 (competitive technical validation), §10.11 (конкурентные технические риски)
 Автор: Research team (FixIt)
 ---
 
@@ -9,7 +9,7 @@
 
 **Назначение документа:** Technical + industry deep dive в домен home repair. Определяет **feasibility** продукта — можно ли в принципе собрать достоверный pricing-advisor на базе публичных API, AI-моделей и legal-допустимых источников данных. Если здесь "красные" флажки — дальше в продуктовую проработку можно не идти.
 
-**Companion documents:** [MARKET-RESEARCH.md](./MARKET-RESEARCH.md), [COMPETITOR-ANALYSIS.md](./COMPETITOR-ANALYSIS.md), [USER-PERSONAS.md](./USER-PERSONAS.md).
+**Companion documents:** [MARKET-RESEARCH.md](./MARKET-RESEARCH.md), [COMPETITOR-ANALYSIS.md](./COMPETITOR-ANALYSIS.md), [COMPETITORS.md](./COMPETITORS.md), [USER-PERSONAS.md](./USER-PERSONAS.md).
 
 **TL;DR для менеджмента:**
 
@@ -713,6 +713,54 @@ Typical permit-triggering work:
 - [Price Per Token — Claude Pricing](https://pricepertoken.com/pricing-page/model/anthropic-claude-3.7-sonnet)
 - [Finout — Anthropic API Pricing 2026](https://www.finout.io/blog/anthropic-api-pricing)
 
+### 7.5 Конкурентная техническая валидация (май 2026)
+
+За апрель–май 2026 появился Кластер 7 (AI mobile repair apps). Их технические решения дают внешнюю валидацию нашего подхода и новые данные о feasibility.
+
+#### Что подтверждают конкуренты
+
+| Конкурент | Техническое решение | Вывод для FixIt |
+|-----------|---------------------|-----------------|
+| **SnapFix** | Claude/GPT-4V photo-input → instant repair diagnosis | ✅ Photo-first AI pipeline **работает в production** для home repair |
+| **Fix AI** | Photo → damage detection → basic cost estimate | ✅ AI может генерировать cost ranges из фото — **прецедент подтверждён** |
+| **Toolbox.repair** | Video + audio + photo multi-modal diagnosis | 📌 Video/audio = v2 direction; для MVP photo достаточно |
+| **iFixit FixBot** | RAG поверх 125K repair guides + форум + PDF мануалов | 📌 RAG-подход (наши собственные данные как knowledge base) работает — **применимо для FixIt cost DB** |
+| **HomeMD.ai** | Product SKU analysis → diagnosis + cost | ⚠️ SKU-level approach ограничен — не работает без model ID; наш photo-first подход шире |
+| **YouFixedIt** | Text-only → step-by-step + local contractor | ✅ Фокус на "практик написал контент" работает для trust — **применимо для our AI prompt engineering** |
+
+#### Технические gap-ы, которые НЕ закрыл ни один конкурент
+
+1. **Regional price localization.** Ни SnapFix, ни Fix AI, ни другие не делают zip-based labor rate adjustment. Все дают universal ranges. Это означает:
+   - Технически это решаемо (BLS OEWS на уровне MSA — бесплатно).
+   - Конкуренты не сделали это не потому что сложно, а потому что ещё не дошли.
+   - **FixIt должен ship эту фичу в MVP** — не в v2.
+
+2. **3-mode structured output.** Ни один конкурент не структурирует ответ как DIY / Hybrid / Pro с ценой каждого варианта side-by-side. Fix AI и SnapFix дают flat "repair guide". Это AI-prompt design task, не infrastructure.
+
+3. **Materials list с live pricing.** SnapFix даёт shopping list, но без real-time цен. Fix AI — cost estimate без breakdown. **FixIt = shopping list + estimated SKU prices + labor** — уникальная комбинация.
+
+#### Toolbox.repair: технический урок для v2
+
+Toolbox.repair использует **video + audio** multi-modal input. Это важно для случаев, когда визуальной информации недостаточно:
+- Странные звуки печи / стиралки — audio diagnosis
+- Движущиеся дефекты (капающий кран) — video context
+- AR-наведение — "покажи точно где проблема"
+
+Это **не MVP scope** — Claude Vision + статичное фото покрывает 80%+ use-cases. Но технически реализуемо через `claude-sonnet-4-6` который поддерживает video frames как image sequence.
+
+**Архитектурный вывод:** Закладывать input abstraction layer в MVP (не `photo_url`, а `media_input: { type: 'photo' | 'video_frame' | 'text', content: ... }`), чтобы не переписывать весь pipeline при v2 upgrade.
+
+#### iFixit FixBot: RAG-архитектура как шаблон
+
+iFixit FixBot работает на **RAG поверх 125K guides + форума**. Ключевые технические детали из публичных анонсов:
+- Knowledge base индексирован векторно (предположительно pgvector или Pinecone)
+- Retrieval по user question → top-K relevant guides → Claude as reasoning layer
+- Форум Q&A включён как дополнительный retrieval corpus
+
+**Применимость для FixIt:** наша cost DB (цены по категориям + ZIP-factored labor rates) = RAG knowledge base. Вместо static lookup → semantic retrieval. Это улучшает handling edge cases ("leaky pipe, but PVC, in old building, NYC zip 10001" → находит ближайший relevant case).
+
+**Cost overhead:** pgvector extension для Supabase — бесплатно при текущем tier. Embedding cost: ~$0.0001 per query (text-embedding-3-small). Не меняет unit economics.
+
 ---
 
 ## 8. Integration Complexity Matrix
@@ -882,6 +930,26 @@ Water heater replace, appliance repair (brand-specific), HVAC repair, roof repla
 - EU AI Act, CA AB 2013, NY state AI bills — всё в движении.
 - **Mitigation:** compliance review every 6 months; feature flag high-risk recommendations для conservative default.
 
+### 10.11 Конкурентные технические риски (май 2026) ⚡ NEW
+
+**Toolbox.repair добавляет regional pricing:**
+- Вероятность: Medium. Их current stack (video + DIY + pro match) не имеет cost layer.
+- Техническая сложность для них: Low — те же BLS OEWS + Homewyse scrape, что и у нас.
+- **Mitigation:** FixIt должен ship regional pricing в MVP, не как v2 afterthought. Если мы выходим без него — Toolbox.repair добавит его за 2–3 спринта и уберёт наш differentiator.
+
+**SnapFix / Fix AI копируют regional pricing:**
+- Вероятность: Medium. У них уже есть photo + basic cost.
+- **Mitigation:** наш advantage — zip-level labor rate adjustment (BLS MSA data). Это не "добавить поле" — это data pipeline + regional multiplier logic. 4–6 недель разработки. Первый кто ship — держит позицию.
+
+**iFixit расширяется в home repair:**
+- Вероятность: Low. Их DNA — электроника. 125K гайдов — устройства, не стены.
+- Но если расширятся — их brand trust + RAG база = серьёзная угроза.
+- **Mitigation:** FixIt должен capture "home repair AI" brand mindshare до их возможной экспансии.
+
+**Reverse-engineering нашего prompt / architecture:**
+- Конкуренты могут использовать FixIt output для улучшения своих промптов (через public test accounts).
+- **Mitigation:** watermark-like response patterns (трудно копировать стиль + структуру 3-mode output); ключевая IP — data pipeline и regional pricing logic, не промпт сам по себе.
+
 ### 10.10 Insurance partner risk
 
 - Some home warranty/insurance companies видят FixIt как competing advisor → могут препятствовать partnerships (e.g., American Home Shield, Select Home Warranty).
@@ -1017,3 +1085,14 @@ Water heater replace, appliance repair (brand-specific), HVAC repair, roof repla
 - [AIMultiple — Image Recognition Tools](https://aimultiple.com/image-recognition-software)
 - [Nyckel — Image Recognition APIs](https://www.nyckel.com/blog/8-best-image-recognition-apis/)
 - [DDIY — AI Image Detection 2026](https://ddiy.co/ai-image-detection-tools/)
+
+### Конкурентная техническая валидация (май 2026)
+
+- [9to5Mac — iFixit launches FixBot](https://9to5mac.com/2025/12/09/ifixit-launches-fixbot-ai-repair-helper-with-free-and-paid-versions/)
+- [iFixit — Introducing FixBot](https://www.ifixit.com/News/114700/introducing-fixbot)
+- [App Store — SnapFix AI Home Repair Help](https://apps.apple.com/us/app/snapfix-ai-home-repair-help/id6758781226)
+- [App Store — Fix AI — Repair & Home Design](https://apps.apple.com/us/app/fix-ai-repair-home-design/id6746446379)
+- [App Store — YouFixedIt AI Home Repair](https://apps.apple.com/ca/app/youfixedit-ai-home-repair/id6757339556)
+- [Toolbox.repair — Best Home Repair Apps 2026](https://toolbox.repair/best-home-repair-apps)
+- [HomeMD.ai — Best AI Home Repair Tools 2026](https://homemd.ai/guides/best-ai-home-repair-tools-2026-comparison)
+- [Marketing Code — Phones Diagnose Home Repairs May 2026](https://www.marketingcode.com/visual-intelligence-mobile-ai-contractors-photo-funnel-may-2026/)

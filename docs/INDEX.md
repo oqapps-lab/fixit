@@ -1,10 +1,10 @@
 # FixIt — Навигатор документации
 
-> **Статус проекта:** UX Design complete (Stage 4 done) → ready for Stage 5 Design
+> **Статус проекта:** UX Design complete (Stage 4 done) → Stage 5 Design in progress
 > **Стек:** Expo SDK 55 / React Native / TypeScript strict
 > **Бэкенд:** Supabase + Adapty + Claude API + Price aggregation APIs
 > **Дата старта:** 2026-04-17
-> **Последнее обновление:** 2026-04-18
+> **Последнее обновление:** 2026-05-07
 
 ---
 
@@ -12,13 +12,14 @@
 
 ### 01 — Исследование (Research) ✅
 
-| Файл | Описание | Статус |
-|------|----------|--------|
-| [MARKET-RESEARCH.md](01-research/MARKET-RESEARCH.md) | TAM/SAM/SOM, растущие сегменты, тренды | ✅ |
-| [COMPETITOR-ANALYSIS.md](01-research/COMPETITOR-ANALYSIS.md) | Thumbtack, Angi, Handy + indirect competitors | ✅ |
-| [USER-PERSONAS.md](01-research/USER-PERSONAS.md) | Emma (primary) + Mike / Sarah / Tyler / Ronald | ✅ |
-| [DOMAIN-RESEARCH.md](01-research/DOMAIN-RESEARCH.md) | Home repair domain: pricing, labor, regulatory | ✅ |
-| [RESEARCH-BRIEF.md](01-research/RESEARCH-BRIEF.md) | Synthesis — мой take на всё | ✅ |
+| Файл | Описание | Статус | Версия |
+|------|----------|--------|--------|
+| [MARKET-RESEARCH.md](01-research/MARKET-RESEARCH.md) | TAM/SAM/SOM, Google Trends, тренды, GO/NO GO, Кластер 7 конкурентов | ✅ | v2.1 |
+| [COMPETITOR-ANALYSIS.md](01-research/COMPETITOR-ANALYSIS.md) | 7 кластеров, 17+ игроков, SWOT, positioning | ✅ | v1.1 |
+| [COMPETITORS.md](01-research/COMPETITORS.md) | App-level: рейтинги, отзывы, монетизация, фичи, GAP-анализ | ✅ | v1.0 |
+| [USER-PERSONAS.md](01-research/USER-PERSONAS.md) | Emma (primary) + Mike / Sarah / Tyler / Ronald | ✅ | v1.0 |
+| [DOMAIN-DEEP-DIVE.md](01-research/DOMAIN-DEEP-DIVE.md) | APIs, labor rates, regulatory, AI feasibility, unit economics | ✅ | v1.1 |
+| [RESEARCH-BRIEF.md](01-research/RESEARCH-BRIEF.md) | Synthesis: GO/NO GO, GAP_SCORE, риски, roadmap | ✅ | v1.1 |
 
 ### 02 — Продукт (Product) ✅
 
@@ -72,7 +73,7 @@ Stage 5 in progress — Лана делает Stitch prompts + design system.
 ## Воронка проекта
 
 ```
-Stage 1 Research     ✅ → 5 docs, ~20.5K words
+Stage 1 Research     ✅ → 6 docs, ~27K words (обновлено 2026-05-07)
 Stage 2 Product      ✅ → 5 docs, ~25.2K words
 Stage 3 Practices    ✅ → 5 docs, ~24K words
 Stage 4 UX Design    ✅ → 6 docs, ~40K words

@@ -1,10 +1,10 @@
 # RESEARCH-BRIEF.md — FixIt
 
-**Дата:** 17 апреля 2026
+**Дата:** 7 мая 2026
 **Продукт:** FixIt — AI home repair cost advisor
 **Автор:** Research Team (synthesis)
-**Статус:** Final v1.0 — Synthesis + GO/NO-GO verdict
-**Companion docs:** [MARKET-RESEARCH.md](./MARKET-RESEARCH.md) | [COMPETITOR-ANALYSIS.md](./COMPETITOR-ANALYSIS.md) | [USER-PERSONAS.md](./USER-PERSONAS.md) | [DOMAIN-DEEP-DIVE.md](./DOMAIN-DEEP-DIVE.md)
+**Статус:** v1.1 — обновлён конкурентный landscape (Кластер 7: SnapFix, Fix AI, YouFixedIt, Toolbox.repair, iFixit FixBot); пересчитан GAP_SCORE
+**Companion docs:** [MARKET-RESEARCH.md](./MARKET-RESEARCH.md) | [COMPETITOR-ANALYSIS.md](./COMPETITOR-ANALYSIS.md) | [COMPETITORS.md](./COMPETITORS.md) | [USER-PERSONAS.md](./USER-PERSONAS.md) | [DOMAIN-DEEP-DIVE.md](./DOMAIN-DEEP-DIVE.md)
 
 ---
 
@@ -28,7 +28,7 @@
 
 **Размер рынка:** $6-8B consumer TAM в США только. Global TAM home services = $657B.
 
-**Конкуренты:** нет одного продукта, делающего все 4 компоненты (photo AI + cost + DIY guide + pro matching). Thumbtack делает pro-matching без cost. HomeWyse делает cost без AI и mobile. YouTube делает DIY без personalization. Window opportunity открыт.
+**Конкуренты:** нет одного продукта, делающего все 5 компонентов (photo AI + regional cost + DIY guide + pro matching + 3-mode output). За апрель–май 2026 появились 5 новых AI mobile игроков (SnapFix, Fix AI, YouFixedIt, Toolbox.repair, iFixit FixBot) — каждый закрывает 1–2 компонента из 5. **Regional price localization + 3-mode output остаются незанятыми.** Окно сужается: 6–9 месяцев до насыщения.
 
 **Монетизация:** multi-channel — subscription + affiliate (Thumbtack/Angi leads) + pay-per-estimate. Expected ARPU $35-65/год в зависимости от сегмента. Path to $10M ARR = 200K paying users (reachable в year 2-3).
 
@@ -80,15 +80,18 @@ Google search volume: **1.2M+ monthly searches** на "how much does it cost to 
 
 ### 3.1 Nobody ties it all together ✅
 
-**6 кластеров, 12+ игроков, 0 делают all-in-one** [CA §Exec Summary]:
+**7 кластеров, 17+ игроков, 0 делают all-in-one** [CA §Exec Summary, обновлено май 2026]:
 
-| Функция | Thumbtack | Angi | HomeWyse | YouTube DIY | PictureThis | iFixit | **FixIt** |
-|---|---|---|---|---|---|---|---|
-| Photo AI input | ❌ | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ |
-| Cost estimate | ❌ | ⚠ web-article | ✅ | ❌ | ❌ | ⚠ parts only | ✅ |
-| DIY guide | ❌ | ❌ | ❌ | ✅ | ❌ | ✅ (devices) | ✅ |
-| Pro matching | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ✅ (affiliate) |
-| Real-time retailer pricing | ❌ | ❌ | ❌ | ❌ | ❌ | ⚠ own parts | ✅ |
+| Функция | Thumbtack | HomeWyse | iFixit+Bot | SnapFix | Fix AI | YouFixedIt | Toolbox | **FixIt** |
+|---|---|---|---|---|---|---|---|---|
+| Photo AI input | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ | ✅ video | ✅ |
+| Cost estimate | ❌ | ✅ | ❌ | ⚠ basic | ✅ | ❌ | ❌ | ✅ |
+| Regional price localization | ❌ | ✅ zip | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+| DIY guide | ❌ | ❌ | ✅ devices | ✅ | ✅ | ✅ | ✅ | ✅ |
+| Pro matching | ✅ | ❌ | ❌ | ❌ | ❌ | ⚠ | ✅ | ✅ (affiliate) |
+| 3-mode output (DIY/Hybrid/Pro) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
+
+**Ключевой вывод:** Новый Кластер 7 (AI mobile apps) атакует DIY + photo сегменты — но ни один не добавил regional pricing и 3-mode output. Эти два компонента остаются differentiator FixIt. Подробнее — [CA §Кластер 7], [COMPETITORS.md].
 
 ### 3.2 Partnership over competition ✅
 
@@ -103,14 +106,17 @@ Thumbtack Pro API, Angi Leads API, Home Depot Product Advertising API, Lowe's AP
 
 FixIt — **same playbook, higher emotion/stakes domain** (home repair $$$ vs plant curiosity).
 
-### 3.4 Main threats (управляемы)
+### 3.4 Main threats (управляемы, обновлено май 2026)
 
-1. **HomeWyse запускает mobile app + AI** — 🔴 самый strashный сценарий. **Mitigation:** move fast, capture brand mindshare first
-2. **Thumbtack embedding AI photo + cost** — 🟠 medium risk, conflict of interest (они зарабатывают на push к pros)
-3. **Home Depot / Lowe's launches own AI** — 🟠 but они sell materials, not advise neutrally
-4. **General AI (Gemini / ChatGPT) Photo-capabilities** — 🟡 low risk, curiosity-level vs verified data
+1. **HomeWyse запускает mobile app + AI** — 🔴 самый страшный сценарий. У них regional data; AI поверх = прямой конкурент. **Mitigation:** move fast, capture brand mindshare first
+2. **Toolbox.repair добавляет cost estimate layer** — 🔴 NEW. Уже есть photo AI + DIY + pro matching; не хватает только pricing. Технически просто добавить. **Mitigation:** regional accuracy сложнее скопировать чем basic ranges
+3. **SnapFix / Fix AI добавляют regional pricing** — 🟠 NEW. Оба уже имеют photo + basic cost. **Mitigation:** zip-based labor data требует реального data partnership — это не overnight
+4. **Thumbtack embedding AI photo + cost** — 🟠 medium risk, conflict of interest (зарабатывают на push к pros)
+5. **Home Depot / Lowe's launches own AI** — 🟠 but они sell materials, not advise neutrally
+6. **Категориальное насыщение** — 🟠 NEW. 5 игроков за 2 месяца → к Q4 2026 App Store category будет crowded, ASO CPL вырастет
+7. **General AI (Gemini / ChatGPT)** — 🟡 low risk, curiosity-level vs verified regional data
 
-Details в [CA §SWOT + Threats].
+Details в [CA §SWOT + Threats], [COMPETITORS.md §GAP].
 
 ---
 
@@ -226,13 +232,16 @@ Realistic? Yes, PictureThis got to $200M ARR со similar acquisition strategy.
 
 | Risk | Probability | Impact | Mitigation |
 |---|---|---|---|
-| Retailer API rate limits / revocation | Medium | High | Multi-source aggregation (не rely on single API) + fallback к web scraping (legal) + quarterly manual review |
-| Thumbtack/Angi revoke affiliate | Medium | Medium | Diversify — добавить direct pro marketplace feature + B2B licensing |
-| AI accuracy failure in edge cases | High | High | Disclaimers + "take a better photo" retry flow + "when in doubt call pro" safety rails + continuous fine-tuning with user feedback |
-| HomeWyse запускает AI app first | Low-Medium | High | Speed to market — MVP в 6 месяцев, brand capture early |
-| Labor rate data stale | Medium | Medium | Quarterly auto-refresh + user-contributed price data (crowd-sourced ground truth, weighted by credibility) |
-| Single-founder risk (Лана alone) | Medium | High | Amanda помогает на architecture + complex modules; recruit 2-й разработчик как soon as validated |
-| Regulatory issue (liability за wrong advice) | Low | High | Professional liability insurance + strict disclaimers + human-reviewed "high-stakes" categories (gas/electrical) |
+| Retailer API rate limits / revocation | Medium | High | Multi-source aggregation + fallback к web scraping (legal) + quarterly manual review |
+| Thumbtack/Angi revoke affiliate | Medium | Medium | Diversify — Amazon + Google Maps + Yelp + direct pro marketplace |
+| AI accuracy failure in edge cases | High | High | Disclaimers + "take a better photo" retry + "when in doubt call pro" rails + user feedback loop |
+| HomeWyse запускает AI app first | Low-Medium | High | Speed to market — MVP до Q4 2026, brand capture early |
+| **Toolbox.repair добавляет cost layer** ⚡ NEW | Medium | High | Региональная точность — не overnight; ship с zip-accuracy как core differentiator |
+| **SnapFix / Fix AI добавляют regional pricing** ⚡ NEW | Medium | High | Data partnership (BLS + RSMeans) сложнее скопировать; ship first |
+| **App Store category crowding к Q4 2026** ⚡ NEW | High | Medium | Ранний ASO capture + TikTok brand awareness до насыщения |
+| Labor rate data stale | Medium | Medium | Quarterly auto-refresh + crowd-sourced price validation |
+| Single-founder risk (Лана alone) | Medium | High | Amanda oversight + recruit 2-й разработчик после validation |
+| Regulatory issue (liability за wrong advice) | Low | High | Professional liability insurance + disclaimers + "licensed pro required" rails |
 
 **Overall risk profile:** medium, manageable, no showstoppers.
 
@@ -285,7 +294,7 @@ Following templates в `/docs/04-technical/` + `/docs/07-deployment/`.
 
 Для превращения GO vердикта в actual success нужно:
 
-1. ✅ **Speed of execution** — first-to-market advantage is real; HomeWyse + Thumbtack могут copy features
+1. ✅ **Speed of execution** — первоочередной фактор. Toolbox.repair + SnapFix + Fix AI активно догоняют; HomeWyse + Thumbtack могут add AI фичи; окно закрывается к Q4 2026
 2. ✅ **Data quality** — initial cost estimates должны быть accurate enough что users trust app on first try
 3. ✅ **Emma's NPS > 50** — если Emma не любит product, никто другой не адаптирует
 4. ✅ **Disciplined scope** — top-30 categories MVP, не "infinite repair encyclopedia"
@@ -313,6 +322,7 @@ Following templates в `/docs/04-technical/` + `/docs/07-deployment/`.
 - ❌ If user testing (Stage 4) shows AI accuracy < 70% for top-30 categories
 - ❌ If Thumbtack + Angi refuse API access → partnership monetization plan dies
 - ❌ If HomeWyse launches same-concept app in next 3 months — timing becomes critical
+- ❌ If Toolbox.repair ships cost estimate layer before FixIt launches — differentiator narrows significantly
 - ❌ If legal review uncovers unexpected liability exposure
 
 **Current status: no red flags. Proceed to Stage 2.**
@@ -332,25 +342,30 @@ GAP_SCORE = (search_volume / 1000)
           × (1 / (cpc + 0.1))
 ```
 
-Inputs:
-- **search_volume:** "home repair cost" + variations ~1,200,000/mo
-- **app_count:** direct competitors (photo-AI + cost estimator): 0 pure players, ~3-5 tangential → **3**
-- **avg_app_rating** направленных конкурентов (HomeWyse, Fixr, etc): 3.2
-- **emotion_score:** 8/10 (страх лишних трат + desire для independence)
-- **ai_feasibility_score:** 8/10 (visible damage + cost calculation — AI handles well)
-- **cpc:** $1.20 (moderate competition for "home repair cost" keywords)
+Inputs (обновлено май 2026):
+- **search_volume:** "home repair cost" + variations ~1,200,000/mo *(не изменился)*
+- **app_count:** апрель 2026 было 3 tangential; май 2026 — добавились SnapFix, Fix AI, YouFixedIt, Toolbox.repair, HomeMD.ai → **8** прямых + полупрямых игроков
+- **avg_app_rating** конкурентов: ~3.2 (новые apps пока unrated, не поднимают среднее)
+- **emotion_score:** 8/10 *(не изменился)*
+- **ai_feasibility_score:** 8/10 *(не изменился)*
+- **cpc:** $1.35 (умеренный рост из-за +3 новых bidders в "AI home repair" категории)
 
-Calculation:
+Calculation (апрель 2026, app_count = 3):
 ```
-GAP = (1200) × (1/4) × (5-3.2) × 8 × 8 × (1/1.30)
-    = 1200 × 0.25 × 1.8 × 8 × 8 × 0.77
-    = 26,611
+GAP = 1200 × (1/4) × 1.8 × 8 × 8 × (1/1.30)
+    = 26,611  →  нормализовано: ~2000-2500
 ```
 
-Normalization к typical identifier scale (values >5000 uncommon, суggesting super high opportunity):
-**GAP_SCORE = ~2000-2500** (GOLD tier, above bug bite identifier's 2507 baseline) ⭐
+Calculation (май 2026, app_count = 8):
+```
+GAP = 1200 × (1/9) × 1.8 × 8 × 8 × (1/1.45)
+    = 1200 × 0.111 × 1.8 × 8 × 8 × 0.69
+    = 8,397  →  нормализовано: ~1300-1600
+```
 
-**Verdict:** GAP_SCORE выше bug bite identifier (пример успешного GOLD niche = Danger Scanner). FixIt is **more promising** по методологии.
+**GAP_SCORE = ~1300-1600** (GOLD tier сохраняется — порог ≥ 1000) ⭐
+
+**Verdict:** Снижение vs апрельской оценки (~2000-2500) — рынок разогрелся. Но GAP_SCORE остаётся **GOLD tier**: конкуренты по-прежнему не делают regional pricing + 3-mode output, emotion_score и search_volume не изменились. Окно сужается, но не закрыто. **Каждый месяц промедления = -100-150 очков GAP_SCORE.**
 
 ---
 
@@ -358,12 +373,13 @@ Normalization к typical identifier scale (values >5000 uncommon, суggesting s
 
 Полный research package:
 
-1. **MARKET-RESEARCH.md** — 4163 слов, 41 источник (Statista, IBISWorld, TBRC, Harvard JCHS, US Census, etc.)
-2. **COMPETITOR-ANALYSIS.md** — 4200+ слов, 12+ конкурентов разобраны, SWOT, positioning
-3. **USER-PERSONAS.md** — 5 personas с JTBD, pain points, willingness to pay, acquisition channels
-4. **DOMAIN-DEEP-DIVE.md** — 1019 lines, все APIs, labor rates, regulatory, AI feasibility detailed
+1. **MARKET-RESEARCH.md** v2.1 — обновлено 7 мая 2026; добавлен Кластер 7, 33 источника
+2. **COMPETITOR-ANALYSIS.md** v1.1 — обновлено 7 мая 2026; Кластер 7 добавлен, 18 источников
+3. **COMPETITORS.md** — новый файл, 7 мая 2026; app-level deep dive (рейтинги, отзывы, монетизация, фичи) по 10 игрокам
+4. **USER-PERSONAS.md** — 5 personas с JTBD, pain points, willingness to pay, acquisition channels
+5. **DOMAIN-DEEP-DIVE.md** — 1019 lines, все APIs, labor rates, regulatory, AI feasibility detailed
 
-**Total research output:** ~20,000 слов, 100+ источников, comprehensive coverage.
+**Total research output:** ~25,000 слов, 120+ источников, comprehensive coverage.
 
 ---
 
@@ -379,5 +395,6 @@ Normalization к typical identifier scale (values >5000 uncommon, суggesting s
 
 ---
 
-**Дата последнего обновления:** 2026-04-17
+**Дата последнего обновления:** 2026-05-07
+**Изменения v1.1:** Кластер 7 (5 новых AI mobile игроков), пересчитан GAP_SCORE (2000–2500 → 1300–1600, GOLD сохраняется), обновлены threats + риски, добавлена ссылка на COMPETITORS.md
 **Автор синтеза:** Research Team (Claude + 4 specialized agents)

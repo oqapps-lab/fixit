@@ -81,7 +81,7 @@ Stage 5 in progress — Лана делает Stitch prompts + design system.
 ## Воронка проекта
 
 ```
-Stage 1 Research     ✅ → 6 docs, ~27K words (обновлено 2026-05-07)
+Stage 1 Research     ✅ → 8 docs, ~50K words (обновлено 2026-05-07)
 Stage 2 Product      ✅ → 5 docs, ~25.2K words
 Stage 3 Practices    ✅ → 5 docs, ~24K words
 Stage 4 UX Design    ✅ → 6 docs, ~40K words

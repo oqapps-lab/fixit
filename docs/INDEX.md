@@ -54,6 +54,12 @@
 | [FUNNEL.md](04-ux/FUNNEL.md) | 10K cohort projection + A/B roadmap | ✅ |
 | [UX-BRIEF.md](04-ux/UX-BRIEF.md) | Synthesis — decisions + Stage 5 handoff | ✅ |
 
+### Корневые документы
+
+| Файл | Описание | Статус |
+|------|----------|--------|
+| [DISCLAIMERS.md](DISCLAIMERS.md) | Готовые тексты D-1–D-4, карта размещения, правила реализации | ✅ |
+
 ### 05 — База данных (Database) ⏳
 
 Будет заполнено перед Stage 6 Development. DB schema, migrations, RLS policies.

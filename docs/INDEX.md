@@ -20,6 +20,7 @@
 | [USER-PERSONAS.md](01-research/USER-PERSONAS.md) | Emma (primary) + Marcus / Tyler — 3 контрастных персоны с Reddit-цитатами | ✅ | v2.0 |
 | [INTERVIEW-GUIDE-EMMA.md](01-research/INTERVIEW-GUIDE-EMMA.md) | 5-интервью guide: 6 гипотез, скрипт, шаблон заметок, decision rules | ✅ | v1.0 |
 | [DOMAIN-DEEP-DIVE.md](01-research/DOMAIN-DEEP-DIVE.md) | APIs, labor rates, regulatory, AI feasibility, unit economics | ✅ | v1.1 |
+| [DOMAIN-RESEARCH.md](01-research/DOMAIN-RESEARCH.md) | Глоссарий 20 терминов, 5 academic sources, regulatory/disclaimers, контентная стратегия | ✅ | v1.0 |
 | [RESEARCH-BRIEF.md](01-research/RESEARCH-BRIEF.md) | Synthesis: GO/NO GO, GAP_SCORE, риски, roadmap | ✅ | v1.1 |
 
 ### 02 — Продукт (Product) ✅

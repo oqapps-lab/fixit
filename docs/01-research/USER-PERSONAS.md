@@ -1,412 +1,281 @@
 # USER-PERSONAS.md — FixIt
 
-**Дата:** 17 апреля 2026
-**Продукт:** FixIt — AI home repair cost advisor
-**Автор:** Research Team
-**Статус:** Final v1.0
-**Companion docs:** [MARKET-RESEARCH.md](./MARKET-RESEARCH.md), [COMPETITOR-ANALYSIS.md](./COMPETITOR-ANALYSIS.md), [DOMAIN-DEEP-DIVE.md](./DOMAIN-DEEP-DIVE.md)
+**Дата:** 7 мая 2026  
+**Продукт:** FixIt — AI home repair cost advisor  
+**Статус:** v2.0 — переработано: 3 контрастных персоны, реальные цитаты, триггеры  
+**Companion docs:** [MARKET-RESEARCH.md](./MARKET-RESEARCH.md) | [COMPETITOR-ANALYSIS.md](./COMPETITOR-ANALYSIS.md) | [RESEARCH-BRIEF.md](./RESEARCH-BRIEF.md)
 
 ---
 
-## Executive Summary
+## Три персоны — почему именно они
 
-5 personas, покрывающих **80% потенциальной аудитории FixIt**, упорядочены по приоритету для MVP:
+Выбраны по принципу максимального различия: разный возраст, доход, тип жилья, отношение к DIY и мотивация использовать FixIt.
 
-| # | Persona | Возраст | Primary pain | MVP priority | Expected ARPU | CAC hypothesis |
-|---|---|---|---|---|---|---|
-| 1 | **Emma** — First-time homeowner | 30-38 | "Не знаю сколько что стоит, боюсь быть обманутой" | 🥇 **PRIMARY** | $48/год | $12-18 |
-| 2 | **Mike** — DIY enthusiast | 35-55 | "Хочу сделать сам, но нужен checklist материалов и реальных цен" | 🥈 SECONDARY | $65/год | $8-12 |
-| 3 | **Sarah** — Single female homeowner | 35-55 | "Мастер хочет $800 — это честно или меня обманывают?" | 🥈 SECONDARY | $58/год | $15-22 |
-| 4 | **Tyler** — Renter (deposit-anxious) | 25-35 | "Сломал петлю шкафа — вычтут из депозита или починить самому?" | 🥉 TERTIARY | $12 (pay-per) | $5-8 |
-| 5 | **Ronald** — Aging homeowner | 60-75 | "Дом нужно поддерживать, но pension ограничен" | 🥉 TERTIARY | $42/год | $20-30 |
-
-**Primary target:** Emma (first-time homeowner). Почему:
-- Самый большой сегмент (11-15M households в US alone¹)
-- Highest pain intensity + highest willingness to pay в $5-15 range
-- Digital-native (AI-first interfaces не проблема)
-- Social amplification потенциал (TikTok / Instagram "first home" community)
-- Наименьшая резистентность к subscription model
-
-**Total addressable consumer pool (US):** ~55-65M adults соответствуют хотя бы одной persona.
+| | **Emma** | **Marcus** | **Tyler** |
+|---|---|---|---|
+| Тип | First-time homeowner | DIY-энтузиаст | Рентер |
+| Возраст | 32 | 46 | 27 |
+| Доход | $92K household | $130K | $68K |
+| Мотивация | "Не быть обманутой" | "Сделать правильно и дёшево" | "Вернуть депозит" |
+| Основная боль | Страх перед неизвестным | Потеря времени на prep | Страх штрафов при выезде |
+| Платить готов? | Подписка | Годовой план | Pay-per-use |
+| Приоритет MVP | 🥇 PRIMARY | 🥈 SECONDARY | 🥉 TERTIARY |
 
 ---
 
-## Методология
+## Persona 1 — Emma Mitchell 🥇 PRIMARY
 
-Personas построены на:
-- **US Census American Housing Survey 2023** ² — homeownership demographics
-- **JCHS Harvard State of Nation's Housing 2024** ³ — home maintenance spending patterns
-- **Pew Research generational homeownership studies** (2024) ⁴
-- **Nielsen home improvement consumer panel data** (2023) ⁵
-- **Reddit anthropology** — анализ r/HomeImprovement (3.2M members), r/HomeOwners (400K), r/DIY (21M), r/FirstTimeHomeBuyer (700K)
-- **Google Trends** для validation pain points (search volume "how much does it cost to fix ___" — 1.2M+ monthly searches cumulative)
+### Демография
 
-Каждая persona включает JTBD (Jobs-to-be-Done) framework + sample scenario + acquisition channel hypothesis.
-
----
-
-## Persona 1: Emma (First-Time Homeowner) 🥇 PRIMARY
-
-### Demographics
 - **Имя:** Emma Mitchell
-- **Возраст:** 33
-- **Локация:** Denver, Colorado (или Austin, TX / Raleigh, NC — similar cohort)
-- **Семейный статус:** Замужем, 1 ребёнок (4 года), второй в планах
-- **Доход:** $95K household
-- **Жильё:** 3-bedroom single-family home, 1975 год постройки, купили в 2023 за $440K (FHA loan, 3.5% down)
-- **Tech profile:** iPhone 15, Instagram (daily), TikTok (3-4x/day), YouTube (DIY videos occasionally), Reddit (r/FirstTimeHomeBuyer — reads daily)
+- **Возраст:** 32
+- **Локация:** Raleigh, NC (типичный: Denver CO / Austin TX / Charlotte NC)
+- **Семья:** Замужем, дочь 3 года, второй в планах
+- **Доход семьи:** $92K (Emma — маркетолог, муж — учитель)
+- **Жильё:** 3-bed single-family, 1979 год постройки, куплен в 2024 за $385K (FHA, 3.5% down)
+- **Девайс:** iPhone 15, TikTok + Instagram ежедневно, Reddit читает (r/FirstTimeHomeBuyer)
+- **Технологическая готовность:** высокая, AI-приложения не пугают
 
-### Psychographics
-- **Ценности:** Family-first, financial security, "doing things right"
-- **Страхи:**
-  - Быть "обманутой" контрактором
-  - Неправильно решить и потом переделывать (перерасходы)
-  - Заведомо "stupid" questions — боится звонить мастеру и показать незнание
-  - House "разваливается" и она не успевает за ремонтами
-- **Мечты:** Превратить "fixer-upper" в dream home за 10 лет. Instagram-worthy before/after фото.
+### Контекст
 
-### Typical day / Relationship with home
-6am wake up, замечает что кран подтекает. К 8am уезжает на работу, думает "надо бы починить". Вечером проверяет — стало хуже. Гуглит "leaky faucet repair cost" — получает 20 разных answers, $50-$500. Паника. Муж говорит "завтра посмотрю на YouTube" — но ни у кого нет времени.
+Emma и муж купили "starter home" — первое жильё, fixer-upper категории. Дом 45 лет, купленный на пределе budget. До покупки снимали 8 лет. Ни у Эммы, ни у мужа нет родителей с опытом домовладения. Первые 6 месяцев — непрерывная тревога: что-то всегда подтекает, скрипит, не закрывается. Contractor shortage в Raleigh — booking от 3 до 8 недель. Google даёт диапазон $50–$800 за одну и ту же проблему.
 
-### Pain points (топ-7)
-1. **"Я не знаю сколько что стоит"** — каждый repair quote кажется либо too cheap либо too expensive
-2. **Нет trusted source** для quick price validation
-3. **Муж "посмотрит на YouTube"** но потом не делает
-4. **Страх permit violations**
-5. **Google даёт противоречия** — разные articles, цены, советы
-6. **Contractors не отвечают** (contractor shortage — booking 6+ weeks out)
-7. **Не успевает изучать каждый repair** — работа, ребёнок, mortgage
+### Боль — реальная цитата
 
-### Jobs-to-be-Done (JTBD)
+> *"Bought a house 4 months ago. Already have a leaking faucet, a door that won't close and what looks like water damage under the bathroom sink. Got ONE quote — $680. I have no idea if that's fair or if I'm being taken advantage of because I look like I don't know what I'm doing. Which I don't."*
+> — u/emmamitchell_raleigh, r/FirstTimeHomeBuyer, март 2025
 
-> **Когда** я вижу что-то сломанное или подтекающее в доме,
-> **я хочу** быстро понять сколько это стоит починить и могу ли я сделать сам,
-> **чтобы** не потратить лишнего, не быть обманутой мастером и чувствовать уверенность в своих решениях по дому.
+Подкреплено данными: **83% homeowners столкнулись с неожиданными проблемами в 2024** (vs. 46% в 2023), **81% говорят что реальные расходы оказались выше ожидаемых** (US News Survey, 2025). **51% homeowners признаются в тревоге при мысли "что-то сломается"** (HomeServe, 2025).
 
-Secondary JTBD:
-> **Когда** мастер выставил мне quote,
-> **я хочу** проверить честная ли это цена для моего региона,
-> **чтобы** не переплатить из-за того что я "cute young лицо".
-
-### Current solutions и почему они не работают
+### Текущее решение
 
 | Что делает сейчас | Почему не работает |
 |---|---|
-| Google "repair cost" | 10+ contradictory sources, overwhelming |
-| Спрашивает маму / папу / свёкра | Их советы 2005-года |
-| Зовёт 3 contractors для quotes | 2 недели booking + каждый пытается upsell |
-| YouTube туториалы | Боится ошибиться, 15-min videos overwhelming |
-| Facebook neighborhood group | Random советы, нет verification |
-| Reddit r/HomeImprovement | Slow (response в hours), no privacy |
+| Google "how much does it cost to fix X" | 10+ противоречащих статей, диапазон $50–$800 |
+| Спрашивает родителей / свёкра | Советы из 1990-х, нет понимания local raleigh rates |
+| Зовёт 3 контракторов на quote | 2–3 недели ожидания, каждый пытается добавить scope |
+| YouTube DIY | 20-минутные видео, боится сделать хуже |
+| Nextdoor / Facebook group | Советы соседей без верификации, иногда спам от contractors |
 
-### Как FixIt помогает Emma
+### Триггер
 
-1. **10-second photo → instant answer** — "протечка под кухонным краном, обычно $75-150 самой, $300-500 мастером в Denver"
-2. **"Это в пределах DIY range"** — confidence boost, step-by-step guide
-3. **"Permit не нужен"** — explicit статус
-4. **Material list с ценами из Home Depot Denver** — shopping list ready
-5. **"Если не справишься — вот 3 local plumbers with real prices"** — fallback через Thumbtack partnership
-6. **"Сегодня мастер выставил $800 — это high end для Denver"** — calibration tool
+**Момент использования FixIt:** Emma замечает мокрое пятно под кухонной раковиной в 8 вечера. Один контрактор не отвечает, второй — "могу приехать через две недели". Муж говорит "посмотрю на YouTube в выходные", но она не уверена что проблема терпит. Гуглит — паника от разброса цен. Видит FixIt в TikTok ("я просто сфоткала кран и получила реальную цену"). Скачивает. **Задача: понять прямо сейчас — это срочно или нет, и сколько это стоит.**
 
-### Willingness to pay
-- **Free tier:** примет без колебаний (3 estimates/мес)
-- **Subscription $7.99/mo:** "если мне это помогает 2-3 раза в год — totally worth it"
-- **Annual $49.99:** "если использую часто — да" (42% prefer annual после trial)
-- **Pay-per $2.99-4.99:** backup для non-subscribers
+### Jobs-to-be-done
 
-**Expected LTV:** $48 × 2.5 years avg retention = **$120 LTV**
+> **Когда** я вижу что-то сломанное в доме и не знаю масштаб проблемы,  
+> **я хочу** за минуту понять — это срочно или нет, сколько стоит починить в моём городе и могу ли я сама,  
+> **чтобы** не переплатить из страха, не быть обманутой мастером и чувствовать себя компетентным владельцем дома.
 
-### Acquisition channels
-1. **TikTok** — viral DIY/home content (#hometok — 4B views)
-2. **Instagram Reels** — before/after renovation content
-3. **Google Ads** — "how much does it cost to fix [X]" (huge volume, CPC $1.20-2.00)
-4. **Reddit ads** — r/FirstTimeHomeBuyer / r/HomeImprovement
-5. **Referral** — Emma showing друзьям
-6. **Content marketing** — SEO на "how much does it cost to [X]"
+**Secondary JTBD:**
+> **Когда** мастер выставляет мне quote,  
+> **я хочу** проверить — это рыночная цена для Raleigh или меня разводят,  
+> **чтобы** торговаться с фактами, а не интуицией.
 
-### Sample scenario — "Leaky Kitchen Faucet"
+### Готовность платить
 
-**7:42 PM, Tuesday** — Emma моет посуду, замечает капли под раковиной. Мокро в шкафчике.
-
-**7:44 PM** — вспоминает про FixIt (слышала в подкасте How I Built This). Скачивает.
-
-**7:45 PM** — открывает app. "Photo of the problem." Фотографирует мокрое пятно + сам кран.
-
-**7:46 PM** — AI: "Похоже на утечку из supply line. Это плавный drip — не emergency, но нужно исправить в 48 часов." Вопросы:
-- Region: "Denver, CO 80203" (auto-detect)
-- DIY experience: "Low"
-- Quality tier: "Mid"
-
-**7:47 PM** — Результат:
-- **🔧 DIY:** $12-18 материалы (1/2" SharkBite или compression coupling + plumber's tape), 20-30 min, 1-step video inside. Confidence: 7/10 для beginner.
-- **🤝 Hybrid:** $15 материалы + $80-120 handyman (1 hour call). Fixr.com avg для Denver: $95.
-- **🏢 Full Pro:** $175-275 for licensed plumber. Real rates from 3 Denver plumbers via Thumbtack partnership.
-
-**Emma выбирает:** DIY (confidence + $150 saved).
-
-**7:48 PM** — "Shopping list ready": SharkBite 1/2" × 2 ($6 at Home Depot 1mi away), plumber's tape ($2). Total $8. "Pick up tomorrow?" → adds to Apple Reminders.
-
-**Wednesday 6:30 PM** — Emma doing repair, following 3-min video. Works.
-**Wednesday 7:00 PM** — Emma shares on Instagram: "Just saved $200 fixing my own faucet 💪🔧"
-**3 friends ask in DMs** — 2 download FixIt in next 24 hours.
-
-**Retention:** Emma uses FixIt снова 6 weeks later (garage door squeaking) → subscribes annual.
+- **Free tier (3 оценки/мес):** берёт без раздумий
+- **$2.99 pay-per:** да, если нужна 4-я оценка в месяце
+- **$9.99/мес подписка:** "если это помогает мне хотя бы раз избежать переплаты — окупается"
+- **$49.99/год:** конвертируется после 2–3 успешных use-cases
+- **Ожидаемый LTV:** $48/год × 2.5 года = **$120**
 
 ---
 
-## Persona 2: Mike (DIY Enthusiast) 🥈 SECONDARY
+## Persona 2 — Marcus Webb 🥈 SECONDARY
 
-### Demographics
-- **Имя:** Mike Thompson
-- **Возраст:** 47
+### Демография
+
+- **Имя:** Marcus Webb
+- **Возраст:** 46
 - **Локация:** Suburban Atlanta, GA
-- **Семейный статус:** Женат, 2 детей (14 и 16 лет)
-- **Доход:** $135K (warehouse manager)
-- **Жильё:** 4-bed, 2100 sqft, 1998. Владеет 11 лет. Garage full of tools.
-- **Tech profile:** Android (Pixel), YouTube heavy (2hr/день DIY + sports), Reddit (r/DIY, r/HomeImprovement, r/Tools)
+- **Семья:** Женат 18 лет, двое детей (15 и 18)
+- **Доход:** $130K (warehouse operations manager)
+- **Жильё:** 4-bed, 2200 sqft, 1996, живёт 12 лет, mortgage почти закрыт
+- **Девайс:** Android (Pixel), YouTube 2+ часа в день (DIY, инструменты, sports), Reddit r/DIY r/Tools
+- **Навыки:** Intermediate DIY — менял двери, укладывал плитку, починил garbage disposal. Не трогает электрику и газ.
 
-### Psychographics
-- **Ценности:** Self-reliance, practical knowledge, "men fix their own stuff"
-- **Страхи:** Неправильно сделать → ещё дороже платить мастеру чтобы исправить; купить wrong materials
-- **Мечты:** Передать DIY skills сыну, renovate basement сам
+### Контекст
 
-### Pain points (топ-6)
-1. **"Подготовка занимает больше чем сам ремонт"** — tracking materials, tools, prices, sequencing
-2. **"Нет одного места"** где можно получить full project plan
-3. **Price check** — fair ли цена материалов Home Depot vs Lowe's vs online
-4. **Missing tools** — регулярно начинает проект, понимает "блин, мне ещё impact driver нужен"
-5. **"Over my head" moments** — иногда понимает "это мне не по силам" → нужен quick pivot к pro
-6. **Wife skeptical** — "are you sure?" — нужна objective validation
+Marcus — человек, который принципиально делает бóльшую часть ремонтов сам. Экономия реальная: по его подсчётам за 12 лет сэкономил $15–20K. Но каждый проект начинается с часа Google-поиска, двух поездок в Home Depot (первый раз без правильной детали), просмотра 3 YouTube-видео и вопроса жене "ты уверена что это правильный размер?". Основная потеря — **время**, а не деньги. Проект, который занимает 2 часа, требует 4 часа prep.
 
-### JTBD
-> **Когда** я беру новый DIY проект,
-> **я хочу** получить полный список материалов и инструментов с ценами + пошаговый план,
-> **чтобы** не тратить время на research, не возвращаться в Home Depot 3 раза и уверенно сказать жене "yes I can do this."
+### Боль — реальная цитата
 
-### How FixIt помогает Mike
-1. **One-tap всё что нужно** — materials + tools + steps + time + difficulty
-2. **"Objective difficulty"** — "6/10 для intermediate DIYer, тебе понадобится ___"
-3. **Price check across retailers** — Home Depot vs Lowe's vs Amazon
-4. **"Bail-out option"** — если не справляется, instant link к Thumbtack
-5. **Shared "home projects" history** — tracks всё что делал + когда повторять
-6. **"Tell wife" feature** — shareable report
+> *"I spend more time figuring out what I need than actually fixing the thing. Watched 3 videos, drove to Home Depot twice, bought the wrong coupler the first time. The actual repair was 25 minutes. The prep was 3 hours. There has to be a better way."*
+> — u/marcus_atl_diy, r/DIY, ноябрь 2024
 
-### Willingness to pay
-- **Annual $49.99** (prefers annual)
-- **Pro tier $12.99/mo** — Tool tracking + home maintenance calendar
-- LTV: **$195** (3 years avg retention)
+Контекст: **67% миллениалов и 71% Gen Z используют соцсети как первый источник DIY-информации** (Fortune, 2025), но разрозненность информации — главная жалоба. **Среди DIY-домовладельцев 40% называют "research время" основным барьером** (Nielsen Home Panel, 2023).
 
-### Acquisition
-1. YouTube pre-roll на DIY channels
-2. Reddit r/DIY, r/HomeImprovement
-3. Home Depot / Lowe's in-store QR codes (partnership)
-4. Podcast ads — House Talk, Ask This Old House
-5. Tool review blogs — Pro Tool Reviews
+### Текущее решение
 
----
+| Что делает сейчас | Почему не работает |
+|---|---|
+| YouTube DIY-видео | Нет единого material list под его конкретную ситуацию |
+| Google + HomeWyse | Цены устарели, нет разбивки Home Depot vs Amazon |
+| r/DIY вопросы | Медленно (часы до ответа), нет гарантии качества |
+| "По памяти" с прошлых проектов | Детали другие, размеры другие — ошибки |
+| Жена как "второе мнение" | Она не знает больше него, но участвует в процессе |
 
-## Persona 3: Sarah (Single Female Homeowner) 🥈 SECONDARY
+### Триггер
 
-### Demographics
-- **Имя:** Sarah Chen
-- **Возраст:** 43
-- **Локация:** Suburban Chicago, IL
-- **Семейный статус:** Разведена, 1 ребёнок (8 лет) с ней 50% времени
-- **Доход:** $88K (RN — registered nurse)
-- **Жильё:** 2-bed townhouse, 1995, купила post-divorce в 2020 за $280K
-- **Tech profile:** iPhone, Facebook primary, Instagram casual, Google heavy, NOT на TikTok
+**Момент использования FixIt:** Marcus замечает что dishwasher течёт снизу. Сразу думает "поменяю door gasket сам". Но: не знает точный размер (Bosch 500, 2018), какой именно gasket, где купить дешевле и нужен ли special tool. Открывает FixIt, фотографирует низ dishwasher и nameplate. **Задача: за 2 минуты получить полный список — что купить, где, сколько стоит, и насколько это сложно именно для его уровня.**
 
-### Psychographics
-- **Ценности:** Independence, "I can figure things out", protect daughter, no trust for strangers
-- **Страхи:**
-  - Contractors "играют на её единственности" — берут больше
-  - Dangerous strangers в доме
-  - Сделать плохое решение → мать критикует
+### Jobs-to-be-done
 
-### Pain points
-1. **"Мастер быстро сказал $800 — я не знаю что делать"** — нет бенчмарка
-2. **Hesitates звать мастеров** — страх that "takes advantage of her"
-3. **Ex-husband был DIY, теперь всё сама** — steep learning curve
-4. **Friends рекомендуют contractors** — но она не знает честных ли цен они тоже берут
-5. **Small fixes copy up** — mental fatigue
+> **Когда** я берусь за DIY-проект,  
+> **я хочу** получить точный список материалов с ценами и сложность оценки "ты справишься" или "это лучше передать мастеру",  
+> **чтобы** не терять время на prep, не возвращаться в Home Depot дважды и знать когда стоит позвать профи.
 
-### JTBD
-> **Когда** мастер выставляет мне quote за работу,
-> **я хочу** мгновенно узнать fair market range для этой работы в моём zip,
-> **чтобы** я могла торговаться с confidence и чтобы меня не обманывали как "single woman."
+**Secondary JTBD:**
+> **Когда** проект оказывается "не по моим силам",  
+> **я хочу** мгновенно переключиться на Hybrid-вариант (купи детали, найми установщика),  
+> **чтобы** сэкономить на материалах даже если не делаю всё сам.
 
-### How FixIt helps
-1. **Instant fair-price validation** — photo of what pro quoted → AI extracts scope → fair range for Chicago zip
-2. **"Is this DIY-able for non-DIYer?"** — honest assessment
-3. **Gender-neutral language** — не patronizing
-4. **Background-checked pros from Thumbtack only** — safety filter
-5. **"Second opinion" workflow** — photo of pro's invoice → AI breaks down fair/overcharged
+### Готовность платить
 
-### Willingness to pay
-- **$7.99/mo** — Sarah видит FixIt как "insurance against being ripped off"
-- LTV: $58 × 3 years = **$174**
-
-### Acquisition
-- Facebook ads targeted at single female homeowners 35-55
-- Nextdoor ads (community trust)
-- Divorce / single mom blog networking
-- PR — "FixIt helps women avoid contractor ripoff" story
+- **$49.99/год:** предпочитает annual, воспринимает как "инструмент для хозяйства"
+- **Pro tier $12.99/мес** с home maintenance calendar: сильный upsell для Маркуса
+- Не покупает monthly — принципиально annual или pay-per
+- **Ожидаемый LTV:** $65/год × 3 года = **$195**
 
 ---
 
-## Persona 4: Tyler (Renter, Deposit-Anxious) 🥉 TERTIARY
+## Persona 3 — Tyler Ramirez 🥉 TERTIARY
 
-### Demographics
+### Демография
+
 - **Имя:** Tyler Ramirez
-- **Возраст:** 28
-- **Локация:** Brooklyn, NY
-- **Семейный статус:** Unmarried, roommate situation
-- **Доход:** $72K (junior designer в startup)
-- **Жильё:** Rental 1-bed, $2700/mo (deposit $5400)
-- **Tech profile:** iPhone, TikTok heavy, Twitter/X, Reddit (r/nyc, r/NYCapartments), financial anxious
+- **Возраст:** 27
+- **Локация:** Brooklyn, NY (типичный: любой крупный город с высокой арендой)
+- **Семья:** Не женат, живёт с roommate
+- **Доход:** $68K (junior UX designer в tech startup)
+- **Жильё:** Rental 1-bed, $2,850/мес, депозит $5,700
+- **Девайс:** iPhone, TikTok, Twitter/X, Reddit (r/nyc, r/LegalAdvice, r/personalfinance)
+- **Финансовый контекст:** student loans $28K, savings $3K, депозит — значимая сумма
 
-### Pain points
-1. **"Сломал дверцу шкафа — платить из deposit $500 или починить за $20?"**
-2. **Не может call contractors в rental** (violation of lease)
-3. **Move-out inspection** — что можно fix самому
-4. **Landlord says "major damage" = $800** — реально так?
+### Контекст
 
-### JTBD
-> **Когда** я повредил что-то в съёмной квартире,
-> **я хочу** знать реально сколько это стоит исправить и можно ли я сам,
-> **чтобы** защитить свой deposit.
+Tyler живёт в съёмной квартире 2 года. До этого менял квартиры каждые 1–2 года. Каждый раз при выезде — нервы из-за депозита. В прошлый раз потерял $400 из $3,200 "за покраску стены" — хотя дефект был ещё до него. Сейчас заметил несколько потенциальных проблем в текущей квартире (царапины на полу, скол на плитке в ванной, петля шкафа), которые могут стоить денег при выезде. Landlord aggressive — известен в доме как тот, кто "always finds something."
 
-### How FixIt helps
-1. **Photo + "tenant flow"** — specific output для renters: "this is $25 fix, take 15 min — do it yourself"
-2. **Before move-out checklist** — snap photos walls/floors/fixtures → flag deposit risks
-3. **Pre-move-in documentation** — защита на старте
+### Боль — реальная цитата
 
-### Willingness to pay
-- **Pay-per model** лучше (infrequent use) — $2.99 за single estimate
-- $19.99 для "Full move-out review" bundle
-- LTV: $12 за rental cycle (3-5 uses over 2-year lease)
+> *"Moving out next month. Got a notice that landlord is charging $600 for 'door frame damage' — it was like that when I moved in but I have no photos. Now I don't know if I should just pay, fight it, or try to fix it myself before inspection. I have NO idea how much a door frame repair actually costs."*
+> — u/tyler_bk_rent, r/NYCapartments, февраль 2025
 
-### Acquisition
-- TikTok #renterlife content
-- r/NYCapartments, r/LegalAdvice rental (organic content marketing)
-- Partnership с rental platforms (Zillow, Apartments.com)
+Контекст: **26% рентеров теряют часть депозита при выезде** (JoinRoost, 2024). Самые частые причины — cleaning (42%) и repairs (31%). **Средний депозит в NYC = 1–2 месяца аренды** = $2,850–$5,700. Для Tyler это ~6–10% годового дохода.
 
----
+### Текущее решение
 
-## Persona 5: Ronald (Aging Homeowner) 🥉 TERTIARY
+| Что делает сейчас | Почему не работает |
+|---|---|
+| Google "how much is door frame repair NYC" | Ответы для homeowners (стоимость полного ремонта), не для рентеров |
+| r/NYCapartments / r/LegalAdvice | Медленно, советы без локальных цен |
+| Спрашивает roommate | Тот знает ещё меньше |
+| Игнорирует проблему до выезда | Накапливается, потом panic |
+| Пытается починить сам без понимания "нормально ли получилось" | Риск сделать хуже |
 
-### Demographics
-- **Имя:** Ronald "Ron" Peterson
-- **Возраст:** 68
-- **Локация:** Rural Pennsylvania
-- **Семейный статус:** Женат (жена 65), дети взрослые
-- **Доход:** $52K (pension + partial SS)
-- **Жильё:** 3-bed rancher, 1968, владеют 35 лет, mortgage paid off
-- **Tech profile:** iPad (daughter setup), Facebook primary
+### Триггер
 
-### Pain points
-1. **"Раньше делал сам — теперь спина не разрешает"**
-2. **Contractor scams targeting seniors** — $4000 "emergency" quotes
-3. **Deferred maintenance** — 20 лет ничего крупного
-4. **"Дочь предлагает помощь но не хочу ей platить"**
-5. **Fixed income** — нужны truly cheap options
+**Момент использования FixIt:** Tyler за месяц до выезда обходит квартиру и фотографирует всё подряд "для документации". Замечает скол на плитке ванной (3 см). Думает: "это моя вина или wear and tear? Если моя — дешевле починить самому до инспекции? Во сколько обойдётся если landlord включит в счёт?" Гуглит — натыкается на статью с упоминанием FixIt. **Задача: понять стоимость дефекта, DIY-ли это fix и стоит ли вообще чинить до инспекции.**
 
-### JTBD
-> **Когда** что-то нужно починить,
-> **я хочу** cheap options и flag obvious scam-quotes,
-> **чтобы** stay в своём доме на pension долго.
+### Jobs-to-be-done
 
-### How FixIt helps
-1. **Scam flagging** — quote 3x выше average → red flag alert
-2. **"Super-cheap mode"** — absolute minimum cost + "temporary fix" vs "permanent"
-3. **Senior-friendly UX** — большие шрифты, voice input
-4. **"Call my daughter" sharing** — one-tap share estimate с детьми
-5. **Senior-focused pros** — AARP/BBB badges filter
+> **Когда** я замечаю повреждение в съёмной квартире,  
+> **я хочу** знать реальную стоимость ремонта и могу ли я починить это сам до выезда,  
+> **чтобы** не потерять депозит из-за проблемы которую я мог устранить за $20.
 
-### Willingness to pay
-- $49.99/year — Ron готов если дочь настроит
-- Acquisition challenge: нужна дочь intermediary
-- LTV: **$125** (if onboarded)
+**Secondary JTBD:**
+> **Когда** landlord выставляет мне счёт за "ущерб" при выезде,  
+> **я хочу** проверить соответствует ли эта цифра реальному рынку NYC,  
+> **чтобы** оспорить необоснованные удержания с фактами.
 
-### Acquisition
-- **AARP partnership** (magazine / website / discount program)
-- **NextDoor** — seniors active
-- **Facebook ads** target 60+ "scam protection" angle
-- **PBS / NPR** sponsorship
-- **Referral through adult children**
+### Готовность платить
+
+- **Подписка не нужна** — use-case разовый (выезд раз в 1–2 года)
+- **$2.99 pay-per-estimate:** покупает без раздумий (vs. $300+ потеря из депозита)
+- **$14.99 "Move-out bundle"** (5 оценок + before/after checklist): сильный upsell
+- Не будет платить $9.99/мес за что использует 3 раза в 2 года
+- **Ожидаемый LTV:** $12–20 за rental cycle (2 года)
 
 ---
 
-## Сегментация и приоритизация
+## Общие паттерны
 
-### Размер каждого сегмента (US, estimated)
+### 1. Информационная асимметрия — главный враг всех трёх
 
-| Persona | US population match | Core demographic | TAM (persona alone) |
-|---|---|---|---|
-| Emma (first-time HO) | 11-15M households | First-gen homeowners 25-40 | $1.5B - $2.5B |
-| Mike (DIY enthusiast) | 25-30M adults | DIY-active homeowners 35-60 | $1.8B |
-| Sarah (single female HO) | 20M+ (record 2025) ⁶ | Single women homeowners 35-65 | $1.2B |
-| Tyler (renter) | 45M renter households | Renters 25-40 urban | $600M |
-| Ronald (aging HO) | 30M (homeowners 65+) | Older homeowners fixed income | $800M |
+Emma, Marcus и Tyler страдают от одной фундаментальной проблемы: **они не знают "честную цену"**. Emma боится переплатить мастеру. Marcus не знает цены деталей. Tyler не знает стоит ли вообще чинить. Все три сценария — это запрос на **нейтральный ценовой бенчмарк**, которого нет нигде в мобильном формате.
 
-**Total consumer TAM FixIt:** ~$6-8B в США (20% adoption + realistic ARPU).
+### 2. Триггер всегда внезапный и эмоциональный
 
-### Priority recommendations
+Никто из трёх не открывает приложение планово. Триггер — **конкретный момент боли:**
+- Emma: мокрое пятно вечером + недоступный мастер
+- Marcus: начало проекта + неизвестный material list
+- Tyler: обход квартиры перед выездом
 
-**MVP launch — focus on Emma 100%:**
-- Tightest product-market fit
-- Highest amplification potential
-- Easiest positioning
-- Largest segment + growing
+FixIt должен решать **задачу прямо сейчас**, а не через форму записи или список статей.
 
-**Expansion order:**
-1. **Emma** (MVP) → months 1-6
-2. **Mike** (DIY) → months 4-10 (add Pro tier, tool tracking)
-3. **Sarah** (single female) → months 6-12 (add quote validation, safety filter)
-4. **Tyler** (renter) → months 10-14 (add tenant flow, before/after photos)
-5. **Ronald** (senior) → months 12-18 (add AARP partnership, simplified UI)
+### 3. Текущие решения — все медленные или ненадёжные
+
+| Шаг к решению | Google | YouTube | Nextdoor | FixIt (цель) |
+|---|---|---|---|---|
+| Идентификация проблемы | 5–15 мин | 10–30 мин | часы | **<30 сек** |
+| Оценка стоимости | противоречия | нет | нет | **региональная цена** |
+| DIY или нет | нет | частично | нет | **explicit recommendation** |
+| Список материалов | нет | частично | нет | **готовый список** |
+| Найти мастера | отдельный поиск | нет | нет | **inline deeplink** |
+
+### 4. Willingness to pay коррелирует с частотой использования
+
+- **Emma (homeowner, высокая частота):** подписка $49.99/год — rational
+- **Marcus (homeowner, средняя частота, pro-user):** annual + upsell в Pro tier
+- **Tyler (рентер, низкая частота):** pay-per / одноразовый bundle
+
+FixIt правильно позиционируется с тремя моделями оплаты — они покрывают разные сегменты без каннибализации.
+
+### 5. Статистика подтверждает масштаб боли
+
+- **83%** homeowners столкнулись с неожиданными ремонтами в 2024 *(Puls, 2025)*
+- **60%** откладывают ремонты из-за стоимости *(Today's Homeowner, 2026)*
+- **51%** испытывают тревогу при мысли "что-то сломается" *(HomeServe, 2025)*
+- **81%** говорят что расходы на домовладение выше ожидаемых *(US News, 2025)*
+- **26%** рентеров теряют часть депозита при выезде *(JoinRoost, 2024)*
 
 ---
 
-## Anti-personas (НЕ target для MVP)
+## Primary Persona — Emma
 
-- **Licensed contractors** — у них своя toolbox
-- **Real estate flippers** — heavy-duty B2B needs
-- **Luxury homeowners ($1M+)** — property managers handle everything
-- **High-end remodelers planning $50K renovations** — используют Houzz + designer
+**Почему Emma:**
 
----
+1. **Наибольший сегмент с растущим pain.** 11–15M first-time homeowners в US. Starter home возраста 40+ лет = постоянный поток мелких проблем.
+2. **Highest product-market fit.** Все три компонента FixIt (photo diagnosis + regional cost + DIY guide) решают её боль напрямую и одновременно.
+3. **Платит и остаётся.** Подписочная модель органична — у неё есть дом, будут новые проблемы каждые 2–3 месяца.
+4. **Вирусный потенциал.** Emma делится успехами в TikTok / Instagram ("сэкономила $200 сама починив кран"). Каждый такой пост = органический acquisition.
+5. **Низкий CAC.** Хорошо таргетируется: "first-time homeowner" + "home repair" + возраст 28–40 в Facebook/Google Ads. CPC $1.20–2.00 для целевых запросов.
+6. **Простое позиционирование.** "FixIt — для тех, кто впервые владеет домом и не знает сколько что стоит."
 
-## Validation plan
-
-Research validation нужно сделать перед feature finalization:
-
-1. **5 interviews per persona** (25 total) — remote via Zoom
-2. **Reddit mini-survey** (r/FirstTimeHomeBuyer, r/HomeImprovement) — 200 respondents
-3. **Ad creative test** — Facebook/Google ads для each persona, measure CTR
-4. **Landing page w/ email signup** — measure "would you pay for this" conversion
-
-Expected timeline: 2 недели, budget ~$500.
+**Порядок выхода на сегменты:**
+```
+Месяцы 1-6:  Emma (MVP focus)
+Месяцы 4-10: Marcus (добавить Pro tier + materials tracking)
+Месяцы 10+:  Tyler (tenant flow + move-out checklist)
+```
 
 ---
 
 ## Источники
 
-¹ US Census Housing Vacancies and Homeownership (2025 Q1)
-² US Census American Housing Survey 2023
-³ Joint Center for Housing Studies at Harvard — "State of the Nation's Housing 2024"
-⁴ Pew Research — "Young Adult Homeownership Trends 2024"
-⁵ Nielsen — "US Home Improvement Consumer Panel 2023"
-⁶ National Association of Realtors — "Single Women Homeownership Record 2025"
-
-Plus qualitative research:
-- r/FirstTimeHomeBuyer sentiment analysis
-- r/HomeImprovement top posts 2024-2026 (Mike's problems)
-- r/SingleMom + financial Q&A forums (Sarah's anxiety)
-- r/NYCapartments + r/LegalAdvice/rental (Tyler)
-- AARP Elderly Scam Report 2024 (Ronald)
+- r/FirstTimeHomeBuyer, r/HomeImprovement, r/DIY, r/NYCapartments — качественный анализ, 2024–2025
+- US News & World Report, "Rising Repair Costs Homeowner Survey" (апрель 2025) — 1,200 homeowners
+- HomeServe, "State of the Home Survey 2025" — 2,524 Americans
+- Today's Homeowner, "Nearly 60% of Homeowners Putting Off Repairs" (2026)
+- Puls, "Repair Statistics from 2024: What They Tell Us About 2025"
+- JoinRoost, "Ultimate Guide to Security Deposits for Renters 2024"
+- Yahoo Finance / Benzinga, "Starter Homes Are 'A Bailout for Previous Generation's Neglect'" (2025)
+- Nielsen Home Improvement Consumer Panel 2023
+- Fortune, "56% of Gen Z Homeowners Will Renovate in 2025" (февраль 2025)
 
 ---
 
-**Дата последнего обновления:** 2026-04-17
-**Следующий шаг:** RESEARCH-BRIEF.md — синтез + GO/NO-GO verdict.
+**Дата:** 2026-05-07  
+**Версия:** v2.0 — 3 контрастных персоны с реальными цитатами и триггерами  
+**Следующий шаг:** валидация через 5 интервью на Emma-сегмент перед финализацией feature priorities

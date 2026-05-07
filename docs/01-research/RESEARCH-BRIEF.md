@@ -1,400 +1,362 @@
+---
+Проект: FixIt — AI home repair cost advisor
+Документ: Research Brief — синтез всех Stage 1 документов
+Дата: 2026-05-07
+Версия: v2.0 — полная переработка на основе 8 research-документов
+Статус: Final
+---
+
 # RESEARCH-BRIEF.md — FixIt
 
-**Дата:** 7 мая 2026
-**Продукт:** FixIt — AI home repair cost advisor
-**Автор:** Research Team (synthesis)
-**Статус:** v1.1 — обновлён конкурентный landscape (Кластер 7: SnapFix, Fix AI, YouFixedIt, Toolbox.repair, iFixit FixBot); пересчитан GAP_SCORE
-**Companion docs:** [MARKET-RESEARCH.md](./MARKET-RESEARCH.md) | [COMPETITOR-ANALYSIS.md](./COMPETITOR-ANALYSIS.md) | [COMPETITORS.md](./COMPETITORS.md) | [USER-PERSONAS.md](./USER-PERSONAS.md) | [DOMAIN-DEEP-DIVE.md](./DOMAIN-DEEP-DIVE.md)
+**Companion docs:** [MARKET-RESEARCH.md](./MARKET-RESEARCH.md) | [COMPETITOR-ANALYSIS.md](./COMPETITOR-ANALYSIS.md) | [COMPETITORS.md](./COMPETITORS.md) | [USER-PERSONAS.md](./USER-PERSONAS.md) | [DOMAIN-DEEP-DIVE.md](./DOMAIN-DEEP-DIVE.md) | [DOMAIN-RESEARCH.md](./DOMAIN-RESEARCH.md) | [INTERVIEW-GUIDE-EMMA.md](./INTERVIEW-GUIDE-EMMA.md)
 
 ---
 
-# 🟢 ВЕРДИКТ: GO
+## Elevator Pitch
 
-**FixIt — валидный бизнес, рекомендуется к разработке.** GAP_SCORE оценка **1800-2400 (GOLD tier)**. Технически выполнимо. Рыночно обосновано. Конкурентно дифференцируемо. Финансово привлекательно при реалистичных ARPU / LTV / CAC assumptions.
-
-**Ключевые риски — управляемы.** Рекомендованная стратегия mitigation описана в разделе 7.
+> **FixIt — первый нейтральный AI-советник по ремонту дома: сфотографируй проблему, получи региональную оценку стоимости и три чётких маршрута (DIY / Hybrid / Pro) за 10 секунд — чтобы никогда больше не переплачивать из страха или незнания.**
 
 ---
 
-## 1. Executive Summary (для не-технической аудитории)
+## Скоринг по 7 критериям
 
-**FixIt — это как PictureThis, только для ремонта дома.** Фотографируешь проблему (протечка / сломанная мебель / умершая техника) → AI за 10 секунд определяет что это, считает реальные цены материалов в твоём городе и labor rates локальных мастеров, и выдаёт **три варианта**:
-
-- 🔧 **DIY** — "ты можешь сам за $15 и 30 минут, вот гайд"
-- 🤝 **Hybrid** — "купи материалы, найми handyman на установку, итого $95"
-- 🏢 **Full Pro** — "вот 3 licensed pro в твоём zip с honest quotes $175-$275"
-
-Продукт решает проблему, которую 100% homeowners формулируют регулярно: **"Сколько это стоит? И могу ли я сам?"**
-
-**Размер рынка:** $6-8B consumer TAM в США только. Global TAM home services = $657B.
-
-**Конкуренты:** нет одного продукта, делающего все 5 компонентов (photo AI + regional cost + DIY guide + pro matching + 3-mode output). За апрель–май 2026 появились 5 новых AI mobile игроков (SnapFix, Fix AI, YouFixedIt, Toolbox.repair, iFixit FixBot) — каждый закрывает 1–2 компонента из 5. **Regional price localization + 3-mode output остаются незанятыми.** Окно сужается: 6–9 месяцев до насыщения.
-
-**Монетизация:** multi-channel — subscription + affiliate (Thumbtack/Angi leads) + pay-per-estimate. Expected ARPU $35-65/год в зависимости от сегмента. Path to $10M ARR = 200K paying users (reachable в year 2-3).
-
-**Сложность разработки:** средняя. MVP = 4-6 месяцев с командой 1-2 человека + Claude Code.
+| # | Критерий | Оценка | |
+|---|----------|--------|-|
+| 1 | Размер рынка | **10/10** | |
+| 2 | Валидация боли | **10/10** | |
+| 3 | Конкурентный gap | **9/10** | |
+| 4 | Техническая выполнимость | **8/10** | |
+| 5 | Бизнес-модель | **9/10** | |
+| 6 | Timing | **7/10** | |
+| 7 | Команда / исполнение | **7/10** | |
+| | **ИТОГО** | **60/70 = 86%** | 🟢 GO |
 
 ---
 
-## 2. Market Validation
+### Критерий 1 — Размер рынка · 10/10
 
-### 2.1 Размер рынка ✅ MASSIVE
+**Данные:**
+- App-based in-home repair services (North America, 2026): **$6.4B**, CAGR 6.5% до $32.4B к 2035 [[MR §1.1]](./MARKET-RESEARCH.md)
+- Global DIY home improvement market (2026): **$837B**, CAGR 3.9–6.9% [[MR §1.1]](./MARKET-RESEARCH.md)
+- Consumer subscription TAM (US homeowners × $60 ARPU × 10% WTP): **$5–8B/year** [[MR §1.2]](./MARKET-RESEARCH.md)
+- AI consumer apps — fastest growing sub-segment: **28–30% CAGR** (RevenueCat 2026) [[MR §4.6]](./MARKET-RESEARCH.md)
 
-| Слой TAM | Размер | Growth | Ссылка |
-|---|---|---|---|
-| Global home services | $657B (Angi) / $425B (TBRC 2025) | 9-10.5% CAGR | [MR §1.1] |
-| US home improvement | $549B (2025) → $682B (2033) | 2.75% | [MR §1.1] |
-| Global DIY market | $800-930B (2026) | 6.87-8% CAGR | [MR §1.1] |
-| Global on-demand repair apps | $22.3B (2025) → $84.1B (2035) | 14.2% CAGR | [MR §1.1] |
-| **FixIt consumer TAM (US)** | **$6-8B** | — | [UP §Сегментация] |
-
-**SOM forecast (realistic):** $0.85M-$1.6M Year 1 → $32-50M Year 3 [MR §1.3].
-
-### 2.2 Тренды работают в нашу пользу ✅
-
-1. **Contractor shortage** — 499K workers gap → pros expensive → DIY attractive
-2. **Homeowners insurance +12% в 2025** → families ищут способы сэкономить
-3. **Aging housing stock** — median home age 42 years (48% > 1980 postroek) = massive repair backlog
-4. **Millennial/Gen Z homeowners** (47% own homes) — digital-native, AI-ready
-5. **Single female homeowners** (20M+ record 2025) — underserved sector с high pain
-6. **AI consumer apps** — fastest-growing app category (28-30% CAGR, RevenueCat) — tailwind для adoption
-7. **TikTok #hometok** — 4B views = massive awareness channel
-
-Детали в [MR §3].
-
-### 2.3 Persistent pain validated ✅
-
-Reddit анализ (r/FirstTimeHomeBuyer 700K, r/HomeImprovement 3.2M, r/DIY 21M) показывает **top-3 рекurring questions:**
-
-1. "How much should this cost?" (#1 по volume)
-2. "Can I do this myself?" (#2)
-3. "Is this quote fair?" (#3)
-
-FixIt решает все три напрямую. См. [UP] для detailed persona pain points.
-
-Google search volume: **1.2M+ monthly searches** на "how much does it cost to fix ___" cumulative across categories [UP §Методология].
+**Комментарий:** Рынок огромен даже в консервативном сценарии. FixIt адресует пересечение трёх растущих слоёв: app-based services + AI apps + DIY demand. Repair-сегмент (в отличие от renovation) **нецикличен** — non-discretionary spending не падает в рецессию. Year-round сезонность без мёртвых месяцев.
 
 ---
 
-## 3. Competitive Landscape
+### Критерий 2 — Валидация боли · 10/10
 
-### 3.1 Nobody ties it all together ✅
+**Данные:**
+- **1.2M+ monthly searches** по "how much does it cost to fix ___" (US) [[MR §3]](./MARKET-RESEARCH.md)
+- **83%** homeowners столкнулись с неожиданными ремонтами в 2024 [[UP §Emma]](./USER-PERSONAS.md)
+- **81%** говорят что расходы на домовладение выше ожидаемых (US News, 2025) [[UP §Паттерны]](./USER-PERSONAS.md)
+- **51%** испытывают тревогу при мысли "что-то сломается" (HomeServe, 2025) [[UP §Паттерны]](./USER-PERSONAS.md)
+- **60%** откладывают ремонты из-за стоимости (Today's Homeowner, 2026) [[UP §Паттерны]](./USER-PERSONAS.md)
+- **26%** рентеров теряют часть депозита при выезде (JoinRoost, 2024) [[UP §Tyler]](./USER-PERSONAS.md)
 
-**7 кластеров, 17+ игроков, 0 делают all-in-one** [CA §Exec Summary, обновлено май 2026]:
-
-| Функция | Thumbtack | HomeWyse | iFixit+Bot | SnapFix | Fix AI | YouFixedIt | Toolbox | **FixIt** |
-|---|---|---|---|---|---|---|---|---|
-| Photo AI input | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ | ✅ video | ✅ |
-| Cost estimate | ❌ | ✅ | ❌ | ⚠ basic | ✅ | ❌ | ❌ | ✅ |
-| Regional price localization | ❌ | ✅ zip | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-| DIY guide | ❌ | ❌ | ✅ devices | ✅ | ✅ | ✅ | ✅ | ✅ |
-| Pro matching | ✅ | ❌ | ❌ | ❌ | ❌ | ⚠ | ✅ | ✅ (affiliate) |
-| 3-mode output (DIY/Hybrid/Pro) | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ✅ |
-
-**Ключевой вывод:** Новый Кластер 7 (AI mobile apps) атакует DIY + photo сегменты — но ни один не добавил regional pricing и 3-mode output. Эти два компонента остаются differentiator FixIt. Подробнее — [CA §Кластер 7], [COMPETITORS.md].
-
-### 3.2 Partnership over competition ✅
-
-Thumbtack Pro API, Angi Leads API, Home Depot Product Advertising API, Lowe's API — все доступны для партнёрства. **FixIt монетизирует affiliate revenue ($15-40/lead) вместо конкуренции** с lead-gen playerами [DD §5].
-
-### 3.3 Precedent proven ✅
-
-**PictureThis:** $200M+ ARR, 300M downloads, freemium subscription model. Доказал:
-- Photo-input + AI + consumer app работает at scale
-- Freemium → subscription конвертится в этой механике
-- Single-purpose AI app выигрывает у general-purpose (Google Lens)
-
-FixIt — **same playbook, higher emotion/stakes domain** (home repair $$$ vs plant curiosity).
-
-### 3.4 Main threats (управляемы, обновлено май 2026)
-
-1. **HomeWyse запускает mobile app + AI** — 🔴 самый страшный сценарий. У них regional data; AI поверх = прямой конкурент. **Mitigation:** move fast, capture brand mindshare first
-2. **Toolbox.repair добавляет cost estimate layer** — 🔴 NEW. Уже есть photo AI + DIY + pro matching; не хватает только pricing. Технически просто добавить. **Mitigation:** regional accuracy сложнее скопировать чем basic ranges
-3. **SnapFix / Fix AI добавляют regional pricing** — 🟠 NEW. Оба уже имеют photo + basic cost. **Mitigation:** zip-based labor data требует реального data partnership — это не overnight
-4. **Thumbtack embedding AI photo + cost** — 🟠 medium risk, conflict of interest (зарабатывают на push к pros)
-5. **Home Depot / Lowe's launches own AI** — 🟠 but они sell materials, not advise neutrally
-6. **Категориальное насыщение** — 🟠 NEW. 5 игроков за 2 месяца → к Q4 2026 App Store category будет crowded, ASO CPL вырастет
-7. **General AI (Gemini / ChatGPT)** — 🟡 low risk, curiosity-level vs verified regional data
-
-Details в [CA §SWOT + Threats], [COMPETITORS.md §GAP].
+**Комментарий:** Боль (#1 вопрос на r/HomeImprovement 3.2M, r/FirstTimeHomeBuyer 700K): *"Сколько это стоит? Могу ли я сам? Справедлива ли эта цена?"* FixIt отвечает на все три в одном flow. Боль подтверждена количественно, качественно (Reddit) и поведенчески (поисковый объём). Real Reddit quote от Emma-сегмента — в [[UP]](./USER-PERSONAS.md).
 
 ---
 
-## 4. User Validation
+### Критерий 3 — Конкурентный gap · 9/10
 
-**5 personas покрывают ~80% addressable consumer pool** [UP]:
+**Данные:**
+- **17+ игроков, 7 кластеров** — ни один не комбинирует все 5 компонентов [[CA §Exec]](./COMPETITOR-ANALYSIS.md)
+- Новый Кластер 7 (апрель–май 2026): SnapFix, Fix AI, YouFixedIt, Toolbox.repair, HomeMD.ai — каждый берёт 1–2 из 5 [[COMPETITORS.md]](./COMPETITORS.md)
+- **Regional pricing** = незанятый differentiator: ни один AI-конкурент не делает zip-level локализацию [[MR §5.1]](./MARKET-RESEARCH.md)
+- **3-mode output (DIY/Hybrid/Pro)** = незанятый differentiator: 0 из 17+ конкурентов [[COMPETITORS.md §GAP]](./COMPETITORS.md)
+- GAP_SCORE = **1300–1600** (GOLD tier ≥1000), снижен с 2000–2500 в апреле из-за роста app_count 3→8 [[RB v1.1 §11]](./RESEARCH-BRIEF.md)
 
-| Persona | Priority | Size | ARPU | CAC hypothesis | LTV |
-|---|---|---|---|---|---|
-| Emma (first-time HO) | 🥇 MVP | 11-15M | $48 | $12-18 | $120 |
-| Mike (DIY enthusiast) | 🥈 | 25-30M | $65 | $8-12 | $195 |
-| Sarah (single female HO) | 🥈 | 20M+ | $58 | $15-22 | $174 |
-| Tyler (renter) | 🥉 | 45M | $12 | $5-8 | $12 |
-| Ronald (aging HO) | 🥉 | 30M | $42 | $20-30 | $125 |
-
-**Primary для MVP = Emma.** Причины:
-- Highest product-market fit (pain + willingness to pay + digital-native + social amplification)
-- Huge TAM (15M households, growing)
-- Lowest positioning resistance ("First-time homeowner? We got you.")
-- Natural viral channel (TikTok #hometok)
+**Комментарий:** Снижение GAP_SCORE — управляемый сигнал. Оба оставшихся differentiator (regional pricing + 3-mode) технически сложнее скопировать overnight, чем фото-диагностику. Conflict of interest у всех конкурентов: Thumbtack/Angi зарабатывают на push к pros, iFixit — на запчастях. **FixIt — первый нейтральный советник**, монетизация через подписку, не транзакцию. -1 балл за ускорение конкуренции.
 
 ---
 
-## 5. Technical Feasibility
+### Критерий 4 — Техническая выполнимость · 8/10
 
-Full analysis в [DD], summary:
+**Данные:**
+- Claude Vision accuracy для home damage classification: **85–94%** на controlled benchmarks [[DD §7]](./DOMAIN-DEEP-DIVE.md)
+- Специализированные CV-модели: **98.6% accuracy** для damage detection (ResNet50+GoogLeNet, PMC 2024) [[DR §2.2]](./DOMAIN-RESEARCH.md)
+- Cost per estimate: **$0.03** (AI inference + API calls + compute) [[DD §9]](./DOMAIN-DEEP-DIVE.md)
+- BLS OEWS labor rate data: **бесплатно**, обновляется ежегодно [[DD §5]](./DOMAIN-DEEP-DIVE.md)
+- Региональная дисперсия: SF плumber = $150–250/ч, Memphis = $65–110/ч (**2× разница**) [[DD §1.3]](./DOMAIN-DEEP-DIVE.md)
+- Регуляторные требования: disclaimers + 6 safety-blocked категорий + EPA RRP [[DR §3]](./DOMAIN-RESEARCH.md)
 
-### 5.1 AI identification ✅
-
-- **Claude Vision / GPT-4V / Gemini** — все three reliable для clearly visible repair issues (leaks, cracks, breaks, stains, visible damage)
-- **Cost per inference:** $0.003-0.01 (Claude Haiku Vision cheapest)
-- Accuracy 80-90% для top-30 categories based on testing similar identifier apps
-- 📌 **Scope restriction:** top-30 categories для MVP, не "infinite repair encyclopedia"
-
-### 5.2 Data sources (APIs) ✅
-
-**Materials pricing:**
-- Home Depot Product Advertising API — **free tier available**, rate-limited
-- Lowe's API — partnership required
-- Amazon Product Advertising API — associate program, 1-3% commission
-
-**Labor rates:**
-- Thumbtack Pro API — partner-only, но достижимо
-- Angi Leads API — email `crmintegrations@homeadvisor.com`
-- BLS Occupational wages — free base anchor
-- RSMeans — $1500-3000/year subscription (industry standard)
-
-**MVP strategy:** aggregate HomeAdvisor Cost Guide (300+ categories) + Homewyse + Fixr cost ranges + BLS for labor anchor. Quarterly updates. Cost: **$0-500 manual** [DD §6].
-
-### 5.3 Integration complexity ✅
-
-Scope-limited MVP = 30 категорий × (materials + labor data). Total build with Claude Code = **4-6 weeks research-to-ship data layer**. Simple enough для 1-person team.
-
-### 5.4 Regulatory ⚠ MANAGEABLE
-
-- **Disclaimer required:** "Not professional advice. For structural / electrical / gas issues, consult licensed pro."
-- **Licensed trade awareness** — FixIt рекомендует "licensed pro required" для: gas lines, full electrical rewiring, structural work, roofing, load-bearing walls
-- **NOT medical** — no FDA concerns (unlike SkinVision)
-- **Liability insurance** — general commercial liability $500K-1M coverage, $500-1500/year
-- **GDPR/CCPA compliance** — standard for user data + photos
-
-Details в [DD §6].
-
-### 5.5 AI limitations (known unknowns)
-
-- AI не видит hidden issues (внутри стен, под полом)
-- Точность зависит от photo quality (low-light, unclear angles)
-- Regional price variability — needs constant updating
-- Brand-specific appliance issues требуют specialized training data
-
-Всё — management через **disclaimers + "take a better photo" prompts + "when in doubt, call a pro" safety rails**.
+**Комментарий:** Claude Vision + structured JSON output + BLS data = рабочий stack с известными параметрами. Никаких неизвестных технологий. Ограничения (hidden damage, low-light photos, hallucinations) — все управляются через UX guardrails и disclaimers. -2 балла за: hidden problem NO-GO scope (gas/structural) сужает TAM; regional data требует quarterly refresh.
 
 ---
 
-## 6. Unit Economics (preliminary model)
+### Критерий 5 — Бизнес-модель · 9/10
 
-Full analysis [DD §9], summary:
+**Данные:**
+- Gross margin: **96%** ($0.03 cost / $0.85–1.50 blended revenue per estimate) [[DD §9]](./DOMAIN-DEEP-DIVE.md)
+- LTV:CAC ratio: **$120 / $15 = 8x** для Emma (target ≥3x) [[RB v1.1 §6]](./RESEARCH-BRIEF.md)
+- AI apps generate **41% more revenue per payer** ($30.16 vs $21.37 median ARPU), RevenueCat 2026 [[MR §4.6]](./MARKET-RESEARCH.md)
+- Hard paywall Day-35 conversion: **10.7%** vs 2.1% freemium [[MR §4.6]](./MARKET-RESEARCH.md)
+- Path to $10M ARR: **200K paying users** × $50 ARPU — Year 2 achievable [[DD §9]](./DOMAIN-DEEP-DIVE.md)
+- 3 revenue streams не конкурируют: subscription (Emma/Marcus) + pay-per (Tyler) + Amazon Associates [[MONETIZATION.md]](../02-product/MONETIZATION.md)
 
-### 6.1 Per-estimate costs
-
-| Item | Cost |
-|---|---|
-| AI inference (Claude Haiku Vision) | $0.005 |
-| API calls (Home Depot + Thumbtack + BLS lookup) | $0.015 |
-| Compute / DB / storage overhead | $0.010 |
-| **Total cost per estimate** | **$0.03** |
-
-### 6.2 Revenue per estimate (blended)
-
-Assuming user mix: 70% free, 20% subscription, 10% pay-per, 3% conversion к affiliate lead:
-
-| Revenue stream | Rate | Weighted contribution |
-|---|---|---|
-| Subscription (20% of users @ $7.99/mo) | — | ~$1.60 per month per user |
-| Pay-per (10% @ $2.99 per estimate × 3 estimates/year) | $0.90/year | $0.08/estimate avg |
-| Affiliate conversion (3% @ $25 avg lead) | — | $0.75/estimate avg |
-| **Blended revenue per estimate** | — | **~$0.85-1.50** |
-
-**Gross margin:** ($0.85 - $0.03) / $0.85 = **96%** — excellent SaaS-level margin.
-
-### 6.3 Path to $10M ARR
-
-Assumptions:
-- Year 2 — 200K paying users × $50 ARPU = **$10M ARR**
-- Requires ~1M total users (20% conversion free → paid)
-- CAC blended $15 → LTV:CAC = **$120 / $15 = 8x** — very attractive
-
-Realistic? Yes, PictureThis got to $200M ARR со similar acquisition strategy.
+**Комментарий:** Исключительные unit economics при минимальных COGS. Три независимых revenue stream покрывают три persona без каннибализации. Affiliate revenue с Day 1 устраняет dependence от subscription ramp. -1 балл за: AI annual retention только 21.1% (RevenueCat) — нужен strong habit loop.
 
 ---
 
-## 7. Risks и Mitigation
+### Критерий 6 — Timing · 7/10
 
-| Risk | Probability | Impact | Mitigation |
-|---|---|---|---|
-| Retailer API rate limits / revocation | Medium | High | Multi-source aggregation + fallback к web scraping (legal) + quarterly manual review |
-| Thumbtack/Angi revoke affiliate | Medium | Medium | Diversify — Amazon + Google Maps + Yelp + direct pro marketplace |
-| AI accuracy failure in edge cases | High | High | Disclaimers + "take a better photo" retry + "when in doubt call pro" rails + user feedback loop |
-| HomeWyse запускает AI app first | Low-Medium | High | Speed to market — MVP до Q4 2026, brand capture early |
-| **Toolbox.repair добавляет cost layer** ⚡ NEW | Medium | High | Региональная точность — не overnight; ship с zip-accuracy как core differentiator |
-| **SnapFix / Fix AI добавляют regional pricing** ⚡ NEW | Medium | High | Data partnership (BLS + RSMeans) сложнее скопировать; ship first |
-| **App Store category crowding к Q4 2026** ⚡ NEW | High | Medium | Ранний ASO capture + TikTok brand awareness до насыщения |
-| Labor rate data stale | Medium | Medium | Quarterly auto-refresh + crowd-sourced price validation |
-| Single-founder risk (Лана alone) | Medium | High | Amanda oversight + recruit 2-й разработчик после validation |
-| Regulatory issue (liability за wrong advice) | Low | High | Professional liability insurance + disclaimers + "licensed pro required" rails |
+**Данные:**
+- AI phone-based diagnosis adoption **утроился за последние 6 месяцев** (Marketing Code, май 2026) [[MR §4.4]](./MARKET-RESEARCH.md)
+- 5 новых AI-конкурентов запустились за апрель–май 2026 [[MR §5.2]](./MARKET-RESEARCH.md)
+- Optimal entry window: **сейчас — сентябрь 2026** [[MR §8]](./MARKET-RESEARCH.md)
+- Каждый месяц промедления = **-100–150 GAP_SCORE очков** [[RB v1.1 §11]](./RESEARCH-BRIEF.md)
+- Toolbox.repair — вероятность добавить cost layer в течение 6 месяцев: **medium-high** [[CA §SWOT]](./COMPETITOR-ANALYSIS.md)
 
-**Overall risk profile:** medium, manageable, no showstoppers.
+**Комментарий:** Категория создаётся прямо сейчас — AI home repair as an app category. Ранний выход = brand ownership в Google/App Store. -3 балла: окно уже закрывается (было 8/10 в апреле). MVP до Q4 2026 — не nice-to-have, а критично.
 
 ---
 
-## 8. Recommended Next Steps (Roadmap)
+### Критерий 7 — Команда / Исполнение · 7/10
 
-### Stage 2 — Product Definition (2-3 недели)
+**Данные:**
+- Команда: Лана (primary dev, Expo + React Native) + Amanda (architecture oversight) + Claude Code
+- Стек: Expo SDK 55 / TypeScript strict / Supabase / Adapty / Claude API — всё проверенное
+- MVP timeline: **4 месяца** при AI-only scope (rescope апрель 2026, убраны все API-партнёрства) [[FEATURES.md]](../02-product/FEATURES.md)
+- 5 user interviews запланированы для валидации feature priorities [[INTERVIEW-GUIDE-EMMA.md]](./INTERVIEW-GUIDE-EMMA.md)
 
-Документы для написания:
-1. **VISION.md** — продуктовое видение, mission, 1/3/5-year plan
-2. **FEATURES.md** — top 10 MVP features (prioritized по RICE score)
-3. **TARGET-AUDIENCE.md** — Emma первая, с deep interview validation
-4. **PROBLEM-SOLUTION-FIT.md** — JTBD framework + value proposition canvas
-5. **MONETIZATION.md** — pricing tiers, affiliate strategy, ARPU/LTV model
-
-### Stage 3 — Practices Research (1-2 недели)
-
-1. **ONBOARDING-RESEARCH.md** — best practices для photo-input apps
-2. **PAYWALL-RESEARCH.md** — when/how to trigger subscription
-3. **RETENTION-RESEARCH.md** — habit loops для infrequent-use app
-4. **ASO-RESEARCH.md** — App Store keywords + screenshots + description
-
-### Stage 4 — UX (3-4 недели)
-
-1. **SCREEN-MAP.md** — полная карта экранов (estimated 15-20)
-2. **WIREFRAMES.md** — low-fi wireframes для всех key flows
-3. **USER-FLOWS.md** — 5-7 core flows (photo→estimate, subscribe, find-pro, etc)
-4. **UX-SPEC.md** — interactions, edge cases, error states
-5. **FUNNEL.md** — activation → retention → monetization metrics
-
-### Stage 5 — Design в Stitch (2-3 недели)
-
-Following `students_project_steps/05-design/stitch-guide-part-1.md`:
-- Generate 3 atmospheric variants
-- Select winner
-- Generate Component Sheet
-- Expand к all 15-20 screens
-- Convert через MCP к React Native code
-
-### Stage 6+ — Development / Testing / Deployment
-
-Following templates в `/docs/04-technical/` + `/docs/07-deployment/`.
-
-**Total time to launch MVP:** ~4-6 months с командой 1-2 человека + Claude Code support + Amanda oversight.
+**Комментарий:** AI-only rescope устранил самые рискованные execution dependencies (Thumbtack API, Home Depot PA-API, RSMeans subscription). Claude Code accelerates dev 2–3× vs baseline. -3 балла: single primary developer создаёт key-person risk; Amanda поддержка частичная; нет выделенного маркетинга.
 
 ---
 
-## 9. Critical Success Factors
+## Топ-5 инсайтов
 
-Для превращения GO vердикта в actual success нужно:
+### 1. Все конкуренты имеют conflict of interest — FixIt не имеет
 
-1. ✅ **Speed of execution** — первоочередной фактор. Toolbox.repair + SnapFix + Fix AI активно догоняют; HomeWyse + Thumbtack могут add AI фичи; окно закрывается к Q4 2026
-2. ✅ **Data quality** — initial cost estimates должны быть accurate enough что users trust app on first try
-3. ✅ **Emma's NPS > 50** — если Emma не любит product, никто другой не адаптирует
-4. ✅ **Disciplined scope** — top-30 categories MVP, не "infinite repair encyclopedia"
-5. ✅ **Affiliate partnerships early** — monetize from day 1 (не wait для subscription conversion)
-6. ✅ **Social channel (TikTok) execution** — это primary acquisition для Emma segment
-7. ✅ **Fix-the-fix** feedback loop — users rate accuracy, AI improves with every estimate
+Thumbtack/Angi зарабатывают на каждом matched contractor job → incentive говорить "вызови мастера". iFixit зарабатывает на запчастях → incentive чинить самому. Frontdoor зарабатывает на expert sessions → incentive эскалировать. **FixIt монетизирует информацию (подписка), не действие** — структурно нейтральный по отношению ко всем трём исходам. Это невозможно скопировать без изменения бизнес-модели. [[COMPETITORS.md §GAP]](./COMPETITORS.md)
 
----
+### 2. Regional pricing — технически сложный moat, не просто фича
 
-## 10. Final Decision Framework
+Zip-level labor rate — разница 2× между SF и Мемфисом для одной и той же работы. [[DD §1.3]](./DOMAIN-DEEP-DIVE.md) Ни один AI-конкурент это не делает — это не oversight, это **техническая сложность**: нужны BLS MSA-level данные + zip-to-MSA mapping + quarterly refresh pipeline. SnapFix и Fix AI не добавят regional pricing overnight. Это не UX-фича, это data infrastructure. Строить с первого дня.
 
-### Why GO?
+### 3. Emma — не просто persona, это продуктовая стратегия
 
-- ✅ Massive market ($6-8B consumer TAM US)
-- ✅ Validated pain (Reddit + Google searches)
-- ✅ Zero all-in-one competitor (clear white space)
-- ✅ Precedent works (PictureThis $200M ARR proves model)
-- ✅ Technical feasibility proven (Claude Vision + retailer APIs)
-- ✅ Healthy unit economics (96% margin, 8x LTV:CAC)
-- ✅ Affiliate revenue from day 1 (no need для subscription ramp)
-- ✅ Multiple expansion paths (furniture, appliances, international, B2B)
+11–15M first-time homeowners в US, средний дом 1979 года, ни одного родственника с опытом — **постоянный поток мелких неожиданных проблем** каждые 2–3 месяца. Это значит: Emma — subscription user, а не pay-per. Её триггер (мокрое пятно вечером) не требует планирования — требует **instant answer**. Весь UX должен быть оптимизирован под стрессовый момент, а не плановое использование. [[UP §Emma]](./USER-PERSONAS.md)
 
-### What could make us NO-GO later?
+### 4. PictureThis playbook — это не аналогия, это blueprint
 
-- ❌ If user testing (Stage 4) shows AI accuracy < 70% for top-30 categories
-- ❌ If Thumbtack + Angi refuse API access → partnership monetization plan dies
-- ❌ If HomeWyse launches same-concept app in next 3 months — timing becomes critical
-- ❌ If Toolbox.repair ships cost estimate layer before FixIt launches — differentiator narrows significantly
-- ❌ If legal review uncovers unexpected liability exposure
+$200M ARR, 300M downloads, photo-first AI, freemium → subscription. **Тот же механизм, более высокий emotional stakes** (сломанный дом $$$ vs любопытство о растении). PictureThis доказал: single-purpose AI app выигрывает у general ChatGPT-style решений; freemium с ограниченным free tier конвертируется; App Store + TikTok = acquisition formula. FixIt копирует playbook точно, не изобретает. [[MR §5.3, RB v1.1 §3.3]](./MARKET-RESEARCH.md)
 
-**Current status: no red flags. Proceed to Stage 2.**
+### 5. Non-discretionary demand защищает от рецессии
+
+Homeowners insurance +12% в 2025, contractor prices +25% с 2019, median home age 42 года. Ремонт — это не "хочу обновить кухню", это "труба течёт и нет выбора". **FixIt решает non-discretionary проблему** — это важно для retention и unit economics: пользователь не отменит подписку когда станет экономнее, а будет использовать FixIt чтобы экономить. [[MR §4.1–4.3]](./MARKET-RESEARCH.md)
 
 ---
 
-## 11. GAP_SCORE Calculation
+## Риски
 
-По формуле `niche-finder-system.md`:
+### Риск 1 — Toolbox.repair добавляет cost estimate · 🔴 HIGH
+
+**Описание:** Toolbox.repair уже имеет photo AI + DIY guides + pro matching (3 из 5 компонентов). Стоимостной слой технически несложно добавить поверх. Если они добавят cost estimate раньше FixIt — gap сужается до только regional pricing.
+
+**Вероятность:** Medium-High (6 месяцев)
+
+**Mitigation:** Regional accuracy (BLS MSA-level) — не overnight. Ship с zip-accuracy как core differentiator в первом релизе. Speed is the primary hedge.
+
+---
+
+### Риск 2 — Сроки исполнения · 🔴 HIGH
+
+**Описание:** Single primary developer (Лана) при 4-месячном timeline создаёт key-person risk. Болезнь, burnout или личные обстоятельства = сдвиг на 2–3 месяца. Каждый месяц промедления = -100–150 GAP_SCORE.
+
+**Вероятность:** Medium
+
+**Mitigation:** Amanda активно включена с месяца 2. Scope discipline (top-30 категорий, не encyclopedia). AI-only rescope уже убрал самые тяжёлые integration блоки.
+
+---
+
+### Риск 3 — AI annual retention 21.1% · 🟠 MEDIUM
+
+**Описание:** RevenueCat 2026: AI apps имеют 12-month annual retention только 21.1% (vs 30.7% non-AI). Пользователи часто подписываются на волне хайпа, затем отменяют.
+
+**Вероятность:** High (industrywide pattern)
+
+**Mitigation:** "My Home" history tab (Feature #7) + push notifications (Feature #10) + savings counter ("You saved $480 with FixIt") создают habit loop и измеримую ценность. Retention research → [[RETENTION-RESEARCH.md]](../03-practices/RETENTION-RESEARCH.md).
+
+---
+
+### Риск 4 — App Store category crowding к Q4 2026 · 🟠 MEDIUM
+
+**Описание:** 5 новых AI repair apps за 2 месяца. К Q4 2026 App Store категория "AI home repair" станет crowded. ASO CPL вырастет, organic discovery упадёт.
+
+**Вероятность:** High
+
+**Mitigation:** Ранний ASO capture (keywords "home repair cost estimator" + "plumber cost calculator") до конкуренции. TikTok #hometok awareness до насыщения. Первый brand = sticky. [[ASO-RESEARCH.md]](../03-practices/ASO-RESEARCH.md)
+
+---
+
+### Риск 5 — AI accuracy failures edge cases · 🟠 MEDIUM
+
+**Описание:** Claude Vision не видит hidden damage (за стенами, под полом). Blurry/low-light photos снижают accuracy. Hallucinated cost estimates могут привести к неправильным решениям.
+
+**Вероятность:** High (inevitable at scale)
+
+**Mitigation:** Disclaimers D-1–D-4 [[DISCLAIMERS.md]](../DISCLAIMERS.md). Confidence threshold: fallback Haiku→Sonnet при <70%. Safety-blocked categories (gas/structural) → принудительный pro-only output. User feedback loop после каждого estimate.
+
+---
+
+## Гипотезы
+
+Пять falsifiable гипотез для валидации через user interviews [[INTERVIEW-GUIDE-EMMA.md]](./INTERVIEW-GUIDE-EMMA.md) и A/B тесты в Stage 6.
+
+### H1 — Основная боль = страх переплатить, не незнание что сломалось
+
+> 70%+ пользователей Emma-сегмента назовут "не знаю, справедлива ли цена" как основную боль — больше чем "не знаю что сломалось".
+
+**Значение:** если опровергнута → диагностика важнее оценки → переосмыслить порядок экранов результата (diagnosis first, price second).
+
+**Метод проверки:** Блок 2 интервью [[INTERVIEW-GUIDE-EMMA.md §Блок 2]](./INTERVIEW-GUIDE-EMMA.md). Decision rule: 4/5 участников.
+
+---
+
+### H2 — Фото как точка входа: естественный и не требует объяснений
+
+> 80%+ участников user testing воспринимают "сфотографируй проблему" как интуитивный entry point без дополнительного объяснения.
+
+**Значение:** если опровергнута → добавить альтернативный text-input entry point в onboarding до launch.
+
+**Метод проверки:** Concept test (Блок 4 интервью). A/B test в onboarding (A: только камера / B: камера + текст) в первые 2 недели после launch.
+
+---
+
+### H3 — 3-mode output (DIY/Hybrid/Pro) соответствует mental model пользователя
+
+> Пользователи без подсказки описывают свои опции как "сам / частично сам / позвать мастера" — то есть 3-mode framework отражает их реальные категории мышления.
+
+**Значение:** если опровергнута (например, users думают только "сам / не сам") → упростить до 2 режимов в v1, Hybrid → v1.5.
+
+**Метод проверки:** Open-ended вопрос в Блоке 4 до показа концепта. Card sort (если позволяет формат).
+
+---
+
+### H4 — Региональная цена критична, generic national range не принимается
+
+> 70%+ пользователей отвечают "региональная цена важнее" когда ставятся перед выбором "цена в вашем ZIP" vs "средняя по США".
+
+**Значение:** если опровергнута → regional pricing не является key differentiator для пользователя (но остаётся для SEO и competitive moat). Не снимает его из roadmap, но снижает приоритет.
+
+**Метод проверки:** Прямой вопрос в Блоке 4 [[INTERVIEW-GUIDE-EMMA.md]](./INTERVIEW-GUIDE-EMMA.md) + A/B test в Stage 6 (regional vs national range в результате).
+
+---
+
+### H5 — Freemium threshold 3 estimates/month оптимален
+
+> Менее 20% пользователей Emma-сегмента назовут "3 бесплатных в месяц" недостаточным.
+
+**Значение:** если опровергнута (3+ из 5 говорят "мало") → поднять до 5 free estimates. Это напрямую влияет на Feature #8 [[FEATURES.md]](../02-product/FEATURES.md) и paywall timing.
+
+**Метод проверки:** Блок 5 интервью + frequency audit (как часто реально возникает ситуация).
+
+---
+
+## Рекомендации для MVP
+
+### ✅ Делать
+
+| Что | Почему |
+|-----|--------|
+| Photo-first UX (1 tap → camera) | Core differentiator + доказан PictureThis playbook |
+| Regional pricing (zip-level, BLS MSA) | Единственный незанятый моат — строить с v1 |
+| 3-mode output (DIY / Hybrid / Pro) | Нет ни у кого; напрямую закрывает Emma JTBD |
+| Claude Haiku Vision (primary) → Sonnet fallback (<70% confidence) | Оптимальный cost/accuracy balance |
+| Freemium 3 estimates/month → paywall | RevenueCat: hard paywall = 10.7% Day-35 conversion |
+| Annual subscription $49.99 (preselected) | Emma WTP подтверждена; 41% AI revenue premium |
+| Find a Pro deeplinks (Thumbtack / Google Maps / Yelp) | Zero partnership dependencies, Day 1 value |
+| Disclaimers D-1–D-4 | Legal requirement (FTC, Apple App Store 5.1.2i) |
+| Safety-blocked categories (gas / structural / main electrical) | Legal + ethical requirement; не переговариваемо |
+| Top-30 repair categories scope | Disciplined focus; 80% of user needs covered |
+| Amazon Associates deeplinks | $0 cost, Day 1 affiliate revenue |
+
+### ❌ Не делать (в MVP)
+
+| Что | Почему нет |
+|-----|-----------|
+| Thumbtack/Angi affiliate partnership | Partnership approval = 3–6 мес; zero-partnership deeplinks дают 80% value без risk |
+| Home Depot / Lowe's product API | PA-API requires 10 orders/30 days minimum — cold start killer |
+| RSMeans subscription ($1500+/год) | BLS OEWS + Claude training = достаточно для MVP accuracy |
+| Video input | Toolbox.repair pattern; v2 feature — 3× complexity, <10% use cases в MVP |
+| AI chat follow-up | Conversational AI = +2 месяца work; one-shot sufficient для MVP |
+| AR measurement | Partner strategy (Magicplan) — не строить; v1.5+ |
+| Community forum / Q&A | Moderation burden; Marcus-сегмент feature; v2.0 |
+| International (non-US) | Data pipelines US-only в MVP; v2.0 с UK/CA/AU |
+| Voice input | Ronald-сегмент feature; v1.5 |
+| >30 repair categories | Scope discipline; encyclopedia = 6+ месяцев extra work |
+
+### 💰 Монетизация (priority order)
+
+| Поток | Запуск | Ожидаемый вклад |
+|-------|--------|-----------------|
+| **Subscription annual $49.99** | Day 1 (paywall после 3 free estimates) | 70% revenue; Emma + Marcus |
+| **Pay-per-estimate $2.99** | Day 1 | 20% revenue; Tyler + casual users |
+| **Amazon Associates deeplinks** | Day 1 (signup 1 день, бесплатно) | 5–10% revenue; бонус без усилий |
+| **Thumbtack/Angi affiliate** | v1.5 post-PMF | +$15–40/lead; требует partnership approval |
+
+**Freemium логика:** 3 free estimates/month → мягкий paywall → два CTA: "Subscribe ($49.99/yr)" + "Pay once ($2.99)". Annual preselected, скидка 58% vs monthly $9.99.
+
+---
+
+## Вердикт
 
 ```
-GAP_SCORE = (search_volume / 1000)
-          × (1 / (app_count + 1))
-          × (5 - avg_app_rating)
-          × emotion_score
-          × ai_feasibility_score
-          × (1 / (cpc + 0.1))
+MARKET SIZE       ██████████  10/10
+PAIN VALIDATION   ██████████  10/10
+COMPETITIVE GAP   █████████░   9/10
+TECH FEASIBILITY  ████████░░   8/10
+BUSINESS MODEL    █████████░   9/10
+TIMING            ███████░░░   7/10
+TEAM/EXECUTION    ███████░░░   7/10
+──────────────────────────────────
+TOTAL             60/70 = 86%
 ```
 
-Inputs (обновлено май 2026):
-- **search_volume:** "home repair cost" + variations ~1,200,000/mo *(не изменился)*
-- **app_count:** апрель 2026 было 3 tangential; май 2026 — добавились SnapFix, Fix AI, YouFixedIt, Toolbox.repair, HomeMD.ai → **8** прямых + полупрямых игроков
-- **avg_app_rating** конкурентов: ~3.2 (новые apps пока unrated, не поднимают среднее)
-- **emotion_score:** 8/10 *(не изменился)*
-- **ai_feasibility_score:** 8/10 *(не изменился)*
-- **cpc:** $1.35 (умеренный рост из-за +3 новых bidders в "AI home repair" категории)
+## 🟢 GO
 
-Calculation (апрель 2026, app_count = 3):
-```
-GAP = 1200 × (1/4) × 1.8 × 8 × 8 × (1/1.30)
-    = 26,611  →  нормализовано: ~2000-2500
-```
+**FixIt — валидный бизнес с сильным product-market fit. Рекомендуется к немедленной разработке.**
 
-Calculation (май 2026, app_count = 8):
-```
-GAP = 1200 × (1/9) × 1.8 × 8 × 8 × (1/1.45)
-    = 1200 × 0.111 × 1.8 × 8 × 8 × 0.69
-    = 8,397  →  нормализовано: ~1300-1600
-```
+**Три причины GO:**
 
-**GAP_SCORE = ~1300-1600** (GOLD tier сохраняется — порог ≥ 1000) ⭐
+1. **GAP реален и незанят.** Никто из 17+ конкурентов не комбинирует regional pricing + 3-mode output. Это не opinion — это данные из feature matrix по 10 прямым конкурентам. [[COMPETITORS.md]](./COMPETITORS.md)
 
-**Verdict:** Снижение vs апрельской оценки (~2000-2500) — рынок разогрелся. Но GAP_SCORE остаётся **GOLD tier**: конкуренты по-прежнему не делают regional pricing + 3-mode output, emotion_score и search_volume не изменились. Окно сужается, но не закрыто. **Каждый месяц промедления = -100-150 очков GAP_SCORE.**
+2. **Unit economics исключительные.** 96% gross margin, 8x LTV:CAC, 3 revenue stream без канибализации. Это не "хороший бизнес" — это **отличный бизнес**, если execution состоится.
+
+3. **PictureThis доказал механику.** $200M ARR, те же mechanics (photo AI + subscription + App Store). FixIt не изобретает — копирует доказанный playbook в более высокоэмоциональный домен.
+
+**Единственная оговорка: скорость.**
+
+Окно — **сентябрь 2026** в худшем случае. Каждый месяц промедления = -100–150 GAP_SCORE. Toolbox.repair и SnapFix развиваются активно. Если MVP выходит после Q4 2026 — вердикт меняется на CAUTIOUS GO с риском устаревания дифференциации.
+
+**Trigging NO-GO сценарий** (любой из трёх):
+- Toolbox.repair добавляет zip-level cost estimate до FixIt launch
+- User interviews (5 интервью, [[INTERVIEW-GUIDE-EMMA.md]](./INTERVIEW-GUIDE-EMMA.md)) показывают <50% H1+H3 validation
+- Юридический review выявляет unexpected liability exposure для AI cost advice
 
 ---
 
-## 12. Source Documents
+## Источники
 
-Полный research package:
+Полный research package (Stage 1, 2026-05-07):
 
-1. **MARKET-RESEARCH.md** v2.1 — обновлено 7 мая 2026; добавлен Кластер 7, 33 источника
-2. **COMPETITOR-ANALYSIS.md** v1.1 — обновлено 7 мая 2026; Кластер 7 добавлен, 18 источников
-3. **COMPETITORS.md** — новый файл, 7 мая 2026; app-level deep dive (рейтинги, отзывы, монетизация, фичи) по 10 игрокам
-4. **USER-PERSONAS.md** — 5 personas с JTBD, pain points, willingness to pay, acquisition channels
-5. **DOMAIN-DEEP-DIVE.md** — 1019 lines, все APIs, labor rates, regulatory, AI feasibility detailed
+| Документ | Версия | Строк | Ключевой вклад |
+|----------|--------|-------|----------------|
+| [MARKET-RESEARCH.md](./MARKET-RESEARCH.md) | v2.1 | ~620 | TAM/SAM/SOM, Google Trends, 7 конкурентов, 33 источника |
+| [COMPETITOR-ANALYSIS.md](./COMPETITOR-ANALYSIS.md) | v1.1 | — | 7 кластеров, 17+ игроков, SWOT, positioning |
+| [COMPETITORS.md](./COMPETITORS.md) | v1.0 | ~360 | App-level: рейтинги, отзывы, монетизация, GAP |
+| [USER-PERSONAS.md](./USER-PERSONAS.md) | v2.0 | ~280 | Emma/Marcus/Tyler с Reddit-цитатами и триггерами |
+| [DOMAIN-DEEP-DIVE.md](./DOMAIN-DEEP-DIVE.md) | v1.1 | ~1000+ | APIs, labor rates, AI feasibility, regulatory, unit economics |
+| [DOMAIN-RESEARCH.md](./DOMAIN-RESEARCH.md) | v1.0 | ~450 | Глоссарий, 5 academic sources, disclaimers, content strategy |
+| [INTERVIEW-GUIDE-EMMA.md](./INTERVIEW-GUIDE-EMMA.md) | v1.0 | ~200 | 5-интервью валидация, 6 гипотез, decision rules |
+| [DISCLAIMERS.md](../DISCLAIMERS.md) | v1.0 | ~90 | D-1–D-4 финальные тексты, placement map |
 
-**Total research output:** ~25,000 слов, 120+ источников, comprehensive coverage.
-
----
-
-## 13. Approval
-
-**Research team recommendation:** 🟢 **GO — продолжаем в Stage 2 (Product Definition).**
-
-**Approved by:**
-- [ ] Amanda (Owner)
-- [ ] Лана (Project Manager)
-
-**Next milestone:** Product Vision + Features prioritization, target completion **2 недели** с момента approval.
+**Total research output:** ~3000+ строк, 50K+ слов, 120+ источников.
 
 ---
 
-**Дата последнего обновления:** 2026-05-07
-**Изменения v1.1:** Кластер 7 (5 новых AI mobile игроков), пересчитан GAP_SCORE (2000–2500 → 1300–1600, GOLD сохраняется), обновлены threats + риски, добавлена ссылка на COMPETITORS.md
-**Автор синтеза:** Research Team (Claude + 4 specialized agents)
+**Дата:** 2026-05-07
+**Версия:** v2.0 — полная переработка (синтез 8 документов Stage 1)
+**Статус:** Final. Следующий milestone — Stage 6 Development после юр. review disclaimers и 5 user interviews.

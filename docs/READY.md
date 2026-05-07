@@ -2,7 +2,7 @@
 
 ---
 
-**Последнее обновление:** 2026-05-07 (сессия 4)
+**Последнее обновление:** 2026-05-07 (сессия 5)
 
 ## Статус Stage 1 Research — полный финал
 
@@ -24,5 +24,7 @@
 GAP сохраняется: **никто из 17+ конкурентов не комбинирует photo AI + regional pricing + 3-mode output + pro matching**. Скоринг 60/70 = 86%. Вердикт GO в силе.
 
 **Primary persona:** Emma Mitchell, 32, first-time homeowner, Raleigh NC — триггер: внезапная протечка, страх переплатить, WTP $49.99/yr.
+
+**PR статус:** #1 открыт (feature/sergegryaznov → main), merge отложен — main прошёл крупный рефактор (app/ → src/app/), конфликты только в коде, docs/ чистые.
 
 **Следующий шаг:** 5 интервью (INTERVIEW-GUIDE-EMMA.md) → юр. review disclaimers → Stage 6 Development.
